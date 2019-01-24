@@ -1,0 +1,35 @@
+% NOTE: It is possible to generate cover at https://www.kth.se/en/student/program/examensarbete/avhandlingarochexamensarbeten/skapa-omslag-till-ditt-exjobb-1.479838 
+% It seems like in the generated cover they use Helvetica while here we use Arial as suggested in the guidelines: https://www.kth.se/polopoly_fs/1.477580.1399637531!/KTH%20Inlaga_avhandling_stylesheet.pdf 
+% But margins and spacing here is made to look like the generated cover page.
+\makeatletter
+\begin{titlepage}
+
+\vspace*{-29.3mm}
+\hspace*{-27.3mm}\includegraphics[width=36.7mm]{img/kth-logo}%
+\par\vspace*{25mm}
+
+\PlaceText{69mm}{16mm}{\fontsize{11}{13}\sffamily DEGREE PROJECT IN MEDICAL ENGINEERING,}
+\PlaceText{69mm}{20.5mm}{\fontsize{11}{13}\sffamily SECOND CYCLE, 30 CREDITS}
+\PlaceText{69mm}{25mm}{\fontsize{11}{13}\sffamily\textit{STOCKHOLM, SWEDEN \the\year}}
+
+\vspace*{-23mm}
+\hspace*{32.7mm}\begin{minipage}[b]{110mm}
+\begin{flushleft}
+{\fontsize{20}{18.5}\sffamily\textbf{\@title\\}}
+\vspace*{10.5mm}
+{\fontsize{17}{17}\sffamily\textbf{\MakeUppercase{\@author}}}
+\end{flushleft}
+\end{minipage}
+
+
+\AddToShipoutPictureBG*{%]
+    \AtPageLowerLeft{%
+        \includegraphics[width=1.0\paperwidth]{img/kth-footer}%
+    }%
+}
+
+\PlaceText{69mm}{268.7mm}{\color{white}\fontsize{11}{13}\sffamily\textbf{KTH ROYAL INSTITUTE OF TECHNOLOGY} }
+\PlaceText{69mm}{274mm}{\color{white}\fontsize{11}{13}\sffamily\textbf{SCHOOL OF ENGINEERING SCIENCES IN CHEMISTRY,} }
+\PlaceText{69mm}{278.3mm}{\color{white}\fontsize{11}{13}\sffamily\textbf{BIOTECHNOLOGY AND HEALTH} }
+\end{titlepage}
+\makeatother

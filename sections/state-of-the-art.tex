@@ -17,6 +17,33 @@ The article states that EMG-driven methods are not as accessible as optimization
 CEINMS is intended to increase said accessibility. 
 It covers neural control solutions from EMG-driven, to hybrids between EMG-driven and static optimization, to full static optimization.
 
+CEINMS use involves the three steps of \textit{calibration}, \textit{execution}, and \textit{validation}. \textit{Calibration} is to refine the subject's neuromuscular parameters to reduce the error between experimental joint moments and joint moments predicted by the CEINMS EMG-driven open-loop mode. There are two sets of parameters which can be refined during the calibration. The first set is the \textit{musculotendon unit's activation dynamics} set and the second set is the \textit{musculotendon contraction dynamics} set. 
+
+The first set (i.e. activation dynamics) characterizes the transformation of muscle excitation, $e(t)$, to muscle activation, $a(t)$. The transformation is derived from the neural activation, $u(t)$, from equation \ref{eq:neural-activation} and the muscle activation, $a(t)$, from either equation \ref{eq:muscle-activation-1} or \ref{eq:muscle-activation-2}.
+\begin{align}
+\label{eq:neural-activation}
+    u(t) &= \alpha e(t-d) - (C_1 + C_2)u(t-1) - C_1 C_2 u(t-2) \\
+\label{eq:muscle-activation-1}
+    a(t) &= \frac{e^{Au(t)} - 1}{e^A - 1}\\
+\label{eq:muscle-activation-2}
+    a(t) &= \begin{cases}
+        \alpha^{act}\ln \left( \beta^{act}u(t)+1 \right) &, 0\leq u(t) < u_0\\
+        mu(t) + c &, u_0 \leq u(t) \leq 1
+    \end{cases}
+\end{align}
+
+The parameters to be refined in equation \ref{eq:neural-activation} are $C_1$ and $C_2$ which are the recursive coefficients. The muscle gain coefficient, $\alpha$, can be determined from these coefficients as:
+\begin{align}
+\label{eq:muscle-gain-coeff}
+    \alpha - C_1 - C_2 - C_1 C_2 = 1 \text{ where } \left|C_1\right|,\left|C_2\right| < 1
+\end{align}
+and finally $d$ is the electromechanical delay.
+
+The parameters to be refined in equations \ref{eq:muscle-activation-1} and \ref{eq:muscle-activation-2} is only the shape factor $A$ but $\alpha^{act}, \beta^{act}, m, c$ are only dependent on $A$. For equation \ref{eq:muscle-activation-1}: $A\in (-3, 0)$ but for equation \ref{eq:muscle-activation-2}: $A\in (0, 0.12]$.
+
+The second set (i.e. contraction dynamics) relates to the force produced by the musculotendon unit (MTU) in contraction. The parameters to refine are the tendon slack length $l_{ts}$, the optimal fiber length $L_m^0$, and the muscle strength coefficient which is a multiplicative factor for the max isometric force $F^{max}$. The muscle strength coefficient can be shared by multiple muscles. 
+
+CEINMS requires three setup files for \textit{calibration}, \textit{neural mapping}, and \textit{execution}.
 
 \subsection{Related Work}
 You should probably keep a heading about the related work here even though the entire chapter basically only contains related work.

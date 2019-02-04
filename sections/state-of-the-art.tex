@@ -7,6 +7,7 @@ Use references!
 
 \subsection{EMG Measurements and Modelling}
 
+\subsubsection{CEINMS}
 CEINMS comprises EMG-driven and EMG-informed algorithms that have been previously published and tested. 
 It operates on dynamic skeletal models possessing any number of degrees of freedom and musculotendon units and can be calibrated to the individual to predict measured joint moments and EMG patterns \cite{Pizzolato2015}.
 
@@ -19,13 +20,13 @@ It covers neural control solutions from EMG-driven, to hybrids between EMG-drive
 
 CEINMS use involves the three steps of \textit{calibration}, \textit{execution}, and \textit{validation}. \textit{Calibration} is to refine the subject's neuromuscular parameters to reduce the error between experimental joint moments and joint moments predicted by the CEINMS EMG-driven open-loop mode. There are two sets of parameters which can be refined during the calibration. The first set is the \textit{musculotendon unit's activation dynamics} set and the second set is the \textit{musculotendon contraction dynamics} set. 
 
-The first set (i.e. activation dynamics) characterizes the transformation of muscle excitation, $e(t)$, to muscle activation, $a(t)$. The transformation is derived from the neural activation, $u(t)$, from equation \ref{eq:neural-activation} and the muscle activation, $a(t)$, from either equation \ref{eq:muscle-activation-1} or \ref{eq:muscle-activation-2}.
+The first set (i.e. activation dynamics) characterizes the transformation of muscle excitation, $e(t)$, to muscle activation, $a(t)$. The transformation is derived from the neural activation, $u(t)$, from equation \ref{eq:neural-activation} and the muscle activation, $a(t)$, from either equation \ref{eq:activation-exponential} or \ref{eq:activation-piecewise}.
 \begin{align}
 \label{eq:neural-activation}
     u(t) &= \alpha e(t-d) - (C_1 + C_2)u(t-1) - C_1 C_2 u(t-2) \\
-\label{eq:muscle-activation-1}
+\label{eq:activation-exponential}
     a(t) &= \frac{e^{Au(t)} - 1}{e^A - 1}\\
-\label{eq:muscle-activation-2}
+\label{eq:activation-piecewise}
     a(t) &= \begin{cases}
         \alpha^{act}\ln \left( \beta^{act}u(t)+1 \right) &, 0\leq u(t) < u_0\\
         mu(t) + c &, u_0 \leq u(t) \leq 1
@@ -39,11 +40,19 @@ The parameters to be refined in equation \ref{eq:neural-activation} are $C_1$ an
 \end{align}
 and finally $d$ is the electromechanical delay.
 
-The parameters to be refined in equations \ref{eq:muscle-activation-1} and \ref{eq:muscle-activation-2} is only the shape factor $A$ but $\alpha^{act}, \beta^{act}, m, c$ are only dependent on $A$. For equation \ref{eq:muscle-activation-1}: $A\in (-3, 0)$ but for equation \ref{eq:muscle-activation-2}: $A\in (0, 0.12]$.
+The parameters to be refined in equations \ref{eq:activation-exponential} and \ref{eq:activation-piecewise} is only the shape factor $A$ but $\alpha^{act}, \beta^{act}, m, c$ are determined from $A$. 
+For equation \ref{eq:activation-exponential}: $A\in (-3, 0)$ but for equation \ref{eq:activation-piecewise}: $A\in (0, 0.12]$. 
+Note that equation \ref{eq:activation-exponential} and \ref{eq:activation-piecewise} are two different solutions for relation between neural and muscle activation. 
+One can choose between them by defining the <activation> parameter as either <exponential\textbackslash{}> for equation \ref{eq:activation-exponential} or <piecewise\textbackslash{}> for equation \ref{eq:activation-piecewise}.
 
 The second set (i.e. contraction dynamics) relates to the force produced by the musculotendon unit (MTU) in contraction. The parameters to refine are the tendon slack length $l_{ts}$, the optimal fiber length $L_m^0$, and the muscle strength coefficient which is a multiplicative factor for the max isometric force $F^{max}$. The muscle strength coefficient can be shared by multiple muscles. 
 
 CEINMS requires three setup files for \textit{calibration}, \textit{neural mapping}, and \textit{execution}.
+
+\subsubsection{EMG-Driven Forward-Dynamic Estimation of Muscle Force and Joint Moment about Multiple Degrees of Freedom in the Human Lower Extremity}
+
+The article mentions the challenge due to the fact that prescribed joint moment and motion in the human body can be the result of different MTU excitation strategies. Optimization-driven methodologies have been used to study this behavior, where "MTUs are assumed to contribute to the experimentally measured joint moments according to a chosen criterion that is presumed to be generalizable across subjects and motor tasks". 
+"However, it has been shown that in humans the neuromuscular redundancy is solved by means of the neural drive to MTUs, or MTU excitation. In this scenario, MTUs are recruited independently of the final joint moment and position, but rather based on the motor task to be performed, and on the personal history of training and pathology." \cite{Sartori2012a}
 
 \subsection{Related Work}
 You should probably keep a heading about the related work here even though the entire chapter basically only contains related work.

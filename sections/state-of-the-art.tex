@@ -84,5 +84,25 @@ The validation procedure consisted of four tests:
 
 "Experimental results also showed that both the single-DOF and multi-DOF EMG-driven models could not produce joint moment estimates that exactly matched the experimental joint moments (Figure 4). This is in part related to two main limitations of surface EMG: 1) the inability to access EMG data from deeply located MTUs, and 2) difficulties in characterizing the EMG frequency bandwidth to best drive the musculoskeletal model [35]." - \cite[p. 11]{Sartori2012a}
 
+\subsubsection{Modeling the Human Knee for Assistive Technologies}
+
+The article aims at developing an EMG-driven model which is fast enough to be used on an embedded system in assistive technologies to predict muscle forces and joint moments.
+
+They propose a MTU model based on infinitely stiff tendons assumption and argue that this model is as accurate as "the sophisticated state-of-the-art models" \cite[p. 2]{Sartori2012} but with much higher computational speeds. Furthermore, they justify this assumption by pointing out that the tendon is normally very stiff with a strain of $3.3\%$ at maximum isometric force (MIF). They identify the sophisticated state-of-the-art MTU model as the elastic-tendon Hill-type muscle component (EHM) and their proposed new model as the stiff-tendon Hill-type muscle (SHM) component. In EHM the fiber length was determined at each time frame with a time consuming integration process. They argue that their SHM reduces this time since the maximum MTU force ($F^{mt}$) is then dependent only on fiber length ($l^m$) and not also the tendon length ($l^t$) which is now fixed to its slack length ($l^t_s$).
+
+The procedure was to collect motion data from numerous motion lab trials, including static and dynamic trials (i.e. walking and running).
+Six healthy male subjects were used and a 16 channel EMG system.
+OpenSim was then used to apply inverse kinematics and inverse dynamics algorithms and get resulting estimated joint moments from the motion lab data.
+
+The EMG-driven model consists of five main components, as explained by them, namely: muscle activation, musculotendon kinematics (MTK), musculotendon dynamics, moment computation, and model calibration \cite[p. 4]{Sartori2012}.
+
+In their model they included 13 MTUs crossing the knee joint: semimembranosus (sm), semitendinosus (st), biceps femoris long head (bflh), biceps femoris short head (bfsh), sartorius (sar), tensor fascia latae (tfl), gracilis (gra), vastus lateralis (vl), vastus medialis (vm), vastus intermedius (vi), rectus femoris (rf), medial gastrocnemius (mg), and lateral gastrocnemius (lg).
+
+In the results they show that not much difference is between muscle force prediction using the SHM compared to the EHM \cite[Fig. 3]{Sartori2012}. Furthermore, KFE moments predicted by both models were also shown to be similar. They also compare the SHM and EHM KFE moment prediction to the experimental result, i.e. $M_{KFE}$, which shows SHM prediction to be better correlated to $M_{KFE}$ \cite[Fig. 4]{Sartori2012} with $R^2 = 0.89$ and $RMSE = 7.89Nm$ between SHM KFE moments and $M_{KFE}$.
+
+They mention that they ran the model on an embedded system with the SHM (Model(SHM,MTK)) or EHM (Model(EHM,MTK)) components. 
+The Model(SHM,MTK) executed in $3.6 \pm 0.064 ms$, while the Model(EHM,MTK) needed $21.1 \pm 0.11 ms$ \cite[p. 8]{Sartori2012}.
+However, they also point out that the embedded system still requires extra instrumentation to measure EMG and joint/segmental angles and moments. The data was gathered and loaded on the embedded system internal memory before running the model so this is not running in real-time as would probably be needed in an assistive device.
+
 \subsection{Related Work}
 You should probably keep a heading about the related work here even though the entire chapter basically only contains related work.

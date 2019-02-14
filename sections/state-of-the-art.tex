@@ -117,9 +117,15 @@ It is the measure of the electric potential generated in muscle cells after an a
 The electric potential generated in the muscle can be measured via the non-invasive surface electrodes or invasive electrodes. 
 When using surface electrodes the method is called surface electromyography (sEMG). 
 This method can capture activity in a muscle rather accurately but it is not as easy to say what this activity represents. 
-Muscle force cannot be directly obtained from EMG and furthermore EMG can be different between days and conditions of the subject.
+Muscle force cannot be directly obtained from EMG and furthermore EMG can be different between days and conditions of the subject. 
+The tissue (e.g. skin- and fat-tissue) that is between the sEMG electrodes and the origin of the electric potential affects the signal. 
+It acts as a filter with varying filtering characteristics depending on the position of electrodes, skin preparation, ambient temperature and electrical impedance \cite{Lloyd2003}.  
+As pointed out by \citeauthor{Lloyd2003} \cite{Lloyd2003} different EMG activation patterns are observed between different subjects or different control tasks even though the joint angle and torque is the same.
 
-Several models have been created to estimate muscle force and consequently joint torque 
+"Different methods have been developed to estimate muscle forces. These methods include static and dynamic optimisation, which involve the use of inverse dynamics to track external joint moments and/or joint kinematics and estimation of muscle activations and forces to satisfy pre-selected objective criteria. However, optimisation methods cannot account for variations in muscle activation patterns  between tasks and individuals, even when joint angles and moments are the same." \cite{Pizzolato2015}
+
+Some EMG-drive NMS models have been created to estimate muscle force and consequently joint torque from measured EMG together with joint angles. 
+Some examples are the models described by  \citeauthor{Lloyd2003} \cite{Lloyd2003}, and \citeauthor{Sartori2012a} \cite{Sartori2012a} and used by CEINMS \cite{Pizzolato2015}. 
 
 \subsection{Related Work}
 You should probably keep a heading about the related work here even though the entire chapter basically only contains related work.

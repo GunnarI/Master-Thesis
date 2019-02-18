@@ -124,8 +124,23 @@ As pointed out by \citeauthor{Lloyd2003} \cite{Lloyd2003} different EMG activati
 
 "Different methods have been developed to estimate muscle forces. These methods include static and dynamic optimisation, which involve the use of inverse dynamics to track external joint moments and/or joint kinematics and estimation of muscle activations and forces to satisfy pre-selected objective criteria. However, optimisation methods cannot account for variations in muscle activation patterns  between tasks and individuals, even when joint angles and moments are the same." \cite{Pizzolato2015}
 
-Some EMG-drive NMS models have been created to estimate muscle force and consequently joint torque from measured EMG together with joint angles. 
-Some examples are the models described by  \citeauthor{Lloyd2003} \cite{Lloyd2003}, and \citeauthor{Sartori2012a} \cite{Sartori2012a} and used by CEINMS \cite{Pizzolato2015}. 
+Some EMG-driven NMS models have been created to estimate muscle force and consequently joint torque from measured EMG together with joint angles. 
+Some examples are the models described by  \citeauthor{Lloyd2003} \cite{Lloyd2003}, \citeauthor{Sartori2014} \cite{Sartori2014}, and \citeauthor{Sartori2012a} \cite{Sartori2012a} and used by CEINMS \cite{Pizzolato2015}. 
+These models vary between completely EMG-driven models and hybrids between EMG-driven and static optimization.
+The drawbacks of the completely EMG-drive model is that the experimental moments are not always well predicted.
+This is due to limitations of sEMG, e.g. cross-talk, movement artifacts, the inability to access deep muscles, varying filtering characteristics of isolating tissue \cite{Lloyd2003, Sartori2014}.
+Another consideration is the fact that the EMG is normalized to peak values to represent the percentage excitation level. 
+This increases unreliability because the true maximum of EMG from any muscle is very difficult to attain \cite{Sartori2014}.
+By combining static optimization with the EMG-driven model the limitations of both EMG-driven model and the static optimization model can be overcome \cite{Sartori2014}.
+
+"it has been shown that, for the same joint moments and angles, different
+individuals use different excitation patterns depending on the control
+tasks, pathology, and training." - \cite[p. 3614]{Sartori2014}
+
+\subsubsection{Neural Networks Electromyography Pattern Recognition}
+
+Artificial Neural Networks have been suggested as an alternative to the Hill-based EMG-driven NMS model \cite{Rosen1999, Sepulveda1993}.
+The model introduced by \citeauthor{Sepulveda1993} \cite{Sepulveda1993}
 
 \subsection{Related Work}
 You should probably keep a heading about the related work here even though the entire chapter basically only contains related work.

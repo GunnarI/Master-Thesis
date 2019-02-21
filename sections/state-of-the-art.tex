@@ -1,9 +1,10 @@
 \section{Theoretical Background}
-In this chapter, a detailed description about background of the degree project is presented together with related work. Discuss what is found useful and what is less useful. Use valid arguments. 
-
-Explain what and how prior work / prior research will be applied on or used in the degree project /work (described in this thesis). Explain why and what is not used in the degree project and give valid reasons for rejecting the work/research.
-
-Use references!
+The ability to predict muscle forces and joint moments using measurements from the body is important to create smooth human-machine interface between a user and an assistive device.
+Extensive research has been done towards gait modelling and joint moment prediction. 
+Motion labs and inverse dynamics can be used to calculate joint angles and moments from motion and force plate data. 
+The cause of the motion and moments, namely the muscle force, is however not well predicted here. 
+Static and dynamic optimization methods have been used to predict the muscle forces but they lack the consideration of variations in muscle activation patterns between tasks and individuals \cite{Pizzolato2015, Sartori2012a}. 
+The challenge of accounting for different muscle synergies for the same motion could be answered using EMG-driven models \cite{Pizzolato2015, Sartori2012a}.
 
 \subsection{EMG Measurements and Modelling}
 
@@ -13,7 +14,7 @@ It operates on dynamic skeletal models possessing any number of degrees of freed
 
 CEINMS which stands for Calibrated EMG-Informed NMS is a modelling toolbox which uses EMG-drive neuromusculoskeletal (NMS) models and enables prediction of different neural control solutions for the same musculoskeletal geometry and measured movements. 
 
-Static and dynamic optimization are other methods to estimate muscle forces and joint moments but, unlike the EMG-drive models, they cannot account account for variations in muscle activation patterns between tasks and individuals.
+Static and dynamic optimization are other methods to estimate muscle forces and joint moments but, unlike the EMG-driven models, they cannot account for variations in muscle activation patterns between tasks and individuals.
 The article states that EMG-driven methods are not as accessible as optimization methods, having limited public availability or focus on isometric tasks rather than dynamic tasks. 
 CEINMS is intended to increase said accessibility. 
 It covers neural control solutions from EMG-driven, to hybrids between EMG-driven and static optimization, to full static optimization.
@@ -120,12 +121,12 @@ This method can capture activity in a muscle rather accurately but it is not as 
 Muscle force cannot be directly obtained from EMG and furthermore EMG can be different between days and conditions of the subject. 
 The tissue (e.g. skin- and fat-tissue) that is between the sEMG electrodes and the origin of the electric potential affects the signal. 
 It acts as a filter with varying filtering characteristics depending on the position of electrodes, skin preparation, ambient temperature and electrical impedance \cite{Lloyd2003}.  
-As pointed out by \citeauthor{Lloyd2003} \cite{Lloyd2003} different EMG activation patterns are observed between different subjects or different control tasks even though the joint angle and torque is the same.
+As pointed out by \citeauthorint{Lloyd2003} different EMG activation patterns are observed between different subjects or different control tasks even though the joint angle and torque is the same.
 
 "Different methods have been developed to estimate muscle forces. These methods include static and dynamic optimisation, which involve the use of inverse dynamics to track external joint moments and/or joint kinematics and estimation of muscle activations and forces to satisfy pre-selected objective criteria. However, optimisation methods cannot account for variations in muscle activation patterns  between tasks and individuals, even when joint angles and moments are the same." \cite{Pizzolato2015}
 
 Some EMG-driven NMS models have been created to estimate muscle force and consequently joint torque from measured EMG together with joint angles. 
-Some examples are the models described by  \citeauthor{Lloyd2003} \cite{Lloyd2003}, \citeauthor{Sartori2014} \cite{Sartori2014}, and \citeauthor{Sartori2012a} \cite{Sartori2012a} and used by CEINMS \cite{Pizzolato2015}. 
+Some examples are the models described by \citeauthorint{Lloyd2003}, \citeauthorint{Sartori2014}, and \citeauthorint{Sartori2012a} and used by CEINMS \cite{Pizzolato2015}. 
 These models vary between completely EMG-driven models and hybrids between EMG-driven and static optimization.
 The drawbacks of the completely EMG-drive model is that the experimental moments are not always well predicted.
 This is due to limitations of sEMG, e.g. cross-talk, movement artifacts, the inability to access deep muscles, varying filtering characteristics of isolating tissue \cite{Lloyd2003, Sartori2014}.
@@ -140,7 +141,48 @@ tasks, pathology, and training." - \cite[p. 3614]{Sartori2014}
 \subsubsection{Neural Networks Electromyography Pattern Recognition}
 
 Artificial Neural Networks have been suggested as an alternative to the Hill-based EMG-driven NMS model \cite{Sepulveda1993, Rosen1999}.
-The model introduced by \citeauthor{Sepulveda1993} \cite{Sepulveda1993}
+The model introduced by \citeauthorint{Sepulveda1993} seems to be a simple Multilayer Perceptron (MLP) with a single hidden layer. 
+The inputs are normalized EMG values from 15 muscles on a lower extremity as well as the Erector spinae muscle on the spine. 
+Table \ref{tab:SepulvedaTable} shows the muscles used and if they have a surface EMG placement protocol as identified by SENIAM.
+\begin{table}[t]
+    \centering
+    \begin{tabular}{c|c}
+        Muscles measured & Is in SENIAMs protocol \\ \hline
+        Gluteus medius              & Yes \\
+        Gluteus maximus             & Yes \\
+        Semitendinosus              & Yes \\
+        Biceps femoris              & Yes \\
+        Erector spinae              & No  \\
+        Sartorius                   & No  \\
+        Rectus femoris              & Yes \\
+        Vastus lateralis            & Yes \\
+        Adductor longus             & No  \\
+        Adductor magnus             & No  \\
+        Tibialis anterior           & Yes \\
+        Extensor digitorum longus   & No  \\
+        Medial gastrocnemius        & Yes \\
+        Lateral gastrocnemius       & Yes \\
+        Soleus                      & Yes \\
+        Peroneus longus             & Yes
+    \end{tabular}
+    \caption{Muscles used by \citeauthorint{Sepulveda1993} extracted from \cite[Tab. 1]{Sepulveda1993}. }
+    \label{tab:SepulvedaTable}
+\end{table}
+The activation function used is the logistic function (see further details in \cite[eq. (1)]{Sepulveda1993}):
+\begin{align}
+    O_{pj} &= \frac{1}{1+e^{-x}}\\
+    x &= \sum_{i=1}^{16}EMG p_i w_{ji} \sigma_j
+\end{align}
+The hidden layer consists of 32 nodes and the output layer consists of 3 nodes, one for each joint, namely hip, knee, and ankle.
+It is worth noting that the research is from 1993 where computing power of the computer can be assumed to be much lesser than that of a modern computer.
+They mention that the training of the two networks (one for joint angles and one for joint torques) took 24h of continues running.
+Seems like the test set was comprised of the same data as the training set except it had been altered by either (1) random noise of up to $\pm 20\%$ of original signal, (2) constant increase of $20\%$, or (3) constant decrease of $-20\%$.
+The results show that the algorithm is able to predict these alteration rather accurately. 
+However, one might question the validity of these results as they are using the same, although corrupt, data set for validation as for training.
+Another testing they did was to simulate a 30\% reduction in soleus activity and a 100\% reduction (i.e. elimination) of rectus femoris activity. 
+The results can be seen in figure 7 and 8 in the paper.
+
+One assumption they made was that a particular combination of muscle activities yields only one possible result of joint moments. This is a simplification which presumably benefits the model but does not necessarily reflect reality since not all muscles can be measured. This is an issue because those muscles that can not be measured might be activating and influencing the angles or moments. That is to say, the angles or moments might be different even though the activity of the measured muscles are the same.
 
 \subsection{Related Work}
 You should probably keep a heading about the related work here even though the entire chapter basically only contains related work.

@@ -132,3 +132,6 @@
 
 % Command to insert empty page
 \newcommand{\insertempty}{\newpage\null\thispagestyle{empty}\newpage}
+
+% Command to reference author in text and display ref number
+\newcommand\citeauthorint[1]{\citeauthor{#1} \cite{#1}}

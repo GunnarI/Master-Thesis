@@ -1,4 +1,9 @@
-\section{Theoretical Background}
+\section{State of the Art}
+This chapter first provides the state of the art of exoskeletons as assistive devices and how the estimation of joint moments can be used. 
+Secondly, theoretical background of the different methods used for kinetics of human motion are discussed and they compared to each other.
+This includes discussion about the links from EMG measurements to muscle activation and muscle synergies and finally to muscle forces resulting in joint moments and motion.
+Thirdly, the chapter details the use of machine learning algorithms as an alternative to the kinetics methods and goes into the state of the art of different algorithms.
+
 The ability to predict muscle forces and joint moments using measurements from the body is important to create smooth human-machine interface between a user and an assistive device.
 Extensive research has been done towards gait modelling and joint moment prediction. 
 Motion labs and inverse dynamics can be used to calculate joint angles and moments from motion and force plate data. 
@@ -6,7 +11,11 @@ The cause of the motion and moments, namely the muscle force, is however not wel
 Static and dynamic optimization methods have been used to predict the muscle forces but they lack the consideration of variations in muscle activation patterns between tasks and individuals \cite{Pizzolato2015, Sartori2012a}. 
 The challenge of accounting for different muscle synergies for the same motion could be answered using EMG-driven models \cite{Pizzolato2015, Sartori2012a}.
 
-\subsection{EMG Measurements and Modelling}
+\subsection{Exoskeletons as Assistive Devices}
+The exoskeleton, as it will be discussed here, refers to a mobile electromechanical structure which can be worn by a human to provide power amplification, support and/or assistance in human motion. Exoskeletons can also be used for haptic interactions but the focus here will be on the groups mentioned before. More specifically, the focus is on exoskeletons as assistive devices for those with physical impairment, i.e. for rehabilitation and/or normal human motion. This excludes exoskeletons as power amplification for professional or military purposes.
+
+\subsection{Electromyography and Muscle Activity Modelling}
+\sub
 
 \subsubsection{CEINMS}
 CEINMS comprises EMG-driven and EMG-informed algorithms that have been previously published and tested. 

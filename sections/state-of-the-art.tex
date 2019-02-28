@@ -12,10 +12,36 @@ Static and dynamic optimization methods have been used to predict the muscle for
 The challenge of accounting for different muscle synergies for the same motion could be answered using EMG-driven models \cite{Pizzolato2015, Sartori2012a}.
 
 \subsection{Exoskeletons as Assistive Devices}
-The exoskeleton, as it will be discussed here, refers to a mobile electromechanical structure which can be worn by a human to provide power amplification, support and/or assistance in human motion. Exoskeletons can also be used for haptic interactions but the focus here will be on the groups mentioned before. More specifically, the focus is on exoskeletons as assistive devices for those with physical impairment, i.e. for rehabilitation and/or normal human motion. This excludes exoskeletons as power amplification for professional or military purposes.
+\label{sec:A-Exoskeletons}
+The exoskeleton, as it will be discussed here, refers to a mobile electromechanical structure which can be worn by a human to provide power amplification, support and/or assistance in human motion. Exoskeletons can also be used for haptic interactions \cite{Anam2012}, but the focus here will be on the groups mentioned before. More specifically, the focus is on exoskeletons as assistive devices for those with physical impairment, i.e. for rehabilitation and/or normal human motion. This excludes exoskeletons as power amplification for professional or military purposes.
+
+To be able to provide assist to motion the exoskeleton needs a human-exoskeleton interaction together with a control system. 
+The control system is how the human motion is translated into mechanical activation, and vice versa. 
+\citeauthorint{Anam2012} list four different categorizations of control systems in exoskeletons, namely \textit{Model-based}, \textit{Hierarchy based}, \textit{Physical parameters based}, and \textit{Usage based}. 
+For the purpose of this review the focus is set on the first categorization, i.e. \textit{Model-based} control systems.
+The article states that the control strategy of an exoskeleton can be divided into two types depending on the model used, namely the \textit{dynamic model} and the \textit{muscle model} based control. 
+One could argue for a third type being a brain model based control like the one implemented in \cite{Wang2017a}, however this type of model will not be discussed further here.
+
+\citeauthor{Anam2012} divide the \textit{dynamic model} into three different categories, each with its strengths and weaknesses.
+These models use systems physical characteristics and motion data to estimate moments and/or forces required from the exoskeleton. 
+For example, one of the categories is the artificial intelligent method where one study has used the joint angle, angle velocity, and angle acceleration as input to the model and the joint torque as output, behaving like an inverse dynamics model \cite{Anam2012}.
+%One might argue that what these models lack in relation to the exoskeleton is responsiveness. 
+
+The \textit{muscle model} uses muscle neural activity and/or joint kinematics to predict muscle forces and resulting joint moments. These models can be split into the two categories: parametric and non-parametric muscle model. 
+The difference between them is that in addition to EMG data the parametric model needs anthropometric data with information of muscle and joint dynamic \cite{Anam2012}.
+The \textit{muscle model}, often called EMG-driven modelling, has been researched as a way to provide real-time prediction of muscle forces and joint torques \cite{Anam2012, durandau, Pizzolato2015}. 
+Furthermore, as mentioned by \citeauthorint{Anam2012}, much effort has been made towards predicting the user's intentions beforehand by using EMG data.
+The Hill-type muscle model is possibly the most researched parametric muscle model and some modifications of it have been made throughout the years to make it more accurate \cite{Lloyd2003, Anam2012, Pizzolato2015, Lee14-1}.
+For the non-parametric muscle model an artificial neural network could be used \cite{Kiguchi2012,Lee14-1}.  
+
+Chapter \ref{sec:A-NMSModels} will compare and go into detail about the different parametric and non-parametric muscle models as well as some dynamic models and inverse dynamics.
+To begin with, next chapter will briefly introduce the theoretical science between EMG signals and their relationship (or non-relationship) to muscle activation and muscle forces.
 
 \subsection{Electromyography and Muscle Activity Modelling}
-\sub
+\label{sec:A-EMG}
+
+\subsection{Neuromusculoskeletal models}
+\label{sec:A-NMSModels}
 
 \subsubsection{CEINMS}
 CEINMS comprises EMG-driven and EMG-informed algorithms that have been previously published and tested. 

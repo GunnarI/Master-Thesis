@@ -1,7 +1,7 @@
 \section{State of the Art}
 This chapter first provides the state of the art of exoskeletons as assistive devices and how the estimation of joint moments can be used. 
 Secondly, theoretical background of the different methods used for kinetics of human motion are discussed and they compared to each other.
-This includes discussion about the links from EMG measurements to muscle activation and muscle synergies and finally to muscle forces resulting in joint moments and motion.
+This includes first a discussion about the links from EMG measurements to muscle activation and muscle synergies and to muscle forces resulting in joint moments and motion.
 Thirdly, the chapter details the use of machine learning algorithms as an alternative to the kinetics methods and goes into the state of the art of different algorithms.
 
 The ability to predict muscle forces and joint moments using measurements from the body is important to create smooth human-machine interface between a user and an assistive device.
@@ -34,7 +34,7 @@ Furthermore, as mentioned by \citeauthorint{Anam2012}, much effort has been made
 The Hill-type muscle model is possibly the most researched parametric muscle model and some modifications of it have been made throughout the years to make it more accurate \cite{Lloyd2003, Anam2012, Pizzolato2015, Lee14-1}.
 For the non-parametric muscle model an artificial neural network could be used \cite{Kiguchi2012,Lee14-1}.  
 
-Chapter \ref{sec:A-NMSModels} will compare and go into detail about the different parametric and non-parametric muscle models as well as some dynamic models and inverse dynamics.
+Chapter \ref{sec:A-MSModels} will compare and go into detail about the different parametric and non-parametric muscle models as well as some dynamic models and inverse dynamics.
 To begin with, next chapter will briefly introduce the theoretical science between \ac{EMG} signals and their relationship (or non-relationship) to muscle activation and muscle forces.
 
 \subsection{Electromyography and Muscle Activity}
@@ -68,12 +68,20 @@ Due to all these implications and artifacts the signal recorded by the electrode
 \end{quote}
 Thus, it is easy to see that the \ac{sEMG} can vary highly between individuals as well as between days and measurements of the same individual.
 
-Guidelines have been made by \ac{SENIAM} in effort to make \ac{sEMG} procedures more standardized and comparable. 
+Guidelines have been made by \ac{SENIAM} in effort to make \ac{sEMG} procedures more standardized and comparable and to increase reproducibility of the experiment. 
 The \ac{SENIAM} project is a European concerted action towards development of recommendations on sensors, sensor placement, signal processing, and modelling for \ac{sEMG} \cite{Hermens2000}.
 
-\subsection{Neuromusculoskeletal models}
-\label{sec:A-NMSModels}
-Different stuff
+Talk about filtering
+
+Talk about muscle synergies
+
+\subsection{Musculoskeletal models}
+\label{sec:A-MSModels}
+As previously stated, the \textit{Model-based} control of exoskeletons can be divided into either \textit{dynamic models} or \textit{muscle model} \cite{Anam2012}. 
+The objective of both groups is essentially to estimate muscle forces and/or resulting joint moments and both can perhaps be considered as a subcategory of musculoskeletal (MS) models. 
+However, what distinguishes these groups is whether the model uses data collected from the muscle activity or not, i.e. whether \ac{EMG} data is used or not.
+
+
 
 \subsubsection{Hill-model}
 \label{sec:A-HillModel}

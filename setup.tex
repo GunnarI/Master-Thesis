@@ -1,8 +1,8 @@
 \usepackage[
 	citestyle=ieee, 
     bibstyle=ieee,
-    style=numeric-comp,
-    sorting=nty, 
+    %style=numeric-comp,
+    %sorting=nty, 
 %     sortcites=true
     ]{biblatex}
     
@@ -139,3 +139,4 @@
 
 % Command to reference author in text and display ref number
 \newcommand\citeauthorint[1]{\citeauthor{#1} \cite{#1}}
+\newcommand\citeauthorpage[2]{\citeauthor{#1} \cite[p. #2]{#1}}

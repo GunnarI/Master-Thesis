@@ -1,50 +1,63 @@
 \section{State of the Art}
-This chapter first provides the state of the art of exoskeletons as assistive devices and how the estimation of joint moments can be used. 
-Secondly, theoretical background of the different methods used for kinetics of human motion are discussed and they compared to each other.
-This includes first a discussion about the links from EMG measurements to muscle activation and muscle synergies and to muscle forces resulting in joint moments and motion.
-Thirdly, the chapter details the use of machine learning algorithms as an alternative to the kinetics methods and goes into the state of the art of different algorithms.
+A typical exoskeleton would have a motor or some sort of actuator to produce torque at the joints (e.g. knee joint) to enable or assist the user.
+The amount of torque produces for any given motion depends on the control system of the exoskeleton.
+Many different methods have been researched and implemented towards goal of providing a good control system that provides exactly the assist that the user wants and/or needs.
+The key to that goal is to estimate or predict the joint torque associated with a certain motion performed by the user.
 
-The ability to predict muscle forces and joint moments using measurements from the body is important to create smooth human-machine interface between a user and an assistive device.
-Extensive research has been done towards gait modelling and joint moment prediction. 
-Motion labs and inverse dynamics can be used to calculate joint angles and moments from motion and force plate data. 
-The cause of the motion and moments, namely the muscle force, is however not well predicted here. 
-Static and dynamic optimization methods have been used to predict the muscle forces but they lack the consideration of variations in muscle activation patterns between tasks and individuals \cite{Pizzolato2015, Sartori2012a}. 
-The challenge of accounting for different muscle synergies for the same motion could be answered using EMG-driven models \cite{Pizzolato2015, Sartori2012a}.
+This chapter discusses the state of the art of exoskeleton control systems and joint torque and/or muscle force prediction models.
+First, the discussion is aimed towards methods and models that are used today for kinetics of human motion analysis in general research and clinical applications.
+This includes discussion about data acquisition, especially \ac{EMG} data, and its relation to the body dynamics, e.g. muscle forces.
+Second, the discussion is narrowed towards the methods and models that can be used as control systems in an exoskeleton.
+The flexibility for computation and data acquisition is lower in an exoskeleton and thus the number of methods that could be used more limited.
+Third, the discussion is focused toward the state of the art of one particular method which consists of joint torque prediction using \ac{ANN} with \ac{EMG} data acquisition. 
+This also includes general discussion about the research of different \ac{ANN}s that have been used with \ac{EMG} data.
 
-\subsection{Exoskeletons as Assistive Devices}
-\label{sec:A-Exoskeletons}
-The exoskeleton, as it will be discussed here, refers to a mobile electromechanical structure which can be worn by a human to provide power amplification, support and/or assistance in human motion. Exoskeletons can also be used for haptic interactions \cite{Anam2012}, but the focus here will be on the groups mentioned before. More specifically, the focus is on exoskeletons as assistive devices for those with physical impairment, i.e. for rehabilitation and/or normal human motion. This excludes exoskeletons as power amplification for professional or military purposes.
+%This chapter first provides the state of the art of exoskeletons as assistive devices and how the estimation of joint moments can be used. Secondly, theoretical background of the different methods used for kinetics of human motion are discussed and they compared to each other. This includes first a discussion about the links from \ac{EMG} measurements to muscle activation and muscle synergies and to muscle forces resulting in joint moments and motion. Thirdly, the chapter details the use of machine learning algorithms as an alternative to the kinetics methods and goes into the state of the art of different algorithms.
 
-To be able to provide assist to motion the exoskeleton needs a human-exoskeleton interaction together with a control system. 
-The control system is how the human motion is translated into mechanical activation, and vice versa. 
-\citeauthorint{Anam2012} list four different categorizations of control systems in exoskeletons, namely \textit{Model-based}, \textit{Hierarchy based}, \textit{Physical parameters based}, and \textit{Usage based}. 
-For the purpose of this review the focus is set on the first categorization, i.e. \textit{Model-based} control systems.
-The article states that the control strategy of an exoskeleton can be divided into two types depending on the model used, namely the \textit{dynamic model} and the \textit{muscle model} based control. 
-One could argue for a third type being a brain model based control like the one implemented in \cite{Wang2017a}, however this type of model will not be discussed further here.
+%The ability to predict muscle forces and joint moments using measurements from the body is important to create smooth human-machine interface between a user and an assistive device. Extensive research has been done towards gait modelling and joint moment prediction. Motion labs and inverse dynamics can be used to calculate joint angles and moments from motion and force plate data. The cause of the motion and moments, namely the muscle force, is however not well predicted here. Static and dynamic optimization methods have been used to predict the muscle forces but they lack the consideration of variations in muscle activation patterns between tasks and individuals \cite{Pizzolato2015, Sartori2012a}. The challenge of accounting for different muscle synergies for the same motion could be answered using \ac{EMG}-driven models \cite{Pizzolato2015, Sartori2012a}.
 
-\citeauthor{Anam2012} divide the \textit{dynamic model} into three different categories, each with its strengths and weaknesses.
-These models use systems physical characteristics and motion data to estimate moments and/or forces required from the exoskeleton. 
-For example, one of the categories is the artificial intelligent method where one study has used the joint angle, angle velocity, and angle acceleration as input to the model and the joint torque as output, behaving like an inverse dynamics model \cite{Anam2012}.
-%One might argue that what these models lack in relation to the exoskeleton is responsiveness. 
 
-The \textit{muscle model} uses muscle neural activity and/or joint kinematics to predict muscle forces and resulting joint moments. These models can be split into the two categories: parametric and non-parametric muscle model. 
-The difference between them is that in addition to EMG data the parametric model needs anthropometric data with information of muscle and joint dynamic \cite{Anam2012}.
-The \textit{muscle model}, often called EMG-driven modelling, has been researched as a way to provide real-time prediction of muscle forces and joint torques \cite{Anam2012, durandau, Pizzolato2015}. 
-Furthermore, as mentioned by \citeauthorint{Anam2012}, much effort has been made towards predicting the user's intentions beforehand by using EMG data.
-The Hill-type muscle model is possibly the most researched parametric muscle model and some modifications of it have been made throughout the years to make it more accurate \cite{Lloyd2003, Anam2012, Pizzolato2015, Lee14-1}.
-For the non-parametric muscle model an artificial neural network could be used \cite{Kiguchi2012,Lee14-1}.  
+\subsection{Kinetics: Methods, models, and data acquisition}
+\label{sec:A-MSModels}
+Kinetics of human motion is the study of the forces that cause human motion. 
+This includes muscle forces as well as external forces, such as \ac{GRF}.
+It is challenging to measure \textit{in vivo} muscle forces and it requires at least a minimally invasive methods or an open surgery, so that a force transducer can be placed on a tendon attached to the muscle \cite{Erdemir2007}. 
+Thus, in general clinical application as well as in exoskeletons, measuring muscle forces directly is hardly an option.
+However, it is possible with non-invasive methods to measure reaction forces like \ac{GRF}, human motion (e.g. motion capture system), and \ac{EMG}.
+Several models have then been developed to estimate joint torques and muscle forces using this data \cite{Erdemir2007}.
+For the purpose of this chapter these methods will be split into two groups, namely those who use \ac{EMG} data and those who do not use \ac{EMG} data.
+This chapter begins with the models that do not use \ac{EMG} data.
+That includes inverse dynamics for joint torque estimations.
+Then it goes into detail about \ac{EMG} and its relation to muscle activity before discussing the models that do use \ac{EMG} data, call them \ac{EMG}-driven models.
 
-Chapter \ref{sec:A-MSModels} will compare and go into detail about the different parametric and non-parametric muscle models as well as some dynamic models and inverse dynamics.
-To begin with, next chapter will briefly introduce the theoretical science between \ac{EMG} signals and their relationship (or non-relationship) to muscle activation and muscle forces.
 
-\subsection{Electromyography and Muscle Activity}
+%As previously stated, the \textit{Model-based} control of exoskeletons can be divided into either \textit{dynamic models} or \textit{muscle model} \cite{Anam2012}. 
+%The objective of both groups is essentially to estimate muscle forces and/or resulting joint moments and both can perhaps be considered as a subcategory of musculoskeletal (MS) models. 
+%However, what distinguishes these groups is whether the model uses data collected from the muscle activity or not, i.e. whether \ac{EMG} data is used or not.
+
+\subsubsection{Inverse dynamics}
+Inverse-dynamics is the use of kinematics and reaction forces, e.g. motion capture and force plate data from a motion lab, to calculate joint torques estimations.
+This modelling method alone does not provide any information about muscle activation and muscle forces.
+
+There are several methods that have been implemented to estimate muscle activation and muscle forces, one of which is static optimization \cite{Erdemir2007,Pizzolato2015}. 
+This method uses optimization with an objective function such as, for example, minimizing the sum of muscle forces from all muscles. 
+Through iteration the muscle forces, that both fit to the estimated joint torque from the inverse dynamics model and satisfy the objective function, are calculated \cite{Erdemir2007}. 
+
+Another method is the dynamic optimization which, in short, uses forward dynamics to find the set of muscle activations that best fit the experimental kinematic data (e.g. with objective to minimize tracking error in kinematics and \ac{GRF}). \citeauthorint{Erdemir2007} point out that this method is beneficial as compared to the static optimization because of its more straightforward inclusion of muscle dynamics within the solution.
+Furthermore, it is less vulnerable toward errors in the experimental measurements as the inclusion of the kinematic data is somewhat "weak", i.e. there is a slack on the kinematic data in favor of more intact muscle dynamics.
+However, the dynamic optimization method is more computationally heavy when compared to the static optimization method \cite{Erdemir2007}.
+
+As pointed out by \citeauthorint{Pizzolato2015} the optimization method, including static and dynamic optimization, cannot account for variations in muscle activation patterns between tasks and individuals.
+For example, if the objective function is to minimize the sum of muscle forces that fit a certain joint moment, it does not really account for possible antagonistic muscle activation.
+
+\subsubsection{Electromyography and Muscle Activity}
 \label{sec:A-EMG}
 Muscle forces of the skeletal muscles are the forces produced by the human body to move or stabilize the human body. 
 The muscle force is generated by muscle contraction which, without going into much detail, is activated by electrical \ac{AP} travelling through the nerves of the body to and through the muscle fibers. 
 The \ac{AP} going through the muscle fibers and making the muscle contract is what is measured in \ac{EMG} recordings.
 To put this more clearly, \ac{EMG} is potentially measuring muscle activation but it does not measure muscle force as that feature depends on so many other factors \cite{Enoka2016}.
 
-There are two common methods of measuring EMG, one being the invasive method where a needle electrode is inserted percutaneously to the target muscle, and the second being the surface EMG method where electrodes are placed on the skin close to the target muscle. 
+There are two common methods of measuring \ac{EMG}, one being the invasive method where a needle electrode is inserted percutaneously to the target muscle, and the second being the surface \ac{EMG} method where electrodes are placed on the skin close to the target muscle. 
 Although the invasive method can give more accurate signal, the \ac{sEMG} method is more widely used due to the fact that it is non-invasive and easier to implement. 
 The continued discussion here about \ac{EMG}s will be focused on the \ac{sEMG} method.
 When using the \ac{sEMG} method the source of the signal and the recording electrodes are separated by biological tissues (e.g. skin, fat, blood vessels).
@@ -75,15 +88,39 @@ Talk about filtering
 
 Talk about muscle synergies
 
-\subsection{Musculoskeletal models}
-\label{sec:A-MSModels}
-As previously stated, the \textit{Model-based} control of exoskeletons can be divided into either \textit{dynamic models} or \textit{muscle model} \cite{Anam2012}. 
-The objective of both groups is essentially to estimate muscle forces and/or resulting joint moments and both can perhaps be considered as a subcategory of musculoskeletal (MS) models. 
-However, what distinguishes these groups is whether the model uses data collected from the muscle activity or not, i.e. whether \ac{EMG} data is used or not.
-
-
-
 \subsubsection{Hill-model}
 \label{sec:A-HillModel}
 The Hill-model 
+
+%\citeauthorpage{Erdemir2007}{132} state that "actual estimates of muscle forces can only be obtained with computational models in which the skeleton and muscles are both represented".
+
+
+\subsection{Exoskeletons as Assistive Devices}
+\label{sec:A-Exoskeletons}
+The exoskeleton, as it will be discussed here, refers to a mobile electromechanical structure which can be worn by a human to provide power amplification, support and/or assistance in human motion. Exoskeletons can also be used for haptic interactions \cite{Anam2012}, but the focus here will be on the groups mentioned before. More specifically, the focus is on exoskeletons as assistive devices for those with physical impairment, i.e. for rehabilitation and/or normal human motion. This excludes exoskeletons as power amplification for professional or military purposes.
+
+To be able to provide assist to motion the exoskeleton needs a human-exoskeleton interaction together with a control system. 
+The control system is how the human motion is translated into mechanical activation, and vice versa. 
+\citeauthorint{Anam2012} list four different categorizations of control systems in exoskeletons, namely \textit{Model-based}, \textit{Hierarchy based}, \textit{Physical parameters based}, and \textit{Usage based}. 
+For the purpose of this review the focus is set on the first categorization, i.e. \textit{Model-based} control systems.
+The article states that the control strategy of an exoskeleton can be divided into two types depending on the model used, namely the \textit{dynamic model} and the \textit{muscle model} based control. 
+One could argue for a third type being a brain model based control like the one implemented in \cite{Wang2017a}, however this type of model will not be discussed further here.
+
+\citeauthor{Anam2012} divide the \textit{dynamic model} into three different categories, each with its strengths and weaknesses.
+These models use systems physical characteristics and motion data to estimate moments and/or forces required from the exoskeleton. 
+For example, one of the categories is the artificial intelligent method where one study has used the joint angle, angle velocity, and angle acceleration as input to the model and the joint torque as output, behaving like an inverse dynamics model \cite{Anam2012}.
+%One might argue that what these models lack in relation to the exoskeleton is responsiveness. 
+
+The \textit{muscle model} uses muscle neural activity and/or joint kinematics to predict muscle forces and resulting joint moments. These models can be split into the two categories: parametric and non-parametric muscle model. 
+The difference between them is that in addition to \ac{EMG} data the parametric model needs anthropometric data with information of muscle and joint dynamic \cite{Anam2012}.
+The \textit{muscle model}, often called \ac{EMG}-driven modelling, has been researched as a way to provide real-time prediction of muscle forces and joint torques \cite{Anam2012, durandau, Pizzolato2015}. 
+Furthermore, as mentioned by \citeauthorint{Anam2012}, much effort has been made towards predicting the user's intentions beforehand by using \ac{EMG} data.
+The Hill-type muscle model is possibly the most researched parametric muscle model and some modifications of it have been made throughout the years to make it more accurate \cite{Lloyd2003, Anam2012, Pizzolato2015, Lee14-1}.
+For the non-parametric muscle model an artificial neural network could be used \cite{Kiguchi2012,Lee14-1}.  
+
+Chapter \ref{sec:A-MSModels} will compare and go into detail about the different parametric and non-parametric muscle models as well as some dynamic models and inverse dynamics.
+To begin with, next chapter will briefly introduce the theoretical science between \ac{EMG} signals and their relationship (or non-relationship) to muscle activation and muscle forces.
+
+
+
 

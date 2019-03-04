@@ -1,10 +1,10 @@
 \section{State of the Art}
 A typical exoskeleton would have a motor or some sort of actuator to produce torque at the joints (e.g. knee joint) to enable or assist the user.
-The amount of torque produces for any given motion depends on the control system of the exoskeleton.
-Many different methods have been researched and implemented towards goal of providing a good control system that provides exactly the assist that the user wants and/or needs.
+The amount of torque produced for any given motion depends on the control system of the exoskeleton.
+Many different methods have been researched and implemented towards the goal of implementing a good control system that provides exactly the assist that the user wants and/or needs.
 The key to that goal is to estimate or predict the joint torque associated with a certain motion performed by the user.
 
-This chapter discusses the state of the art of exoskeleton control systems and joint torque and/or muscle force prediction models.
+This chapter discusses the state of the art of exoskeleton control systems and joint torque and muscle force prediction models.
 First, the discussion is aimed towards methods and models that are used today for kinetics of human motion analysis in general research and clinical applications.
 This includes discussion about data acquisition, especially \ac{EMG} data, and its relation to the body dynamics, e.g. muscle forces.
 Second, the discussion is narrowed towards the methods and models that can be used as control systems in an exoskeleton.
@@ -16,8 +16,7 @@ This also includes general discussion about the research of different \ac{ANN}s 
 
 %The ability to predict muscle forces and joint moments using measurements from the body is important to create smooth human-machine interface between a user and an assistive device. Extensive research has been done towards gait modelling and joint moment prediction. Motion labs and inverse dynamics can be used to calculate joint angles and moments from motion and force plate data. The cause of the motion and moments, namely the muscle force, is however not well predicted here. Static and dynamic optimization methods have been used to predict the muscle forces but they lack the consideration of variations in muscle activation patterns between tasks and individuals \cite{Pizzolato2015, Sartori2012a}. The challenge of accounting for different muscle synergies for the same motion could be answered using \ac{EMG}-driven models \cite{Pizzolato2015, Sartori2012a}.
 
-
-\subsection{Kinetics: Methods, models, and data acquisition}
+\subsection{Kinetics of Human Motion: methods, models, and data acquisition}
 \label{sec:A-MSModels}
 Kinetics of human motion is the study of the forces that cause human motion. 
 This includes muscle forces as well as external forces, such as \ac{GRF}.
@@ -27,16 +26,15 @@ However, it is possible with non-invasive methods to measure reaction forces lik
 Several models have then been developed to estimate joint torques and muscle forces using this data \cite{Erdemir2007}.
 For the purpose of this chapter these methods will be split into two groups, namely those who use \ac{EMG} data and those who do not use \ac{EMG} data.
 This chapter begins with the models that do not use \ac{EMG} data.
-That includes inverse dynamics for joint torque estimations.
+That includes inverse dynamics for joint torque estimations. 
 Then it goes into detail about \ac{EMG} and its relation to muscle activity before discussing the models that do use \ac{EMG} data, call them \ac{EMG}-driven models.
-
 
 %As previously stated, the \textit{Model-based} control of exoskeletons can be divided into either \textit{dynamic models} or \textit{muscle model} \cite{Anam2012}. 
 %The objective of both groups is essentially to estimate muscle forces and/or resulting joint moments and both can perhaps be considered as a subcategory of musculoskeletal (MS) models. 
 %However, what distinguishes these groups is whether the model uses data collected from the muscle activity or not, i.e. whether \ac{EMG} data is used or not.
 
 \subsubsection{Inverse dynamics}
-Inverse-dynamics is the use of kinematics and reaction forces, e.g. motion capture and force plate data from a motion lab, to calculate joint torques estimations.
+Inverse dynamics is the use of kinematics and reaction forces, e.g. motion capture, scaled model, and force plate data from a motion lab, to calculate joint torques estimations \cite{Erdemir2007, }.
 This modelling method alone does not provide any information about muscle activation and muscle forces.
 
 There are several methods that have been implemented to estimate muscle activation and muscle forces, one of which is static optimization \cite{Erdemir2007,Pizzolato2015}. 

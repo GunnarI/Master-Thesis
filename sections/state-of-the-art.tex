@@ -34,7 +34,11 @@ Then it goes into detail about \ac{EMG} and its relation to muscle activity befo
 %However, what distinguishes these groups is whether the model uses data collected from the muscle activity or not, i.e. whether \ac{EMG} data is used or not.
 
 \subsubsection{Inverse dynamics}
-Inverse dynamics is the use of kinematics and reaction forces, e.g. motion capture, scaled model, and force plate data from a motion lab, to calculate joint torques estimations \cite{Erdemir2007, }.
+Inverse dynamics is the use of kinematics and reaction forces, e.g. motion capture, scaled model, and force plate data from a motion lab, to calculate joint torques estimations.
+As the method works with the equation of motion, it relies on correct scaling of each body segment, and joints angles and positions relative to the reaction forces \cite{Buchanan2004,Erdemir2007}.
+Extensive research has been done on inverse dynamics and it is widely used in clinical applications such as, for example, gait analysis in rehabilitation \cite{Erdemir2007,Buchanan2004,Pizzolato2015}.
+OpenSim \cite{Delp2007, Seth2018} is an open-source software offering biomechanical models and simulation tools to, among many other things, model and run inverse dynamic solution on a scaled musculoskeletal model \cite{Buchanan2004, Delp2007, Seth2018, Pizzolato2017}.
+
 This modelling method alone does not provide any information about muscle activation and muscle forces.
 
 There are several methods that have been implemented to estimate muscle activation and muscle forces, one of which is static optimization \cite{Erdemir2007,Pizzolato2015}. 

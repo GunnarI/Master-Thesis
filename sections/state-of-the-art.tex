@@ -127,13 +127,22 @@ See table \ref{tab:SENIAM-mus-and-loc} for the list of these 14 muscles as well 
 \end{table}
 }
 
-Talk about filtering
+\todo{Add short text here about the filtering and normalization of the EMG signal}
 
-Talk about muscle synergies
-
+\clearpage
 \subsubsection{\ac{EMG}-based Models}
 \label{sec:A-EMGBasedModels}
-The Hill-model 
+As previously mentioned, \ac{EMG} can only measure muscle activation and not muscle forces.
+\ac{EMG}-based models are models developed towards estimating muscle forces and/or joint torques base on \ac{EMG} data \cite{Pizzolato2015, Erdemir2007}.
+
+Hill-Type models... \todo{\cite{Lloyd2003,WangMarc,Winby2008} and maybe \cite{Rosen1999} to talk about Hill-Type models}
+
+While static and dynamic optimization are methods to estimate muscle forces from kinematic and reaction force data only, \ac{EMG}-driven models use also \ac{EMG} data \cite{Pizzolato2015}.
+As previously stated, \citeauthorint{Pizzolato2015} recognize the drawback of the optimization methods in regards to synergy variation. 
+Furthermore, they note that the optimization methods are easily accessible, which is for example reflected by the fact that OpenSim, a tool widely used by researchers, uses those methods in its models \cite{Delp2007,Pizzolato2015,Seth2018}. 
+They further state that this accessibility does not apply for EMG-driven methods which "have been developed by different research groups and they are not publicly available, or are limited to isometric tasks" \cite[p. 1]{Pizzolato2015}.
+CEINMS is a tool developed to increase said availability and allows researchers to use \ac{EMG}-driven (or \ac{EMG}-informed) models on collected kinematic, reaction force, and \ac{EMG} data \cite{Pizzolato2015}.
+
 
 %\citeauthorpage{Erdemir2007}{132} state that "actual estimates of muscle forces can only be obtained with computational models in which the skeleton and muscles are both represented".
 
@@ -147,7 +156,7 @@ The control system is how the human motion is translated into mechanical activat
 \citeauthorint{Anam2012} list four different categorizations of control systems in exoskeletons, namely \textit{Model-based}, \textit{Hierarchy based}, \textit{Physical parameters based}, and \textit{Usage based}. 
 For the purpose of this review the focus is set on the first categorization, i.e. \textit{Model-based} control systems.
 The article states that the control strategy of an exoskeleton can be divided into two types depending on the model used, namely the \textit{dynamic model} and the \textit{muscle model} based control. 
-One could argue for a third type being a brain model based control like the one implemented in \cite{Wang2017a}, however this type of model will not be discussed further here.
+%One could argue for a third type being a brain model based control like the one implemented in \cite{Wang2017a}, however this type of model will not be discussed further here.
 
 \citeauthor{Anam2012} divide the \textit{dynamic model} into three different categories, each with its strengths and weaknesses.
 These models use systems physical characteristics and motion data to estimate moments and/or forces required from the exoskeleton. 
@@ -156,14 +165,13 @@ For example, one of the categories is the artificial intelligent method where on
 
 The \textit{muscle model} uses muscle neural activity and/or joint kinematics to predict muscle forces and resulting joint moments. These models can be split into the two categories: parametric and non-parametric muscle model. 
 The difference between them is that in addition to \ac{EMG} data the parametric model needs anthropometric data with information of muscle and joint dynamic \cite{Anam2012}.
-The \textit{muscle model}, often called \ac{EMG}-driven modelling, has been researched as a way to provide real-time prediction of muscle forces and joint torques \cite{Anam2012, durandau, Pizzolato2015}. 
+This is much like the \ac{EMG}-driven models discussed in the previous chapter \cite{Pizzolato2015}.
+The \textit{muscle model} has been researched as a way to provide real-time prediction of muscle forces and joint torques \cite{Anam2012, durandau, Pizzolato2015}. 
 Furthermore, as mentioned by \citeauthorint{Anam2012}, much effort has been made towards predicting the user's intentions beforehand by using \ac{EMG} data.
 The Hill-type muscle model is possibly the most researched parametric muscle model and some modifications of it have been made throughout the years to make it more accurate \cite{Lloyd2003, Anam2012, Pizzolato2015, Lee14-1}.
 For the non-parametric muscle model an artificial neural network could be used \cite{Kiguchi2012,Lee14-1}.  
+\todo{Find more references towards exoskeletons and do more comparisons between methods}
 
-%Chapter \ref{sec:A-MSModels} will compare and go into detail about the different parametric and non-parametric muscle models as well as some dynamic models and inverse dynamics.
-%To begin with, next chapter will briefly introduce the theoretical science between \ac{EMG} signals and their relationship (or non-relationship) to muscle activation and muscle forces.
-
-
-
-
+\subsection{Artificial neural networks in biomechanics}
+\todo{Start with general discussion about ANN and its developments and recent advanced within biomechanics}
+\cite{Ardestani2014,Liu2009,WangMarc,Lee14-1,Smith2009,Naeem2012}\todo{Do comparison of different ANN methods used with EMG data that have been researched.}

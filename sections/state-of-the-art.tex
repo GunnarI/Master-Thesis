@@ -5,6 +5,7 @@ Many different methods have been researched and implemented towards the goal of 
 The key to that goal is to estimate or predict the joint torque associated with a certain motion performed by the user.
 
 This chapter discusses the state of the art of exoskeleton control systems and joint torque and muscle force prediction models.
+Note that the overall focus is on lower extremity kinematics, joints, and muscles.
 First, the discussion is aimed towards methods and models that are used today for kinetics of human motion analysis in general research and clinical applications.
 This includes discussion about data acquisition, especially \ac{EMG} data, and its relation to the body dynamics, e.g. muscle forces.
 Second, the discussion is narrowed towards the methods and models that can be used as control systems in an exoskeleton.
@@ -54,10 +55,10 @@ This method does not require inverse dynamics to first estimate joint torques si
 Furthermore, it is less vulnerable toward errors in the experimental measurements as the inclusion of the kinematic data is somewhat "weak", i.e. there is a slack on the kinematic data in favor of more intact muscle dynamics.
 However, the dynamic optimization method is more computationally heavy when compared to the static optimization method \cite{Erdemir2007}.
 
-As pointed out by \citeauthorint{Pizzolato2015} the optimization method, including static and dynamic optimization, cannot account for variations in muscle activation patterns between tasks and individuals.
+As pointed out by \citeauthorint{Pizzolato2015} the optimization method, including static and dynamic optimization, cannot account for variations in muscle activation patterns (i.e. muscle synergies) between tasks and individuals.
 For example, if the objective function is to minimize the sum of muscle forces that fit a certain joint moment, it does not account for the fact different muscle synergies can produce the same joint moment. 
-Furthermore, 
-\cite{Ivanenko2016}
+Muscle synergies have been shown to be task-specific and vary between individuals and different pathologies \cite{Ivanenko2016, Safavynia2011}.
+To account for this drawback, muscle activation need to be measured and accounted for, for example by using \ac{sEMG} and \ac{EMG}-driven models \cite{Pizzolato2015}.
 
 \subsubsection{Electromyography and Muscle Activity}
 \label{sec:A-EMG}
@@ -75,8 +76,7 @@ However, these tissues act as spatial and temporal low-pass filters with resulti
 A common method to partially compensate for the spatial low-pass filtering is to use a pair of electrodes positioned few cm apart.
 This method also allows removing the common-mode component (e.g. $50Hz$ from power line interference) \cite{Farina2016}.
 
-Other artifacts of the \ac{sEMG} signal include end-of-fiber effect, electrode-skin impedance
-
+Some other artifacts of the \ac{sEMG} signal include, for example end-of-fiber effect, electrode-skin impedance, and crosstalk \cite{Farina2016}.
 Due to all these implications and artifacts the signal recorded by the electrodes depends on a number of anatomical, physical, and detection system parameters. The following list are the most important factors as listed by \citeauthorpage{Farina2016}{41}:
 \begin{quote}
 (1) the thickness of the subcutaneous tissue layer (only for surface recordings),
@@ -91,7 +91,41 @@ Due to all these implications and artifacts the signal recorded by the electrode
 Thus, it is easy to see that the \ac{sEMG} can vary highly between individuals as well as between days and measurements of the same individual.
 
 Guidelines have been made by \ac{SENIAM} in effort to make \ac{sEMG} procedures more standardized and comparable and to increase reproducibility of the experiment. 
-The \ac{SENIAM} project is a European concerted action towards development of recommendations on sensors, sensor placement, signal processing, and modelling for \ac{sEMG} \cite{Hermens2000}.
+The \ac{SENIAM} project is a European concerted action towards development of recommendations on sensors, sensor placement, signal processing, and modelling for \ac{sEMG} \cite{Hermens1999, Hermens2000}.
+One obvious setback of \ac{sEMG}, as compared to using the invasive method, is that it only possible to measure muscles near the surface.
+If the muscle is located behind other muscles or if too much tissue is between the source of the signal and the electrodes then the "correct" signal cannot be detected. 
+Furthermore, the placement of the electrodes should not be too close to either the innervation zone or the end zone where the tendon is.
+In fact it has been suggested that the best potition is right in between those zones \cite{Farina2016, Hermens2000}.
+Also, the position of the electrodes cannot be to close to another muscle with the risk of crosstalk \cite{Farina2016, Hermens2000}.
+The \ac{SENIAM} project has identified 14 muscles on lower extremities, including the hip, where \ac{sEMG} can be measured.
+They have also provided guidelines on where to place the electrodes.
+See table \ref{tab:SENIAM-mus-and-loc} for the list of these 14 muscles as well as short description of recommended electrodes locations \cite{Hermens1999}.
+
+{
+\renewcommand{\arraystretch}{1.5}
+\begin{table}[ht!]
+    \centering
+    \caption{\ac{SENIAM}: Recommendations for sensor locations on lower extrimity muscles. Muscle names and location description are extracted from the \ac{SENIAM} website (\href{www.seniam.org}{www.seniam.org}). Visit the website or see \cite{Hermens1999} for more information.}
+    \label{tab:SENIAM-mus-and-loc}
+    \small
+    \begin{tabular}{>{\raggedright}p{4.2cm}|p{8cm}}
+        Muscles & Electrodes Location \\ \hline
+        Gluteus (Maximus) & 50\% on the line between the sacral vertebrae and the greater trochanter. This position corresponds with the greatest prominence of the middle of the buttocks well above the visible bulge of the greater trochanter. \\
+        Gluteus (Medius) & 50\% on the line from the crista iliaca to the trochanter.\\
+        Tensor Fasciae Latae & On the line from the anterior spina iliaca superior to the lateral femoral condyle in the proximal 1/6.\\
+        Quadriceps Femoris (rectus femoris) & The electrodes need to be placed at 50\% on the line from the anterior spina iliaca superior to the superior part of the patella\\
+        Quadriceps Femoris (vastus medialis) & 80\% on the line between the anterior spina iliaca superior and the joint space in front of the anterior border of the medial ligament.\\
+        Quadriceps Femoris (vastus lateralis) & 2/3 on the line from the anterior spina iliaca superior to the lateral side of the patella.\\
+        Biceps Femoris (long and short head) & 50\% on the line between the ischial tuberosity and the lateral epicondyle of the tibia.\\
+        Semitendinosus & 50\% on the line between the ischial tuberosity and the medial epycondyle of the tibia.\\
+        Tibialis Anterior & 1/3 on the line between the tip of the fibula and the tip of the medial malleolus.\\
+        Peroneus Longus & 25\% on the line between the tip of the head of the fibula to the tip of the lateral malleolus.\\
+        Soleus & Anterior to the tendon of the m. peroneus longus at 25\% of the line from the tip of the lateral malleolus to the fibula-head.\\
+        Gastrocnemius Medialis & On the most prominent bulge of the muscle.\\
+        Gastrocnemius Lateralis & 1/3 of the line between the head of the fibula and the heel.
+    \end{tabular}
+\end{table}
+}
 
 Talk about filtering
 

@@ -1,7 +1,7 @@
 \section{State of the Art}
 A typical exoskeleton would have a motor or some sort of actuator to produce torque at the joints (e.g. knee joint) to enable or assist the user.
 The amount of torque produced for any given motion depends on the control system of the exoskeleton.
-Many different methods have been researched and implemented towards the goal of implementing a good control system that provides exactly the assist that the user wants and/or needs.
+Many different methods have been researched and implemented towards the goal of making a good control system that provides exactly the assist that the user wants and/or needs.
 The key to that goal is to estimate or predict the joint torque associated with a certain motion performed by the user.
 
 This chapter discusses the state of the art of exoskeleton control systems and joint torque and muscle force prediction models.
@@ -10,7 +10,7 @@ This includes discussion about data acquisition, especially \ac{EMG} data, and i
 Second, the discussion is narrowed towards the methods and models that can be used as control systems in an exoskeleton.
 The flexibility for computation and data acquisition is lower in an exoskeleton and thus the number of methods that could be used more limited.
 Third, the discussion is focused toward the state of the art of one particular method which consists of joint torque prediction using \ac{ANN} with \ac{EMG} data acquisition. 
-This also includes general discussion about the research of different \ac{ANN}s that have been used with \ac{EMG} data.
+This also includes general discussion about the research of different \acp{ANN} that have been used with \ac{EMG} data.
 
 %This chapter first provides the state of the art of exoskeletons as assistive devices and how the estimation of joint moments can be used. Secondly, theoretical background of the different methods used for kinetics of human motion are discussed and they compared to each other. This includes first a discussion about the links from \ac{EMG} measurements to muscle activation and muscle synergies and to muscle forces resulting in joint moments and motion. Thirdly, the chapter details the use of machine learning algorithms as an alternative to the kinetics methods and goes into the state of the art of different algorithms.
 
@@ -24,33 +24,40 @@ It is challenging to measure \textit{in vivo} muscle forces and it requires at l
 Thus, in general clinical application as well as in exoskeletons, measuring muscle forces directly is hardly an option.
 However, it is possible with non-invasive methods to measure reaction forces like \ac{GRF}, human motion (e.g. motion capture system), and \ac{EMG}.
 Several models have then been developed to estimate joint torques and muscle forces using this data \cite{Erdemir2007}.
-For the purpose of this chapter these methods will be split into two groups, namely those who use \ac{EMG} data and those who do not use \ac{EMG} data.
+For the purpose of this chapter these methods will be split into two groups, namely those who use \ac{EMG} data (\ac{EMG}-based models) and those who do not use \ac{EMG} data (Non-\ac{EMG}-based models).
 This chapter begins with the models that do not use \ac{EMG} data.
-That includes inverse dynamics for joint torque estimations. 
-Then it goes into detail about \ac{EMG} and its relation to muscle activity before discussing the models that do use \ac{EMG} data, call them \ac{EMG}-driven models.
+That includes inverse dynamics for joint torque estimations and static and dynamic optimization for muscle force estimation. 
+Then it goes into detail about \ac{EMG} and its relation to muscle activity before discussing the models that do use \ac{EMG} data, namely \ac{EMG}-driven models.
 
 %As previously stated, the \textit{Model-based} control of exoskeletons can be divided into either \textit{dynamic models} or \textit{muscle model} \cite{Anam2012}. 
 %The objective of both groups is essentially to estimate muscle forces and/or resulting joint moments and both can perhaps be considered as a subcategory of musculoskeletal (MS) models. 
 %However, what distinguishes these groups is whether the model uses data collected from the muscle activity or not, i.e. whether \ac{EMG} data is used or not.
-
-\subsubsection{Inverse dynamics}
-Inverse dynamics is the use of kinematics and reaction forces, e.g. motion capture, scaled model, and force plate data from a motion lab, to calculate joint torques estimations.
+\subsubsection{Non-\ac{EMG}-based Models}
+\label{sec:A-NonEMGBasedModels}
+\textit{Inverse dynamics} is the use of kinematics and reaction forces, e.g. motion capture, scaled model, and force plate data from a motion lab, to calculate joint torques estimations.
 As the method works with the equation of motion, it relies on correct scaling of each body segment, and joints angles and positions relative to the reaction forces \cite{Buchanan2004,Erdemir2007}.
 Extensive research has been done on inverse dynamics and it is widely used in clinical applications such as, for example, gait analysis in rehabilitation \cite{Erdemir2007,Buchanan2004,Pizzolato2015}.
 OpenSim \cite{Delp2007, Seth2018} is an open-source software offering biomechanical models and simulation tools to, among many other things, model and run inverse dynamic solution on a scaled musculoskeletal model \cite{Buchanan2004, Delp2007, Seth2018, Pizzolato2017}.
+\todo{Possibly talk more about the methods used in OpenSim}
 
-This modelling method alone does not provide any information about muscle activation and muscle forces.
+The inverse dynamics method alone does not provide any information about muscle activation and muscle forces.
+There are several methods that have been implemented to estimate muscle activation and muscle forces \cite{Erdemir2007}.
+Perhaps the most notable ones that are not \ac{EMG}-drive are the static and dynamic optimization methods \cite{Erdemir2007, Delp2007, Pizzolato2015}. 
 
-There are several methods that have been implemented to estimate muscle activation and muscle forces, one of which is static optimization \cite{Erdemir2007,Pizzolato2015}. 
-This method uses optimization with an objective function such as, for example, minimizing the sum of muscle forces from all muscles. 
+The \textit{static optimization} method uses optimization with an objective function such as, for example, minimizing the sum of muscle forces from all muscles. 
 Through iteration the muscle forces, that both fit to the estimated joint torque from the inverse dynamics model and satisfy the objective function, are calculated \cite{Erdemir2007}. 
+\todo{Write about pros and cons of this method and include more references}
 
-Another method is the dynamic optimization which, in short, uses forward dynamics to find the set of muscle activations that best fit the experimental kinematic data (e.g. with objective to minimize tracking error in kinematics and \ac{GRF}). \citeauthorint{Erdemir2007} point out that this method is beneficial as compared to the static optimization because of its more straightforward inclusion of muscle dynamics within the solution.
+\textit{Dynamic optimization} is an alternative to static optimization which, in short, uses forward dynamics to find the set of muscle activations that best fit the experimental kinematic data (e.g. with objective to minimize tracking error in kinematics and \ac{GRF}). 
+This method does not require inverse dynamics to first estimate joint torques since the constraint is rather the measured motion and \ac{GRF} data.
+\citeauthorint{Erdemir2007} point out that this method is beneficial as compared to the static optimization because of its more straightforward inclusion of muscle dynamics within the solution.
 Furthermore, it is less vulnerable toward errors in the experimental measurements as the inclusion of the kinematic data is somewhat "weak", i.e. there is a slack on the kinematic data in favor of more intact muscle dynamics.
 However, the dynamic optimization method is more computationally heavy when compared to the static optimization method \cite{Erdemir2007}.
 
 As pointed out by \citeauthorint{Pizzolato2015} the optimization method, including static and dynamic optimization, cannot account for variations in muscle activation patterns between tasks and individuals.
-For example, if the objective function is to minimize the sum of muscle forces that fit a certain joint moment, it does not really account for possible antagonistic muscle activation.
+For example, if the objective function is to minimize the sum of muscle forces that fit a certain joint moment, it does not account for the fact different muscle synergies can produce the same joint moment. 
+Furthermore, 
+\cite{Ivanenko2016}
 
 \subsubsection{Electromyography and Muscle Activity}
 \label{sec:A-EMG}
@@ -90,8 +97,8 @@ Talk about filtering
 
 Talk about muscle synergies
 
-\subsubsection{Hill-model}
-\label{sec:A-HillModel}
+\subsubsection{\ac{EMG}-based Models}
+\label{sec:A-EMGBasedModels}
 The Hill-model 
 
 %\citeauthorpage{Erdemir2007}{132} state that "actual estimates of muscle forces can only be obtained with computational models in which the skeleton and muscles are both represented".
@@ -120,8 +127,8 @@ Furthermore, as mentioned by \citeauthorint{Anam2012}, much effort has been made
 The Hill-type muscle model is possibly the most researched parametric muscle model and some modifications of it have been made throughout the years to make it more accurate \cite{Lloyd2003, Anam2012, Pizzolato2015, Lee14-1}.
 For the non-parametric muscle model an artificial neural network could be used \cite{Kiguchi2012,Lee14-1}.  
 
-Chapter \ref{sec:A-MSModels} will compare and go into detail about the different parametric and non-parametric muscle models as well as some dynamic models and inverse dynamics.
-To begin with, next chapter will briefly introduce the theoretical science between \ac{EMG} signals and their relationship (or non-relationship) to muscle activation and muscle forces.
+%Chapter \ref{sec:A-MSModels} will compare and go into detail about the different parametric and non-parametric muscle models as well as some dynamic models and inverse dynamics.
+%To begin with, next chapter will briefly introduce the theoretical science between \ac{EMG} signals and their relationship (or non-relationship) to muscle activation and muscle forces.
 
 
 

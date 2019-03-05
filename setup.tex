@@ -12,8 +12,8 @@
 % Specify the margins
 \usepackage[
 	a4paper,
-	inner=30mm,
-	outer=30mm,
+	inner=35mm,
+	outer=35mm,
 	headsep=11.5mm, % There is an automatic 1 inch headsep but the headsep should be 15mm minus the headheight (10pt), so: 15mm - 3.5mm - 25.4mm = -13.9mm
 	footskip=15mm,
 	top=15mm,
@@ -41,12 +41,32 @@
 \usepackage{tcolorbox}								% Create boxes around content
 \tcbset{colback=white,arc=0mm}
 
+% The TODO package
+\usepackage[textwidth=30mm, textsize=tiny]{todonotes}
+
 % Packages for math
 \usepackage{amsmath}
 
 % Setup for abbreviations
+\usepackage{enumitem}
+\newlength\myitemwidth
+\setlength\myitemwidth{5em} % <<< choose what you need here
+\newlist{myacronymlist}{description}{1}
+\setlist[myacronymlist]{
+  labelindent = 0pt ,
+  labelsep    = 0pt ,
+  leftmargin  = \myitemwidth ,
+  labelwidth  = \myitemwidth ,
+  itemindent  = 0pt 
+  %format      = \normalfont
+}
 \usepackage{acro}
+\DeclareAcroListStyle{myliststyle}{list}{
+  list = myacronymlist
+}
 \acsetup{
+    list-style  = myliststyle,
+    list-caps   = true,
     first-style = default,
     single      = true
 }
@@ -54,7 +74,7 @@
 
 % Specifying fonts
 \usepackage{fontspec}
-\setmainfont{Georgia} 
+\setmainfont{Georgia}[WordSpace={1.2,2.5,0}]
 \setsansfont{Arial}
 \newfontfamily\footerfont{Georgia}
 

@@ -1,57 +1,50 @@
-\documentclass[12pt,twoside]{article}
+\documentclass{kththesis}
 
-% This is all the packages and settings and so on.
-% It is using custom fonts that needs to be installed on the computer. If they are not present, they have to be added manually.
-\input{setup}
+\usepackage{csquotes} % Recommended by biblatex
+\usepackage[style=numeric,sorting=none,backend=biber]{biblatex}
+\addbibresource{references.bib} % The file containing our references, in BibTeX format
 
-% Defining files for bibliography
-%\addbibresource{ref.bib}
-\addbibresource{./references.bib}
-% Add a second bibliography file for the second author to allow
-% both to update it through the mendeley integration.
-% \addbibresource{ref-author-2.bib}
-
-% Defining document information
 \title{Real-time joint torque prediction using machine learning model based on surface electromyography}
-%\newcommand{\subtitle}{Subtitle} 
+\alttitle{Real-time gemensamt vridmoment förutsägelse med maskininlärningsmodell baserad på ytelektromyografi}
 \author{Gunnar Ingi Fridriksson}
+\email{gifr@kth.se}
+\supervisor{Elena Gutierrez Farewik}
+\examiner{Rodrigo Moreno}
+\programme{Master in Medical Engineering}
+\school{School of Engineering Sciences in Chemistry, Biotechnology and Health}
+\date{\today}
+
+% Uncomment the next line to include cover generated at https://intra.kth.se/kth-cover?l=en
+% \kthcover{kth-cover.pdf}
 
 \begin{document}
-%\setstretch{1.4}
-\onehalfspacing
+\frontmatter
 
-% The front page of the document
-\include{title-page}
+\include{chapters/0-pre-content}
 
-\pagestyle{empty}
-\insertempty
-%\newpage
-%\pagenumbering{roman}
 
-\include{sections/0-pre-content}
+% Mainmatter is where the actual contents of the thesis goes
+\mainmatter
 
-% The table of content
-%\customtoc
+\include{chapters/1-introduction}
 
-%The content only includes the first level of sub-headings as the third level was less relevant in the scope of the entire report. This can be changed in the setup.tex file.
+\include{chapters/2-background}
 
-\restoregeometry
-\pagestyle{fancy}
-\pagenumbering{arabic}
+\include{chapters/3-methods}
 
-%\include{sections/1-introduction}
-%\include{sections/2-method}
-%\include{sections/3-results}
-%\include{sections/4-conclusions}
+\include{chapters/4-results}
 
-% \include{content}
+\include{chapters/5-discussion}
 
-\newpage
-\addcontentsline{toc}{section}{References}
-%\printbibliography
+\include{chapters/6-conclusion}
 
-\include{sections/appendices}
-\printbibliography
-\include{back-cover}
+% Print the bibliography (and make it appear in the table of contents)
+\printbibliography[heading=bibintoc]
+
+\appendix
+
+\include{chapters/appendices}
+
+\tailmatter
 
 \end{document}

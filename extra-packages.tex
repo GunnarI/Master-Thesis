@@ -1,0 +1,37 @@
+% The TODO package
+\usepackage[textwidth=33mm, textsize=tiny]{todonotes}
+
+% Clickable links
+\usepackage[hidelinks]{hyperref}
+
+% Setup for abbreviations
+\usepackage{enumitem}
+\newlength\myitemwidth
+\setlength\myitemwidth{5em} % <<< choose what you need here
+\newlist{myacronymlist}{description}{1}
+\setlist[myacronymlist]{
+  labelindent = 0pt ,
+  labelsep    = 0pt ,
+  leftmargin  = \myitemwidth ,
+  labelwidth  = \myitemwidth ,
+  itemindent  = 0pt 
+  %format      = \normalfont
+}
+\usepackage{acro}
+\DeclareAcroListStyle{myliststyle}{list}{
+  list = myacronymlist
+}
+\acsetup{
+    list-style  = myliststyle,
+    list-caps   = true,
+    first-style = default,
+    single      = true
+}
+\input{chapters/abbreviations.tex}
+
+% Command to reference author in text and display ref number
+%\newcommand\citeauthorint[1]{\citeauthor{#1} \cite{#1}}
+\newcommand\citeauthorpage[2]{\citeauthor{#1} \parencite[#2]{#1}}
+
+% This is just to get some nonsense text in this template, can be safely removed
+\usepackage{blindtext}

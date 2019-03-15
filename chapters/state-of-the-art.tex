@@ -163,12 +163,14 @@ However, as previously mentioned, the models (i.e. the \ac{ANN} and the human bo
 The aim of the \ac{ANN} model is simply to find the best fit based statistical methods and probability.
 
 \subsection{Machine Learning}
-%\begin{figure}
-%    \centering
-%    \includegraphics{img/node-diagram.tikz}
-%    \caption{Caption}
-%    \label{fig:my_label}
-%\end{figure}
+Machine learning refers to a computer algorithm with the ability to learn from data \cite{Goodfellow2016}. \textcite{Mitchell1997} gives the following definition of this learning: "A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$."
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/types-of-learning-diagram.pdf}
+    \caption{The tree shows how machine learning algorithms can be categorized by different types of learning. Diagram is adapted from \cite[fig. 4.3]{Rojas1996a}}
+    \label{fig:types-of-learning}
+\end{figure}
 
 
 
@@ -176,7 +178,7 @@ The aim of the \ac{ANN} model is simply to find the best fit based statistical m
 Like the name suggests \acp{ANN} consist of multiple "artificial neurons", often called nodes, that are interconnected by pathways for communication.
 Topology refers to how these nodes are placed (e.g. into layers), how many there are, and how they are connected.
 Figure \ref{fig:generic-ann} shows an example of a generic multilayer feed-forward \ac{ANN}, also known as \ac{MLP}.
-It is feed-forward since 
+It is feed-forward since it does not contain any feed-back loop, as opposed to \acp{RNN} \cite{Goodfellow2016, Haykin2009}. Furthermore, it is multilayer as it contains, apart from the input and output layer, some hidden layers.
 
 \begin{figure}
     \centering
@@ -185,7 +187,7 @@ It is feed-forward since
     \label{fig:generic-ann}
 \end{figure}
 
-While figure \ref{fig:generic-ann} shows one type of neural network topology
+While the topology is one way to manipulate \acp{NN} figure \ref{fig:generic-ann} shows one type of neural network topology
 
 \subsection{Backpropagation}
 

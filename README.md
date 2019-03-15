@@ -1,3 +1,3 @@
-# Description
-This is my Master Thesis TeX setup including all figures, table, references, etc.
-The template is adopted from [this kth-thesis-template repo](https://github.com/hannesrabo/kth-thesis-template) with slight adjustments implemented in [my fork](https://github.com/GunnarI/kth-thesis-template) to mimic some features recommended on KTH website, i.e. [here](https://www.kth.se/en/student/program/examensarbete/avhandlingarochexamensarbeten/tips-for-utformning-av-inlaga-1.458240) and [here](https://intra.kth.se/kth-cover/)
+# KTH Master thesis template
+This template uses the format given by KTH here: https://gits-15.sys.kth.se/giampi/kthlatex
+However, the structure and folder organization is modified.

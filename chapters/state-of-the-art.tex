@@ -149,3 +149,43 @@ For the non-parametric muscle model an artificial neural network could be used \
 This chapter has yet to be written\todo{Start with general discussion about ANN and its developments and recent advanced within biomechanics}
 \\
 \cite{Ardestani2014,Liu2009,Lee14-1,Smith2009,Naeem2012,Kiguchi2012}\todo{Do comparison of different ANN methods used with EMG data that have been researched.}
+
+The methods to predict joint torque discussed previously all use calculations based on anthropometry and dynamic models of the human body. 
+The measured parameters, such as \ac{EMG}, motion, and reaction force data, are used as input into these equations that are based on specific dynamic models of the human body, to estimate the joint torque that best fits the input.
+\acp{ANN} on the contrary treats the model part as sort of a \textit{black box} and does not depend on these dynamic models. 
+Rather, it simulates the model with a self-organized calculations based on statistics.
+This means that the \ac{ANN} goes from an input to desired output without direct relations to dynamic models of the human body.
+This is important when looking at going from an \ac{EMG} signal to joint torque prediction since the projection of \ac{EMG} to muscle force and joint torque is not well established through dynamic models.
+Motion data and reaction forces are needed to get joint torque from dynamic models, and this is not easy to measure in an exoskeleton.
+
+The \ac{ANN} model has many different design methods (e.g. topology, learning rate, number of epochs) that can be chosen to give the same results as the dynamic models of the human body. 
+However, as previously mentioned, the models (i.e. the \ac{ANN} and the human body models) do not relate kinetically or biologically.
+The aim of the \ac{ANN} model is simply to find the best fit based statistical methods and probability.
+
+\subsection{Machine Learning}
+%\begin{figure}
+%    \centering
+%    \includegraphics{img/node-diagram.tikz}
+%    \caption{Caption}
+%    \label{fig:my_label}
+%\end{figure}
+
+
+
+\subsection{Neural Networks: Machine Learning and Topology}
+Like the name suggests \acp{ANN} consist of multiple "artificial neurons", often called nodes, that are interconnected by pathways for communication.
+Topology refers to how these nodes are placed (e.g. into layers), how many there are, and how they are connected.
+Figure \ref{fig:generic-ann} shows an example of a generic multilayer feed-forward \ac{ANN}, also known as \ac{MLP}.
+It is feed-forward since 
+
+\begin{figure}
+    \centering
+    \includegraphics{img/generic-ann-diagram}
+    \caption{The figure shows a feed-forward neural network with following layers (left to right): an input layer (filled black nodes), two hidden layers, and an output layer. The arrows and the turquoise filled nodes together form a transfer function $f$ which maps the input to the output: $f(\mathbf{x})=\mathbf{y} $.}
+    \label{fig:generic-ann}
+\end{figure}
+
+While figure \ref{fig:generic-ann} shows one type of neural network topology
+
+\subsection{Backpropagation}
+

@@ -1,5 +1,6 @@
 \chapter{State of the Art}
-A typical exoskeleton would have a motor or some sort of actuator to produce torque at the joints (e.g. knee joint) to enable or assist the user.
+A typical powered exoskeleton\footnote{Robotic exoskeletons or powered exoskeletons are considered wearable robotic units controlled by computer boards to power a system of motors, pneumatics,
+levers, or hydraulics to restore locomotion} would have a motor or some sort of actuator to produce torque at the joints (e.g. knee joint) to enable or assist the user.
 The amount of torque produced for any given motion depends on the control system of the exoskeleton.
 Many different methods have been researched and implemented towards the goal of making a good control system that provides exactly the assist that the user wants and/or needs.
 The key to that goal is to estimate or predict the joint torque associated with a certain motion performed by the user.
@@ -151,43 +152,106 @@ This chapter has yet to be written\todo{Start with general discussion about ANN 
 \cite{Ardestani2014,Liu2009,Lee14-1,Smith2009,Naeem2012,Kiguchi2012}\todo{Do comparison of different ANN methods used with EMG data that have been researched.}
 
 The methods to predict joint torque discussed previously all use calculations based on anthropometry and dynamic models of the human body. 
-The measured parameters, such as \ac{EMG}, motion, and reaction force data, are used as input into these equations that are based on specific dynamic models of the human body, to estimate the joint torque that best fits the input.
+The measured parameters, such as \ac{EMG}, motion, and reaction force data, are used as input into equations based on specific dynamic models of the human body, to estimate the joint torque that best fits the input.
 \acp{ANN} on the contrary treats the model part as sort of a \textit{black box} and does not depend on these dynamic models. 
-Rather, it simulates the model with a self-organized calculations based on statistics.
+Rather, it simulates the model with a self-organized calculations based on statistical methods.
 This means that the \ac{ANN} goes from an input to desired output without direct relations to dynamic models of the human body.
 This is important when looking at going from an \ac{EMG} signal to joint torque prediction since the projection of \ac{EMG} to muscle force and joint torque is not well established through dynamic models.
 Motion data and reaction forces are needed to get joint torque from dynamic models, and this is not easy to measure in an exoskeleton.
 
-The \ac{ANN} model has many different design methods (e.g. topology, learning rate, number of epochs) that can be chosen to give the same results as the dynamic models of the human body. 
-However, as previously mentioned, the models (i.e. the \ac{ANN} and the human body models) do not relate kinetically or biologically.
-The aim of the \ac{ANN} model is simply to find the best fit based statistical methods and probability.
+%The \ac{ANN} model has many different design methods (e.g. topology, learning rate, number of epochs) that can be chosen to give the same results as the dynamic models of the human body. 
+%However, as previously mentioned, the models (i.e. the \ac{ANN} and the human body models) do not relate kinetically or biologically.
+%The aim of the \ac{ANN} model is simply to find the best fit based statistical methods and probability.
 
 \subsection{Machine Learning}
-Machine learning refers to a computer algorithm with the ability to learn from data \cite{Goodfellow2016}. \textcite{Mitchell1997} gives the following definition of this learning: "A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$."
+Machine learning refers to a computer algorithm with the ability to learn from data \cite{Goodfellow2016}. \citeauthor{Mitchell1997} gives the following definition of that learning: "A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$" \parencite[2]{Mitchell1997}.
 
-\begin{figure}
+Machine learning algorithms contains subcategories of different algorithms within which \acp{ANN}, which this chapter will focus on, is only one of many.
+In addition, \ac{ANN} contains even more subcategories depending on number of design factors such as topology.
+
+Most machine learning algorithms, including \acp{ANN}, can be categorized into two groups depending on the manner of learning.
+These categories are \textit{supervised learning} and \textit{unsupervised learning} \cite{Goodfellow2016}.
+This categorization is visually presented in figure \ref{fig:types-of-learning}.
+The focus of this chapter will be on \acp{ANN} using \textit{supervised learning} or more specifically \textit{corrective learning}.
+
+\begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/types-of-learning-diagram.pdf}
-    \caption{The tree shows how machine learning algorithms can be categorized by different types of learning. Diagram is adapted from \cite[fig. 4.3]{Rojas1996a}}
+    \caption{The tree shows how machine learning algorithms can be categorized by different types of learning. The diagram is adapted from \cite[Fig. 4.3]{Rojas1996a}}
     \label{fig:types-of-learning}
 \end{figure}
 
+\textit{Supervised learning} differs from \textit{unsupervised learning} in that the training data (i.e. the aforementioned "experience") is paired with associated \textit{label} or \textit{target}.
+The "performance measure" is then how accurately the algorithm can map a data set (or \textit{features}), $\mathbf{x}$, to the associated target, $y$ \cite{Goodfellow2016}.
+How the accuracy is measured and how that measure is used to "teach" the algorithm varies between the different designs of algorithms.
+To summarize, supervised learning algorithms typically aim at estimating the probability distribution $p(y | \mathbf{x})$ \cite{Goodfellow2016}.
 
+The "classes of tasks", mentioned in the definition referenced above, contains many different types \cite{Goodfellow2016}.
+However, the focus here will be on two, arguably most researched tasks within \textit{supervised learning}, namely \textit{Classification} and \textit{Regression}.
 
-\subsection{Neural Networks: Machine Learning and Topology}
+All these concepts of machine learning apply to the subcategory of \acp{ANN} as well, which will be discussed in the next section.
+
+%Curse of dimensionality: "one challenge posed by the curse of dimensionality is a statistical challenge which arises because the number of possible configurations of $x$ is much larger than the number of training examples" \parencite[153]{Goodfellow2016}.
+
+%Capacity: Representational capacity is what "specifies which family of functions the learning algorithm can choose from". Effective capacity refers to the fact that the "best" function within the family is rarely found and thus the actual capacity may be less than the representational capacity \parencite[111]{Goodfellow2016}.
+
+%"The answer to both of these questions—whether it is possible to represent a complicated function efficiently, and whether it is possible for the estimated function to generalize well to new inputs—is yes. The key insight is that a very large number of regions, such as O(2k ), can be defined withO(k) examples, so long as we introduce some dependencies between the regions through additional assumptions about the underlying data-generating distribution. In this way, we can actually generalize nonlocally (Bengio and Monperrus, 2005; Bengio et al., 2006c). Many different deep learning algorithms provide implicit or explicit assumptions that are reasonable for a broad range of AI tasks in order to capture these advantages." \parencite[156]{Goodfellow2016}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.95\textwidth]{img/overfitting-vs-underfitting}
+    \caption{Adapted and modified from \cite[Fig. 5.2]{Goodfellow2016}}
+    \label{fig:over-vs-under}
+\end{figure}
+
+\subsection{Neural Networks}
 Like the name suggests \acp{ANN} consist of multiple "artificial neurons", often called nodes, that are interconnected by pathways for communication.
-Topology refers to how these nodes are placed (e.g. into layers), how many there are, and how they are connected.
-Figure \ref{fig:generic-ann} shows an example of a generic multilayer feed-forward \ac{ANN}, also known as \ac{MLP}.
-It is feed-forward since it does not contain any feed-back loop, as opposed to \acp{RNN} \cite{Goodfellow2016, Haykin2009}. Furthermore, it is multilayer as it contains, apart from the input and output layer, some hidden layers.
+\textit{Topology} refers to how these nodes are placed (e.g. into layers), how many there are, and how they are connected.
+Figure \ref{fig:generic-ann} shows an example of a generic multilayer feed-forward \ac{ANN}, also known as \ac{DNN} or \ac{MLP}.
+It is feed-forward since it does not contain any feed-back loops, as opposed to \acp{RNN} \cite{Goodfellow2016, Haykin2009}. Furthermore, it is multilayer as it contains, apart from the input and output layer, some hidden layers.
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics{img/generic-ann-diagram}
-    \caption{The figure shows a feed-forward neural network with following layers (left to right): an input layer (filled black nodes), two hidden layers, and an output layer. The arrows and the turquoise filled nodes together form a transfer function $f$ which maps the input to the output: $f(\mathbf{x})=\mathbf{y} $.}
+    \caption{Generic feed-forward neural network: Layers are (from left to right): an input layer (filled black nodes), two hidden layers, and an output layer. The arrows and the turquoise filled nodes together form a function $f$ which maps the input to the output: $f(\mathbf{x})=\mathbf{y} $.}
     \label{fig:generic-ann}
 \end{figure}
 
-While the topology is one way to manipulate \acp{NN} figure \ref{fig:generic-ann} shows one type of neural network topology
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{img/node-diagram}
+    \caption{Single node diagram: Shows the inputs $\mathbf{x}$ into a single node of a \ac{NN} and the nodes functionality and process to get an output $\mathbf{y}$. The colored items can all be considered to be part of the node as represented in figure \ref{fig:generic-ann}. The circle denotes the summation of inputs and the square denotes the activation of the node. The figure is adapted and modified from \cite[Fig. 5]{Haykin2009}.}
+    \label{fig:node-diagram}
+\end{figure}
+
+Figure \ref{fig:node-diagram} shows a better visualization of what happens at each node of the network.
+Each arrow of the feed-forward network is associated with a weight, often denoted with $w$, and each node has a summation characteristic and an \textit{activation function} which determines if (or how much) the node activates.
+The node diagram can be represented mathematically with the following two equations:
+\begin{align}
+    v_k &= \sum_{j=1}^m w_{kj}x_j + b_k \\
+    y_k &= \phi (v_k)
+\end{align}
+
+Relating figure \ref{fig:generic-ann} to previously defined learning, the \textit{task} might be classification where each $y$ represents a class.
+The \textit{experience} is the $n$ dimensional training data set which is fed into the input layer of the network, as the vector $\mathbf{x}$.
+The information then propagates through the network, layer by layer, to the output layer. A process called \textit{forward-propagation} \cite{Goodfellow2016}.
+The \textit{performance measure} is then how close the output $\mathbf{y}$ is to the target $t$.
+If the output is not "close enough" to the target then the mapping function $f$, represented by the arrows and nodes, needs to be updated.
+As previously mentioned and shown in figure \ref{fig:node-diagram}, each arrow has an associated weight and these weights are what can be updated to affect $f$.
+The update is then typically to minimize a certain cost-function representing the error between the output and the target (e.g. $(y-t)^2$).
+This is done through a process called \textit{back-propagation} or \textit{backprop} for short.
+
+Backprop, in short, is about computing the gradient of $f$ from node to node using the chain rule for derivatives. 
+The weights are then typically updated to minimize the cost function using gradient descent.
+To enable this method the activation function has to be differentiable, i.e. it can not be the step function for example.
+Popular activation functions include, for example the sigmoid or the hyperbolic tangent function and the ReLu or softplus function \cite{Goodfellow2016, Haykin2009, Rojas1996}.
+
+Although this brief introduction of neural networks and how they learn has been focused around the feed-forward network, much of the same or similar principles apply to other networks. 
+They are, to quote \citeauthor{Goodfellow2016}, "the quintessential deep learning models" \parencite[164]{Goodfellow2016}.
+
+
+
+%"It is best to think of feedforward networks as function approximation machines that are designed to achieve statistical generalization" \parencite[165]{Goodfellow2016}.
 
 \subsection{Backpropagation}
 

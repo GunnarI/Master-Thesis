@@ -1,14 +1,13 @@
 \chapter{State of the Art}
-A typical powered exoskeleton\footnote{Robotic exoskeletons or powered exoskeletons are considered wearable robotic units controlled by computer boards to power a system of motors, pneumatics,
-levers, or hydraulics to restore locomotion} would have a motor or some sort of actuator to produce torque at the joints (e.g. knee joint) to enable or assist the user.
+A typical powered exoskeleton\footnote{Definition provided by \textcite{Gorgey2018}: "Robotic exoskeletons or powered exoskeletons are considered wearable robotic units controlled by computer boards to power a system of motors, pneumatics, levers, or hydraulics to restore locomotion" \parencite[113]{Gorgey2018}.} would have a motor or some sort of actuator to produce torque at the joints (e.g. knee joint) to enable or assist the user.
 The amount of torque produced for any given motion depends on the control system of the exoskeleton.
 Many different methods have been researched and implemented towards the goal of making a good control system that provides exactly the assist that the user wants and/or needs.
 The key to that goal is to estimate or predict the joint torque associated with a certain motion performed by the user.
 
 This chapter discusses the state of the art of exoskeleton control systems and joint torque and muscle force prediction models.
-Note that the overall focus is on lower extremity kinematics, joints, and muscles.
+Note that the overall focus is on lower extremities.
 First, the discussion is aimed towards methods and models that are used today for kinetics of human motion analysis in general research and clinical applications.
-This includes discussion about data acquisition, especially \ac{EMG} data, and its relation to the body dynamics, e.g. muscle forces.
+This includes discussion about data acquisition, especially \ac{EMG} data, and its relation to the body dynamics, i.e. muscle forces.
 Second, the discussion is narrowed towards the methods and models that can be used as control systems in an exoskeleton.
 The flexibility for computation and data acquisition is lower in an exoskeleton and thus the number of methods that could be used more limited.
 Third, the discussion is focused toward the state of the art of one particular method which consists of joint torque prediction using \ac{ANN} with \ac{EMG} data acquisition. 
@@ -24,9 +23,9 @@ Kinetics of human motion is the study of the forces that cause human motion.
 This includes muscle forces as well as external forces, such as \ac{GRF}.
 It is challenging to measure \textit{in vivo} muscle forces and it requires at least a minimally invasive methods or an open surgery, so that a force transducer can be placed on a tendon attached to the muscle \cite{Erdemir2007}. 
 Thus, in general clinical application as well as in exoskeletons, measuring muscle forces directly is hardly an option.
-However, it is possible with non-invasive methods to measure reaction forces like \ac{GRF}, human motion (e.g. motion capture system), and \ac{EMG}.
-Several models have then been developed to estimate joint torques and muscle forces using this data \cite{Erdemir2007}.
-For the purpose of this chapter these methods will be split into two groups, namely those who use \ac{EMG} data (\ac{EMG}-based models) and those who do not use \ac{EMG} data (Non-\ac{EMG}-based models).
+However, it is possible with non-invasive methods to measure reaction forces like \ac{GRF}, human motion, and \ac{EMG}.
+Several methods have then been developed to estimate joint torques and muscle forces using this data \cite{Erdemir2007}.
+For the purpose of this chapter these methods will be split into two groups, namely those who use \ac{EMG} data (\ac{EMG}-based methods) and those who do not use \ac{EMG} data (Non-\ac{EMG}-based methods).
 This chapter begins with the models that do not use \ac{EMG} data.
 That includes inverse dynamics for joint torque estimations and static and dynamic optimization for muscle force estimation. 
 Then it goes into detail about \ac{EMG} and its relation to muscle activity before discussing the models that do use \ac{EMG} data, namely \ac{EMG}-driven models.
@@ -78,16 +77,16 @@ A common method to partially compensate for the spatial low-pass filtering is to
 This method also allows removing the common-mode component (e.g. $50Hz$ from power line interference) \cite{Farina2016}.
 
 Some other artifacts of the \ac{sEMG} signal include, for example end-of-fiber effect, electrode-skin impedance, and crosstalk \cite{Farina2016}.
-Due to all these implications and artifacts the signal recorded by the electrodes depends on a number of anatomical, physical, and detection system parameters. The following list are the most important factors as listed by \citeauthorpage{Farina2016}{41}:
+Due to all these implications and artifacts the signal recorded by the electrodes depends on a number of anatomical, physical, and detection system parameters. The following list are the most important factors as listed by \textcite[p. 41]{Farina2016}:
 \begin{quote}
-(1) the thickness of the subcutaneous tissue layer (only for surface recordings),
-(2) the depth of the sources within the muscle (for surface recordings) and the distance from the source to the electrodes (for intramuscular recordings),
-(3) the inclination of the detection system with respect to the muscle fiber orientation (mainly for surface recordings),
-(4) the length of the fibers (mainly for surface recordings),
-(5) the location of the electrodes over the muscle (or within the muscle in case of intramuscular recordings),
+(1) the thickness of the subcutaneous tissue layer,
+(2) the depth of the sources within the muscle,
+(3) the inclination of the detection system with respect to the muscle fiber orientation,
+(4) the length of the fibers,
+(5) the location of the electrodes over the muscle,
 (6) the spatial filter (electrode montage) used for signal detection, including the inter-electrode distance,
-(7) the electrode size and shape(for surface recordings), and
-(8) crosstalk among nearby muscles (for surface recordings).
+(7) the electrode size and shape, and
+(8) crosstalk among nearby muscles.
 \end{quote}
 Thus, it is easy to see that the \ac{sEMG} can vary highly between individuals as well as between days and measurements of the same individual.
 

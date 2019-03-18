@@ -13,10 +13,6 @@ The flexibility for computation and data acquisition is lower in an exoskeleton 
 Third, the discussion is focused toward the state of the art of one particular method which consists of joint torque prediction using \ac{ANN} with \ac{EMG} data acquisition. 
 This also includes general discussion about the research of different \acp{ANN} that have been used with \ac{EMG} data.
 
-%This chapter first provides the state of the art of exoskeletons as assistive devices and how the estimation of joint moments can be used. Secondly, theoretical background of the different methods used for kinetics of human motion are discussed and they compared to each other. This includes first a discussion about the links from \ac{EMG} measurements to muscle activation and muscle synergies and to muscle forces resulting in joint moments and motion. Thirdly, the chapter details the use of machine learning algorithms as an alternative to the kinetics methods and goes into the state of the art of different algorithms.
-
-%The ability to predict muscle forces and joint moments using measurements from the body is important to create smooth human-machine interface between a user and an assistive device. Extensive research has been done towards gait modelling and joint moment prediction. Motion labs and inverse dynamics can be used to calculate joint angles and moments from motion and force plate data. The cause of the motion and moments, namely the muscle force, is however not well predicted here. Static and dynamic optimization methods have been used to predict the muscle forces but they lack the consideration of variations in muscle activation patterns between tasks and individuals \cite{Pizzolato2015, Sartori2012a}. The challenge of accounting for different muscle synergies for the same motion could be answered using \ac{EMG}-driven models \cite{Pizzolato2015, Sartori2012a}.
-
 \section{Kinetics of Human Motion: methods, models, and data acquisition}
 \label{sec:A-MSModels}
 Kinetics of human motion is the study of the forces that cause human motion. 
@@ -30,16 +26,14 @@ This chapter begins with the models that do not use \ac{EMG} data.
 That includes inverse dynamics for joint torque estimations and static and dynamic optimization for muscle force estimation. 
 Then it goes into detail about \ac{EMG} and its relation to muscle activity before discussing the models that do use \ac{EMG} data, namely \ac{EMG}-driven models.
 
-%As previously stated, the \textit{Model-based} control of exoskeletons can be divided into either \textit{dynamic models} or \textit{muscle model} \cite{Anam2012}. 
-%The objective of both groups is essentially to estimate muscle forces and/or resulting joint moments and both can perhaps be considered as a subcategory of musculoskeletal (MS) models. 
-%However, what distinguishes these groups is whether the model uses data collected from the muscle activity or not, i.e. whether \ac{EMG} data is used or not.
 \subsection{Non-\ac{EMG}-based Models}
 \label{sec:A-NonEMGBasedModels}
-\textit{Inverse dynamics} is the use of kinematics and reaction forces, e.g. motion capture, scaled model, and force plate data from a motion lab, to calculate joint torques estimations.
+\textit{Inverse dynamics} is, as defined by the Dictionary of Sport and Exercise Science and Medicine, "the calculation of forces and moments by using kinematics and data for mass and moment of inertia, effectively using Newton's second law of motion ($f = ma$) in reverse."\footnote{"inverse dynamics." Dictionary of Sport and Exercise Science and Medicine by Churchill Livingstone. 2008. Elsevier Limited 18 Mar. 2019 \url{https://medical-dictionary.thefreedictionary.com/inverse+dynamics}}
+In relation to the human body this means the use of kinetics and kinematics, e.g. motion capture, scaled model, and force plate data from a motion lab, to calculate joint torque estimations.
 As the method works with the equation of motion, it relies on correct scaling of each body segment, and joints angles and positions relative to the reaction forces \cite{Buchanan2004,Erdemir2007}.
 Extensive research has been done on inverse dynamics and it is widely used in clinical applications such as, for example, gait analysis in rehabilitation \cite{Erdemir2007,Buchanan2004,Pizzolato2015}.
+
 OpenSim \cite{Delp2007, Seth2018} is an open-source software offering biomechanical models and simulation tools to, among many other things, model and run inverse dynamic solution on a scaled musculoskeletal model \cite{Buchanan2004, Delp2007, Seth2018, Pizzolato2017}.
-\todo{Possibly talk more about the methods used in OpenSim}
 
 The inverse dynamics method alone does not provide any information about muscle activation and muscle forces.
 There are several methods that have been implemented to estimate muscle activation and muscle forces \cite{Erdemir2007}.
@@ -55,6 +49,9 @@ This method does not require inverse dynamics to first estimate joint torques si
 Furthermore, it is less vulnerable toward errors in the experimental measurements as the inclusion of the kinematic data is somewhat "weak", i.e. there is a slack on the kinematic data in favor of more intact muscle dynamics.
 However, the dynamic optimization method is more computationally heavy when compared to the static optimization method \cite{Erdemir2007}.
 
+There is a limitation to these optimization methods due to variations in muscle synergies.
+\textcite{Ivanenko2016} define muscle synergies as representing "coordinated activations of groups of muscles, with specific activation balances or temporal profiles, that might reflect basic biomechanical properties of the musculoskeletal apparatus or statistical regularities in the muscle activation patterns involved in performing a specific motor behavior" \parencite[160]{Ivanenko2016}.
+This means that muscles are not necessarily recruited to produce a specific torque at a joint but rather they are recruited as part of a muscle synergy that relates to a specific task, such as taking a step.
 As pointed out by \textcite{Pizzolato2015} the optimization method, including static and dynamic optimization, cannot account for variations in muscle activation patterns (i.e. muscle synergies) between tasks and individuals.
 For example, if the objective function is to minimize the sum of muscle forces that fit a certain joint moment, it does not account for the fact different muscle synergies can produce the same joint moment. 
 Muscle synergies have been shown to be task-specific and vary between individuals and different pathologies \cite{Ivanenko2016, Safavynia2011}.
@@ -63,9 +60,17 @@ To account for this drawback, muscle activation need to be measured and accounte
 \subsection{Electromyography and Muscle Activity}
 \label{sec:A-EMG}
 Muscle forces of the skeletal muscles are the forces produced by the human body to move or stabilize the human body. 
-The muscle force is generated by muscle contraction which, without going into much detail, is activated by electrical \ac{AP} travelling through the nerves of the body to and through the muscle fibers. 
-The \ac{AP} going through the muscle fibers and making the muscle contract is what is measured in \ac{EMG} recordings.
-To put this more clearly, \ac{EMG} is potentially measuring muscle activation but it does not measure muscle force as that feature depends on so many other factors \cite{Enoka2016}.
+The muscle force is generated by muscle contraction which is activated by electrical \ac{AP} travelling through the nerves of the body to and through the muscle fibers. 
+A single muscle is comprised of many \acp{MU} which in turn contain many muscle fibers.
+Each \ac{MU} is activated by the \ac{AP} from a single motor neuron.
+The muscle force produced thus depends, but not exclusively, on the amount of fibers per \ac{MU} and the number of \acp{MU} activating.
+Other factors influencing the muscle force include the fiber properties (e.g. cross-sectional area and specific force), the cooperation of different \acp{MU} within the muscle, \ac{AP} frequency, etc.
+Furthermore, if looking at the force exerted by the muscle to the skeleton to produce movement, i.e. the \ac{MTU} force, then the properties of the tendon, such as elasticity, need to be considered as well \cite{Pizzolato2015, Enoka2016, Farina2016}. 
+
+\textcite{Raez2006} provide the following definition for EMG signals: "The EMG signal is a biomedical signal that measures electrical currents generated in muscles during its contraction representing neuromuscular activities" \parencite[1]{Raez2006} where biomedical signal refers to an electrical signal from any organ that represents a specific physical variable.
+The \ac{EMG} signal also depends on the number of \acp{MU} activated and the \ac{AP} frequency and has been found to correlate with the muscle force.
+However, the relation between the two varies from muscle to muscle and furthermore, both relate nonlinearly to the neural drive from the motor neuron.
+Consequently, \ac{EMG} does not directly measure muscle forces but rather how activated the \acp{MU} are \cite{Enoka2016, Farina2016}.
 
 There are two common methods of measuring \ac{EMG}, one being the invasive method where a needle electrode is inserted percutaneously to the target muscle, and the second being the surface \ac{EMG} method where electrodes are placed on the skin close to the target muscle. 
 Although the invasive method can give more accurate signal, the \ac{sEMG} method is more widely used due to the fact that it is non-invasive and easier to implement. 
@@ -92,33 +97,41 @@ Thus, it is easy to see that the \ac{sEMG} can vary highly between individuals a
 
 Guidelines have been made by \ac{SENIAM} in effort to make \ac{sEMG} procedures more standardized and comparable and to increase reproducibility of the experiment. 
 The \ac{SENIAM} project is a European concerted action towards development of recommendations on sensors, sensor placement, signal processing, and modelling for \ac{sEMG} \cite{Hermens1999, Hermens2000}.
-One obvious setback of \ac{sEMG}, as compared to using the invasive method, is that it only possible to measure muscles near the surface.
-If the muscle is located behind other muscles or if too much tissue is between the source of the signal and the electrodes then the "correct" signal cannot be detected. 
-Furthermore, the placement of the electrodes should not be too close to either the innervation zone or the end zone where the tendon is.
-In fact it has been suggested that the best potition is right in between those zones \cite{Farina2016, Hermens2000}.
-Also, the position of the electrodes cannot be to close to another muscle with the risk of crosstalk \cite{Farina2016, Hermens2000}.
-The \ac{SENIAM} project has identified 14 muscles on lower extremities, including the hip, where \ac{sEMG} can be measured.
-They have also provided guidelines on where to place the electrodes.
-%See table \ref{tab:SENIAM-mus-and-loc} for the list of these 14 muscles as well as short description of recommended electrodes locations \cite{Hermens1999}.
+One setback of \ac{sEMG} is that it only possible to measure muscles near the surface.
+If the muscle is located behind other muscles, if there is too much tissue between the source of the signal and the electrodes or if the position of the electrodes are closer to another muscle, then the integrity and selectivity of the signal is compromised \cite{Farina2016, Hermens2000}.
+The \ac{SENIAM} project provides \ac{sEMG} electrode placement recommendations for 14 muscles on lower extremities, including the hip \cite{Hermens1999}.
 
-\todo{Add short text here about the filtering and normalization of the EMG signal}
+The amplitude of \ac{EMG} signal is in the range of $\pm 5$ or $0-10 mV$ but it is random in nature \cite{Raez2006}.
+The firing rate of the \acp{MU} is in the range of $0-20Hz$.
 
-\clearpage
 \subsection{\ac{EMG}-based Models}
 \label{sec:A-EMGBasedModels}
-As previously mentioned, \ac{EMG} can only measure muscle activation and not muscle forces.
-\ac{EMG}-based models are models developed towards estimating muscle forces and/or joint torques base on \ac{EMG} data \cite{Pizzolato2015, Erdemir2007}.
+As previously mentioned, \ac{EMG} measure muscle activation and not muscle forces but there is a correlation between the two.
+\ac{EMG}-based models are models developed towards estimating muscle forces and/or joint torques base on \ac{EMG} data \cite{Erdemir2007, Pizzolato2015}.
+These models are often based on a modified Hill-type muscle model which describes how the muscle's normalized isometric force  ($F^{norm}_t$) depends on the optimal fibre length ($L^O_m$), tendon slack length ($L^S_T$), and the muscle pennation angle ($\phi (t)$) \cite{Winby2008, Lloyd2003}.
+The equation for this type of model, as presented by \textcite{Lloyd2003}, and represented by calculating the \ac{MTU} force ($F^{mt}(t)$) is given by
+\begin{align}
+\label{eq:hill-equation}
+    F^{mt}(t) &= F^{max} \left[ f(l)f(v)a(t) + f_p(l) \right] \cos{\left(\phi (t)\right)} \\ \nonumber
+    \phi (t) &= \sin^{-1}\left( \frac{L^O_m\sin{\phi_0}}{L^m(t)}\right)
+\end{align}
+where $F^{max}$ is the maximum isometric muscle force; $f(v)$ and $f(l)$ the normalized fiber forces dependent on velocity and length respectively; $a(t)$ the time varying muscle activation; $f_p(l)$ the parallel passive elastic force–length; $L^m(t)$ the muscle fiber length at time $t$; and $\phi_0$ the pennation angle at $L^O_m$ \cite{Buchanan2004, Winby2008, Lloyd2003}.
+The model geometry of a single \ac{MTU} is represented in figure \ref{fig:MTU-unit}.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.75\textwidth]{img/MTU-unit}
+    \caption{Representation of a \ac{MTU} showing the muscle force $F^m$, tendon force $F^t$, muscle and tendon lengths $L^m$ and $L^t$ respectively, and the pennation angle $\phi$. The figure is adapted and modified from \cite[Fig. 5]{Buchanan2004}}
+    \label{fig:MTU-unit}
+\end{figure}
+The way that these models are base on $EMG$ is that the muscle activation, $a(t)$ in equation \ref{eq:hill-equation}, can be measured with $EMG$.
+Other parameters, such as $L^O_m$ and $L^S_T$, are difficult to measure \cite{Winby2008}.
+\textcite{Lloyd2003} handle this problem by giving these parameters initial estimations based on previous studies and measurements. The values are then allowed to be adjusted, within a certain limit, to best fit values obtained using an inverse dynamics approach.
+Thus, in a way, this \ac{EMG}-based model still uses optimization but it should better reflect on the muscle activation pattern than the previously discussed static and dynamic optimization \cite{Pizzolato2015, Lloyd2003}
 
-Hill-Type models... \todo{\cite{Lloyd2003,WangMarc,Winby2008} and maybe \cite{Rosen1999} to talk about Hill-Type models}
-
-While static and dynamic optimization are methods to estimate muscle forces from kinematic and reaction force data only, \ac{EMG}-driven models use also \ac{EMG} data \cite{Pizzolato2015}.
 As previously stated, \textcite{Pizzolato2015} recognize the drawback of the optimization methods in regards to synergy variation. 
-Furthermore, they note that the optimization methods are easily accessible, which is for example reflected by the fact that OpenSim, a tool widely used by researchers, uses those methods in its models \cite{Delp2007,Pizzolato2015,Seth2018}. 
+Furthermore, they note that the optimization methods are easily accessible, which is for example reflected by the fact that OpenSim, a tool widely used by researchers, uses those methods in its models \cite{Pizzolato2015, Delp2007, Seth2018}. 
 They further state that this accessibility does not apply for EMG-driven methods which "have been developed by different research groups and they are not publicly available, or are limited to isometric tasks" \parencite[1]{Pizzolato2015}.
-\ac{CEINMS} is a tool developed to increase said availability and allows researchers to use \ac{EMG}-driven (or \ac{EMG}-informed) models on collected kinematic, reaction force, and \ac{EMG} data \cite{Pizzolato2015}.
-
-%\citeauthorpage{Erdemir2007}{132} state that "actual estimates of muscle forces can only be obtained with computational models in which the skeleton and muscles are both represented".
-
+That motivates their development of \ac{CEINMS}, a tool developed to increase said availability and allows researchers to use \ac{EMG}-driven (or \ac{EMG}-informed) models on collected kinematic, reaction force, and \ac{EMG} data \cite{Pizzolato2015}.
 
 \section{Exoskeletons as Assistive Devices}
 \label{sec:A-Exoskeletons}
@@ -131,9 +144,9 @@ For the purpose of this review the focus is set on the first categorization, i.e
 The article states that the control strategy of an exoskeleton can be divided into two types depending on the model used, namely the \textit{dynamic model} and the \textit{muscle model} based control. 
 %One could argue for a third type being a brain model based control like the one implemented in \cite{Wang2017a}, however this type of model will not be discussed further here.
 
-\citeauthor{Anam2012} divide the \textit{dynamic model} into three different categories, each with its strengths and weaknesses.
+\textcite{Anam2012} divide the \textit{dynamic model} into three different categories, each with its strengths and weaknesses.
 These models use systems physical characteristics and motion data to estimate moments and/or forces required from the exoskeleton. 
-For example, one of the categories is the artificial intelligent method where one study has used the joint angle, angle velocity, and angle acceleration as input to the model and the joint torque as output, behaving like an inverse dynamics model \cite{Anam2012}.
+For example, one of the categories is the artificial intelligent method where one study has used the joint angle, angle velocity, and angle acceleration as input to the model and the joint torque as output, behaving like an inverse dynamics model.
 %One might argue that what these models lack in relation to the exoskeleton is responsiveness. 
 
 The \textit{muscle model} uses muscle neural activity and/or joint kinematics to predict muscle forces and resulting joint moments. These models can be split into the two categories: parametric and non-parametric muscle model. 
@@ -146,10 +159,6 @@ For the non-parametric muscle model an artificial neural network could be used \
 \todo{Find more references towards exoskeletons and do more comparisons between methods}
 
 \section{Artificial neural networks in biomechanics}
-This chapter has yet to be written\todo{Start with general discussion about ANN and its developments and recent advanced within biomechanics}
-\\
-\cite{Ardestani2014,Liu2009,Lee14-1,Smith2009,Naeem2012,Kiguchi2012}\todo{Do comparison of different ANN methods used with EMG data that have been researched.}
-
 The methods to predict joint torque discussed previously all use calculations based on anthropometry and dynamic models of the human body. 
 The measured parameters, such as \ac{EMG}, motion, and reaction force data, are used as input into equations based on specific dynamic models of the human body, to estimate the joint torque that best fits the input.
 \acp{ANN} on the contrary treats the model part as sort of a \textit{black box} and does not depend on these dynamic models. 
@@ -176,7 +185,7 @@ The focus of this chapter will be on \acp{ANN} using \textit{supervised learning
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/types-of-learning-diagram.pdf}
-    \caption{The tree shows how machine learning algorithms can be categorized by different types of learning. The diagram is adapted from \cite[Fig. 4.3]{Rojas1996a}}
+    \caption{The tree shows how machine learning algorithms can be categorized by different types of learning. The diagram is based on \cite[Fig. 4.3]{Rojas1996a}}
     \label{fig:types-of-learning}
 \end{figure}
 
@@ -219,7 +228,7 @@ It is feed-forward since it does not contain any feed-back loops, as opposed to 
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.6\textwidth]{img/node-diagram}
-    \caption{Single node diagram: Shows the inputs $\mathbf{x}$ into a single node of a \ac{NN} and the nodes functionality and process to get an output $\mathbf{y}$. The colored items can all be considered to be part of the node as represented in figure \ref{fig:generic-ann}. The circle denotes the summation of inputs and the square denotes the activation of the node. The figure is adapted and modified from \cite[Fig. 5]{Haykin2009}.}
+    \caption{Single node diagram: Shows the inputs $\mathbf{x}$ into a single node of a \ac{NN} and the nodes functionality and process to get an output $\mathbf{y}$. The colored items can all be considered to be part of the node as represented in figure \ref{fig:generic-ann}. The circle denotes the summation of inputs and the square denotes the activation of the node. The figure is based on \cite[Fig. 5]{Haykin2009}.}
     \label{fig:node-diagram}
 \end{figure}
 
@@ -252,5 +261,13 @@ They are, to quote \citeauthor{Goodfellow2016}, "the quintessential deep learnin
 
 %"It is best to think of feedforward networks as function approximation machines that are designed to achieve statistical generalization" \parencite[165]{Goodfellow2016}.
 
-\subsection{Backpropagation}
+\subsection{Neural Networks for Biomechanics}
+The use of neural networks to predict joint dynamics is nothing new.
+\textcite{Sepulveda1993} constructed a \ac{MLP} with a single hidden layer to predict joint angles and joint moments based on EMG signals, more than 20 years ago. 
+The training of this relatively small network took a very long time.
+Furthermore, the results of the trained algorithm indicate overfitting.
+Since then, extended processing power of modern computers has enabled use of more complicated and deeper networks.
+Furthermore, extended research into machine learning in recent years has created a lot of recommendations and best practices to aid in development of the best algorithm and improved generalization.
 
+With the current immense popularity with neural networks, many researches have provided alternative algorithms to solve the task.
+\textcite{Ardestani2014} provide a multi-dimensional wavelet neural network to estimate lower extremity joint moments. The input to the network is \ac{EMG} and \ac{GRF} data collected during gait trials of four patients with different conditions. \textcite{Lee14-1} use a NNARX (Neural Network, AutoRegressive, eXternal Input) model to estimate knee joint moment in sit-to-stand movement. The input was \ac{EMG}, joint angle, and joint velocity as well as previously predicted joint moment. \textcite{Kiguchi2012} present a neuro-fuzzy system to estimate joint torques in the upper-limb to use with a power-assist exoskeleton. The input to the neuro-fuzzy system is the joint angles and the output are weights to be multiplied by measured \ac{EMG} RMS values.

@@ -1,3 +1,7 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
 \chapter{State of the Art}
 A typical powered exoskeleton\footnote{Definition provided by \textcite{Gorgey2018}: "Robotic exoskeletons or powered exoskeletons are considered wearable robotic units controlled by computer boards to power a system of motors, pneumatics, levers, or hydraulics to restore locomotion" \parencite[113]{Gorgey2018}.} would have a motor or some sort of actuator to produce torque at the joints (e.g. knee joint) to enable or assist the user.
 The amount of torque produced for any given motion depends on the control system of the exoskeleton.
@@ -30,18 +34,17 @@ Then it goes into detail about \ac{EMG} and its relation to muscle activity befo
 \label{sec:A-NonEMGBasedModels}
 \textit{Inverse dynamics} is, as defined by the Dictionary of Sport and Exercise Science and Medicine, "the calculation of forces and moments by using kinematics and data for mass and moment of inertia, effectively using Newton's second law of motion ($f = ma$) in reverse."\footnote{"inverse dynamics." Dictionary of Sport and Exercise Science and Medicine by Churchill Livingstone. 2008. Elsevier Limited 18 Mar. 2019 \url{https://medical-dictionary.thefreedictionary.com/inverse+dynamics}}
 In relation to the human body this means the use of kinetics and kinematics, e.g. motion capture, scaled model, and force plate data from a motion lab, to calculate joint torque estimations.
-As the method works with the equation of motion, it relies on correct scaling of each body segment, and joints angles and positions relative to the reaction forces \cite{Buchanan2004,Erdemir2007}.
+As the method works with the equation of motion, it relies on correct scaling of each body segment, and joints angles and positions relative to the reaction forces \cite{Erdemir2007, Buchanan2004}.
 Extensive research has been done on inverse dynamics and it is widely used in clinical applications such as, for example, gait analysis in rehabilitation \cite{Erdemir2007,Buchanan2004,Pizzolato2015}.
 
 OpenSim \cite{Delp2007, Seth2018} is an open-source software offering biomechanical models and simulation tools to, among many other things, model and run inverse dynamic solution on a scaled musculoskeletal model \cite{Buchanan2004, Delp2007, Seth2018, Pizzolato2017}.
 
 The inverse dynamics method alone does not provide any information about muscle activation and muscle forces.
 There are several methods that have been implemented to estimate muscle activation and muscle forces \cite{Erdemir2007}.
-Perhaps the most notable ones that are not \ac{EMG}-drive are the static and dynamic optimization methods \cite{Erdemir2007, Delp2007, Pizzolato2015}. 
+Perhaps the most notable ones that are not \ac{EMG}-drive are the static and dynamic optimization methods \cite{Erdemir2007, Pizzolato2015, Delp2007}. 
 
 The \textit{static optimization} method uses optimization with an objective function such as, for example, minimizing the sum of muscle forces from all muscles. 
 Through iteration the muscle forces, that both fit to the estimated joint torque from the inverse dynamics model and satisfy the objective function, are calculated \cite{Erdemir2007}. 
-\todo{Write about pros and cons of this method and include more references}
 
 \textit{Dynamic optimization} is an alternative to static optimization which, in short, uses forward dynamics to find the set of muscle activations that best fit the experimental kinematic data (e.g. with objective to minimize tracking error in kinematics and \ac{GRF}). 
 This method does not require inverse dynamics to first estimate joint torques since the constraint is rather the measured motion and \ac{GRF} data.
@@ -135,7 +138,13 @@ That motivates their development of \ac{CEINMS}, a tool developed to increase sa
 
 \section{Exoskeletons as Assistive Devices}
 \label{sec:A-Exoskeletons}
-The exoskeleton, as it will be discussed here, refers to a mobile electromechanical structure which can be worn by a human to provide power amplification, support and/or assistance in human motion. Exoskeletons can also be used for haptic interactions \cite{Anam2012}, but the focus here will be on the groups mentioned before. More specifically, the focus is on exoskeletons as assistive devices for those with physical impairment, i.e. for rehabilitation and/or normal human motion. This excludes exoskeletons as power amplification for professional or military purposes.
+The exoskeleton, as it will be discussed here, refers to a mobile electromechanical structure which can be worn by a human to provide power amplification, support and/or assistance in human motion (see figure \ref{fig:exoskeleton}). Exoskeletons can also be used for haptic interactions \cite{Anam2012}, but the focus here will be on the groups mentioned before. More specifically, the focus is on exoskeletons as assistive devices for those with physical impairment, i.e. for rehabilitation and/or normal human motion. This excludes exoskeletons as power amplification for professional or military purposes.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.75\textwidth]{img/exoskeleton}
+    \caption{Two different designs of an exoskeleton. The one on the left is the Hyprid Assistive Limb exoskeleton developed by Cyberdyne for the purpose of aiding individuals with disabilities. The one on the right is the Ekso exoskeleton which is mostly used for rehabilitation purposes. The figure is adapted from \cite[Fig. 3]{Young2017}}
+    \label{fig:exoskeleton}
+\end{figure}
 
 To be able to provide assist to motion the exoskeleton needs a human-exoskeleton interaction together with a control system. 
 The control system is how the human motion is translated into mechanical activation, and vice versa. 
@@ -152,11 +161,10 @@ For example, one of the categories is the artificial intelligent method where on
 The \textit{muscle model} uses muscle neural activity and/or joint kinematics to predict muscle forces and resulting joint moments. These models can be split into the two categories: parametric and non-parametric muscle model. 
 The difference between them is that in addition to \ac{EMG} data the parametric model needs anthropometric data with information of muscle and joint dynamic \cite{Anam2012}.
 This is much like the \ac{EMG}-driven models discussed in the previous chapter \cite{Pizzolato2015}.
-The \textit{muscle model} has been researched as a way to provide real-time prediction of muscle forces and joint torques \cite{Anam2012, durandau, Pizzolato2015}. 
+The \textit{muscle model} has been researched as a way to provide real-time prediction of muscle forces and joint torques \cite{Pizzolato2015, Anam2012, durandau}. 
 Furthermore, as mentioned by \textcite{Anam2012}, much effort has been made towards predicting the user's intentions beforehand by using \ac{EMG} data.
-The Hill-type muscle model is possibly the most researched parametric muscle model and some modifications of it have been made throughout the years to make it more accurate \cite{Lloyd2003, Anam2012, Pizzolato2015, Lee14-1}.
-For the non-parametric muscle model an artificial neural network could be used \cite{Kiguchi2012,Lee14-1}.  
-\todo{Find more references towards exoskeletons and do more comparisons between methods}
+The Hill-type muscle model is possibly the most researched parametric muscle model and some modifications of it have been made throughout the years to make it more accurate \cite{Pizzolato2015, Lloyd2003, Anam2012, Lee14-1}.
+For the non-parametric muscle model an artificial neural network could be used \cite{Lee14-1, Kiguchi2012}.  
 
 \section{Artificial neural networks in biomechanics}
 The methods to predict joint torque discussed previously all use calculations based on anthropometry and dynamic models of the human body. 
@@ -204,11 +212,12 @@ All these concepts of machine learning apply to the subcategory of \acp{ANN} as 
 %Capacity: Representational capacity is what "specifies which family of functions the learning algorithm can choose from". Effective capacity refers to the fact that the "best" function within the family is rarely found and thus the actual capacity may be less than the representational capacity \parencite[111]{Goodfellow2016}.
 
 %"The answer to both of these questions—whether it is possible to represent a complicated function efficiently, and whether it is possible for the estimated function to generalize well to new inputs—is yes. The key insight is that a very large number of regions, such as O(2k ), can be defined withO(k) examples, so long as we introduce some dependencies between the regions through additional assumptions about the underlying data-generating distribution. In this way, we can actually generalize nonlocally (Bengio and Monperrus, 2005; Bengio et al., 2006c). Many different deep learning algorithms provide implicit or explicit assumptions that are reasonable for a broad range of AI tasks in order to capture these advantages." \parencite[156]{Goodfellow2016}
-
+One of the most important challenge and goal of machine learning is generalization, i.e. that the trained algorithm works equally well on data it has not been presented with before. 
+This highly relates to the concepts of overfitting and underfitting, as defined by \textcite{Goodfellow2016} and represented in figure \ref{fig:over-vs-under}: "Underﬁtting occurs when the model is not able to obtain a suﬃciently low error value on the training set. Overﬁtting occurs when the gap between the training error and test error is too large" \parencite[109]{Goodfellow2016}.
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.95\textwidth]{img/overfitting-vs-underfitting}
-    \caption{Adapted and modified from \cite[Fig. 5.2]{Goodfellow2016}}
+    \includegraphics[width=0.9\textwidth]{img/overfitting-vs-underfitting}
+    \caption{Algorithm results for machine learning regression of a quadratic function. The blue dots are training samples, the red dot is a testing sample, and the blue line is the algorithms result. On the left there is a high error on the training set, and even though the test set is accurately predicted it is not reliable as there is underfitting. On the right there is clearly a huge error on the test set even though the training set is accurately predicted by the algorithm. Figure is adapted and modified from \cite[Fig. 5.2]{Goodfellow2016}}
     \label{fig:over-vs-under}
 \end{figure}
 
@@ -280,3 +289,9 @@ The input to the neuro-fuzzy system is the joint angles and the output are weigh
 The input is \ac{EMG} signal and feedback from previous prediction.
 
 The challenges related to using \ac{EMG} signal is its redundancy, nonlinear characteristics, and variability between tasks, subjects, conditions (e.g. pathologies, muscle fatigue), etc.
+There are many muscles that contribute to the joint torque and with the nonlinear characteristics a higher dimensional data is needed to be able to map the relationship.
+However, with higher dimension and the redundancy of the \ac{EMG} signal, there is a risk of overfitting.
+Furthermore, due to the variability it is difficult to get a solution that is generalizable.
+When working with \ac{EMG} data from many muscles it is useful to preprocess the data with dimensionality reduction and feature extraction and selection. This can contribute to learning efficiency and improve generalization \cite{Chen2018, Marsland2014}.
+
+\end{document}

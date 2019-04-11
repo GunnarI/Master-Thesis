@@ -1,2 +1,32 @@
-\chapter{Methods}
+\documentclass[../main.tex]{subfiles}
 
+\begin{document}
+
+\chapter{Methods}
+Introduce TensorFlow and the Keras API for the implementation of the \ac{NN}.
+The training set for the \ac{NN} is normalized EMG data from regular walking.
+The training labels are the corresponding joint torque values obtained from CEINMS.
+
+Following list shows steps from experiment and data acquisition to ANN training:
+\begin{enumerate}
+    \item Experiment in motion lab collects motion data (Vicon camera system), EMG data (myon aktos nano), and reaction forces (Kistler force plates). See experiment properties and settings:
+    \begin{enumerate}
+        \item Exercises to record: Regular gait for the analysis and squatting, jumping, and heel-raise to get max EMG for EMG normalization.
+        \item Markers protocol: CGM2
+        \item EMG protocol: SENIAM
+    \end{enumerate}
+    \item Post-processing of data in Vicon Nexus 2.8 including marker trajectory gap filling, marker trajectory filtering/smoothing, event identification, and filtering force plate and EMG data. Possible to do ID here but perhaps better to do in OpenSim.
+    \item Run MOtoNMS to convert the .C3D output files from Nexus to .trc and .mot files necessary for OpenSim. If force plate and EMG data was not filtered in Nexus then it can be filtered here. The tool also normalizes the EMG relative to the maximum EMG it can find from all exercises. The output emg.mot is the training/validation/test data but the torque labels come from ID.
+    \item Run OpenSim using the gait2392\_simbody.osim model. Do Scaling > IK > ID to obtain the knee joint torques to use for training labels
+    \item Train the ANN with selected EMG dataset and corresponding joint torques.
+\end{enumerate}
+
+\input{tables/tools-and-devices.tex}
+
+\section{Data collection and Inverse Dynamics}
+
+\section{Surface-EMG filtering and feature extraction}
+
+\section{Training of the Neural Network}
+
+\end{document}

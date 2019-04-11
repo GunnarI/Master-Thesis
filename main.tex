@@ -17,35 +17,37 @@
 \date{\today}
 
 % Uncomment the next line to include cover generated at https://intra.kth.se/kth-cover?l=en
-%\kthcover{kth-cover.pdf}
+\kthcover{kth-cover.pdf}
 
 \begin{document}
 \frontmatter
 
-%\include{chapters/0-pre-content}
+\include{chapters/0-pre-content}
 
 
 % Mainmatter is where the actual contents of the thesis goes
 \mainmatter
 
-%\include{chapters/1-introduction}
+\subfile{chapters/1-introduction}
 
-%\include{chapters/2-background}
+\subfile{chapters/2-background}
 
 %\include{chapters/3-methods}
+\subfile{chapters/3-methods}
 
-%\include{chapters/4-results}
+\subfile{chapters/4-results}
 
-%\include{chapters/5-discussion}
+\subfile{chapters/5-discussion}
 
-%\include{chapters/6-conclusion}
+\subfile{chapters/6-conclusion}
 
 % Print the bibliography (and make it appear in the table of contents)
 \printbibliography[heading=bibintoc]
 
 \appendix
 
-\include{chapters/appendices}
+\subfile{chapters/appendices}
+%\printbibliography[heading=bibintoc]
 
 \tailmatter
 

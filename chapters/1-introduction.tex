@@ -1,12 +1,35 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
 \chapter{Introduction}
+The concept of \textit{exoskeletons} as it will be used in this thesis refers to \textit{robotic exoskeletons} or \textit{powered exoskeletons} which can be defined as mobile, computer controlled, electromechanical structure which can be worn by a human to provide power amplification, support and/or assistance in human motion \cite{Anam2012, Gorgey2018}. 
+Refer to appendix \ref{sec:A-Exoskeletons} and figure \ref{fig:exoskeleton} for more information on exoskeletons.
 
-We use the \emph{biblatex} package to handle our references.  We therefore use the
-command \texttt{parencite} to get a reference in parenthesis, like this
-\parencite[12]{Pizzolato2015}\cite{Pizzolato2015}.  It is also possible to include the author
-as part of the sentence using \texttt{textcite}, like talking about
-the work of \textcite{Lloyd2003}.
+What to talk about:
+Talk about exoskeletons:
+\begin{itemize}
+    \item Briefly how they assist with motion
+    \item Human-robot interaction
+    \item Smoothness of real-time control
+    \item Myoelectric control, parametric (Hill-type) vs. non-parametric (neural networks) \cite{Anam2012}.
+\end{itemize}
 
-\Blindtext
+Discuss limitations for using real-time analysis, e.g. data acquisition, complexity of analysis and processing power of microcontrollers on the exoskeleton.
+
+Discuss ANN together with EMG as an alternative to motion capture and complex analysis such as inverse dynamics and Hill-type muscle models. 
+Also briefly mention what ANN is all about and its limitations, specially in relation to overfitting and underfitting.
+
+
+
+%We use the \emph{biblatex} package to handle our references.  We therefore use the
+%command \texttt{parencite} to get a reference in parenthesis, like this
+%\parencite[12]{Pizzolato2015}\cite{Pizzolato2015}.  It is also possible to include the author
+%as part of the sentence using \texttt{textcite}, like talking about
+%the work of \textcite{Lloyd2003}.
 
 \section{Research Question}
-\blindtext
+State the research question: Is ANN feasible to use as a myoelectric control model in an exoskeleton. Is it possible to generalize EMG to torque prediction across different conditions of same subject or even across different subjects doing the same task. How does ANN perform in relation to inverse dynamics.
+%EMG-driven muscle models, specifically CEINMS Hill-type muscle model implementation
+
+\end{document}

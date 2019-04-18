@@ -26,6 +26,14 @@ Following list shows steps from experiment and data acquisition to ANN training:
 \section{Data collection and Inverse Dynamics}
 
 \section{Surface-EMG filtering and feature extraction}
+The filtering steps are \parencite[99]{Clancy2016}:
+\begin{enumerate}
+    \item Noise and interference filtering using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$
+    \item Temporal decorrelation (or whitening) to get rid of correlation from neighboring EMG channels
+    \item Demodulation (this could be taking RMS?)
+    \item Smoothing: moving average with a window of $20ms$, i.e. 20 samples. As \citeauthor{Clancy2016} points out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $20ms$ is chosen to not introduce too much delay.
+    \item Relinearization
+\end{enumerate}
 
 \section{Training of the Neural Network}
 

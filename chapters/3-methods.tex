@@ -24,6 +24,7 @@ Following list shows steps from experiment and data acquisition to ANN training:
 \input{tables/tools-and-devices.tex}
 
 \section{Data collection and Inverse Dynamics}
+Before running inverse dynamics on the model, the force plate and trajectory data is filtered. A 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$ is used here. Same cutoff frequency is used for both the force plate data and the trajectory data to minimize an artifact introduced at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.
 
 \section{Surface-EMG filtering and feature extraction}
 The filtering steps are \parencite[99]{Clancy2016}:

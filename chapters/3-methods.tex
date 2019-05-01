@@ -3,9 +3,12 @@
 \begin{document}
 
 \chapter{Methods}
+The process from collecting data to training the \ac{NN} can be divided to 4 steps: (1) motion lab experiment, (2) post-processing data, including \ac{IK} and \ac{ID}, (3) data preparation before training, and (4) training and testing the network.
+
+
 Introduce TensorFlow and the Keras API for the implementation of the \ac{NN}.
 The training set for the \ac{NN} is normalized EMG data from regular walking.
-The training labels are the corresponding joint torque values obtained from CEINMS.
+The training labels are the corresponding joint torque values obtained from Vicon Nexus CGM2.
 
 Following list shows steps from experiment and data acquisition to ANN training:
 \begin{enumerate}
@@ -24,7 +27,7 @@ Following list shows steps from experiment and data acquisition to ANN training:
 \input{tables/tools-and-devices.tex}
 
 \section{Data collection and Inverse Dynamics}
-Before running inverse dynamics on the model, the force plate and trajectory data is filtered. A 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$ is used here. Same cutoff frequency is used for both the force plate data and the trajectory data to minimize an artifact introduced at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.
+Before running inverse dynamics on the model, the force plate and trajectory data is filtered. A 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$ is used here. Same cutoff frequency is used for both the force plate data and the trajectory data to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.
 
 \section{Surface-EMG filtering and feature extraction}
 The filtering steps are \parencite[99]{Clancy2016}:

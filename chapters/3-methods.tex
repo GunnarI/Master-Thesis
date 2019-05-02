@@ -3,7 +3,16 @@
 \begin{document}
 
 \chapter{Methods}
-The process from collecting data to training the \ac{NN} can be divided to 4 steps: (1) motion lab experiment, (2) post-processing data, including \ac{IK} and \ac{ID}, (3) data preparation before training, and (4) training and testing the network.
+The process from collecting data to training the \ac{NN} can be divided to 4 steps (see Fig. \ref{fig:process-diagram}): (A) motion lab experiment, (B) filtering and preprocessing EMG data, (C) performing \ac{IK} and \ac{ID} to retrieve knee joint moments as training labels and data preparation before training, and (D) training and testing the network.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/ProcessDiagram}
+    \caption{Flow diagram of the modelling procedure. The dashed box indicates procedure used only for training the \ac{NN}. (A) Subject walks in a motion lab collecting \ac{GRF} from force plates, marker trajectories, and muscle activity from \ac{sEMG} sensors; (B) The data is filtered and prepared for use in the models; (C) The \ac{GRF} and marker trajectories are used for \ac{IK} and \ac{ID} to retrieve knee joint moments; (D) During training the normalized \ac{EMG} is continuously fed through the \ac{NN}, the dashed arrows indicate feedback where the output is compared to the moments from (C) and the error used to update the \ac{NN}; (D) Once training is finished the \ac{EMG} can be fed through the \ac{NN} directly, producing knee joint moments to control motor torque in an exoskeleton}
+    \label{fig:process-diagram}
+\end{figure}
+
+For the experiment (step A) a motion lab equipped with 10 Vicon Vantage V16 cameras and 3 AMTI OR6 \ac{FP} was used. 
 
 
 Introduce TensorFlow and the Keras API for the implementation of the \ac{NN}.

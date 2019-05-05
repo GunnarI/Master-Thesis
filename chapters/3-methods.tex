@@ -12,28 +12,34 @@ The process from collecting data to training the \ac{NN} can be divided to 4 ste
     \label{fig:process-diagram}
 \end{figure}
 
-For the experiment (step A) a motion lab equipped with 10 Vicon Vantage V16 cameras and 3 AMTI OR6 \ac{FP} was used. 
+For the experiment (step A), a motion lab equipped with 10 Vicon Vantage V16 cameras and 3 AMTI OR6 \acp{FP} was used. 
+The CGM2.3 markerset \textcite{Leboeuf2019} (see Fig. \ref{fig:cgm23-markerset}) was used without optional markers, except for RBAK which was included.
+The aktos nano \ac{sEMG} sensors from myon were used for the \ac{EMG} data capture. 
+The sensors were placed on (or near) 12 muscles (see table \ref{tab:muscle-names}) skin preparation and placement recommendations from the SENIAM group \cite{Hermens1999, Hermens2000}.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/CGM23_markerset2.png}
+    \caption{CGM2.3 markerset}
+    \label{fig:cgm23-markerset}
+\end{figure}
+
+All the data from the \ac{EMG} sensors (muscle activity), cameras (marker trajectories), and the \acp{FP} (\ac{GRF}) was collected and synchronized using the Vicon Nexus 2.8.2 system/software.
+The marker trajectories were sampled at 100Hz using the cameras while the analog data (i.e. \ac{GRF} and \ac{EMG}) was sampled at 1000Hz.
+
+In step B, before running \ac{IK} and \ac{ID}, the marker trajectories and the \ac{GRF} are filtered with a 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$. 
+Same cutoff frequency is used to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.
+The \ac{EMG} was filtered with the "typical" steps as mentioned by \citeauthor{Clancy2016} \parencite[99]{Clancy2016}, but excluding the whitening step to keep the filtering real-time friendly.
+Thus, the signal was noise and interference filtered using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$. 
+Then, for demodulation, smoothing, and relinearization, the RMS method was used where the smoothing was done with a moving average window of $20ms$. 
+As \citeauthor{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $20ms$ is chosen to not introduce too much delay.
+
+The pyCGM2 package \textcite{Leboeuf2019} was used to apply \ac{IK} and \ac{ID} on the motion and force data.
+The computations are based on anthropometric segment measurements by 
 
 Introduce TensorFlow and the Keras API for the implementation of the \ac{NN}.
 The training set for the \ac{NN} is normalized EMG data from regular walking.
 The training labels are the corresponding joint torque values obtained from Vicon Nexus CGM2.
-
-Following list shows steps from experiment and data acquisition to ANN training:
-\begin{enumerate}
-    \item Experiment in motion lab collects motion data (Vicon camera system), EMG data (myon aktos nano), and reaction forces (Kistler force plates). See experiment properties and settings:
-    \begin{enumerate}
-        \item Exercises to record: Regular gait for the analysis and squatting, jumping, and heel-raise to get max EMG for EMG normalization.
-        \item Markers protocol: CGM2
-        \item EMG protocol: SENIAM
-    \end{enumerate}
-    \item Post-processing of data in Vicon Nexus 2.8 including marker trajectory gap filling, marker trajectory filtering/smoothing, event identification, and filtering force plate and EMG data. Possible to do ID here but perhaps better to do in OpenSim.
-    \item Run MOtoNMS to convert the .C3D output files from Nexus to .trc and .mot files necessary for OpenSim. If force plate and EMG data was not filtered in Nexus then it can be filtered here. The tool also normalizes the EMG relative to the maximum EMG it can find from all exercises. The output emg.mot is the training/validation/test data but the torque labels come from ID.
-    \item Run OpenSim using the gait2392\_simbody.osim model. Do Scaling > IK > ID to obtain the knee joint torques to use for training labels
-    \item Train the ANN with selected EMG dataset and corresponding joint torques.
-\end{enumerate}
-
-\input{tables/tools-and-devices.tex}
 
 \section{Data collection and Inverse Dynamics}
 Before running inverse dynamics on the model, the force plate and trajectory data is filtered. A 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$ is used here. Same cutoff frequency is used for both the force plate data and the trajectory data to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.

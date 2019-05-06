@@ -34,8 +34,8 @@ Thus, the signal was noise and interference filtered using Butterworth IIR bandp
 Then, for demodulation, smoothing, and relinearization, the RMS method was used where the smoothing was done with a moving average window of $20ms$. 
 As \citeauthor{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $20ms$ is chosen to not introduce too much delay.
 
-The pyCGM2 package \textcite{Leboeuf2019} was used to apply \ac{IK} and \ac{ID} on the motion and force data.
-The computations are based on anthropometric segment measurements by 
+The pyCGM2 package by \textcite{Leboeuf2019} was used to apply \ac{IK} and \ac{ID} on the motion and force data.
+The \ac{ID} computations are based on anthropometric segment measurements according to \textcite{Dempster1955} and the iterative Newton-Euler equations as described by \textcite{Dumas2004}.
 
 Introduce TensorFlow and the Keras API for the implementation of the \ac{NN}.
 The training set for the \ac{NN} is normalized EMG data from regular walking.

@@ -43,26 +43,27 @@ where $EMG_{min}$ and $EMG_{max}$ are, respectively, the minimum and maximum mea
 
 The pyCGM2 package by \textcite{Leboeuf2019} was used to apply \ac{IK} and \ac{ID} on the motion and force data.
 The \ac{ID} computations are based on anthropometric segment measurements according to \textcite{Dempster1955} and the iterative Newton-Euler equations as described by \textcite{Dumas2004}.
+The model outputs are designed to have the same conventions as Vicon's \ac{PiG} model, and as such are normalized to the subject's height and body mass .
 
+TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
 
+% Introduce TensorFlow and the Keras API for the implementation of the \ac{NN}.
+% The training set for the \ac{NN} is normalized EMG data from regular walking.
+% The training labels are the corresponding joint torque values obtained from Vicon Nexus CGM2.
 
-Introduce TensorFlow and the Keras API for the implementation of the \ac{NN}.
-The training set for the \ac{NN} is normalized EMG data from regular walking.
-The training labels are the corresponding joint torque values obtained from Vicon Nexus CGM2.
+% \section{Data collection and Inverse Dynamics}
+% Before running inverse dynamics on the model, the force plate and trajectory data is filtered. A 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$ is used here. Same cutoff frequency is used for both the force plate data and the trajectory data to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.
 
-\section{Data collection and Inverse Dynamics}
-Before running inverse dynamics on the model, the force plate and trajectory data is filtered. A 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$ is used here. Same cutoff frequency is used for both the force plate data and the trajectory data to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.
+% \section{Surface-EMG filtering and feature extraction}
+% The filtering steps are \parencite[99]{Clancy2016}:
+% \begin{enumerate}
+%     \item Noise and interference filtering using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$
+%     \item Temporal decorrelation (or whitening) to get rid of correlation from neighboring EMG channels
+%     \item Demodulation (this could be taking RMS?)
+%     \item Smoothing: moving average with a window of $20ms$, i.e. 20 samples. As \citeauthor{Clancy2016} points out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $20ms$ is chosen to not introduce too much delay.
+%     \item Relinearization
+% \end{enumerate}
 
-\section{Surface-EMG filtering and feature extraction}
-The filtering steps are \parencite[99]{Clancy2016}:
-\begin{enumerate}
-    \item Noise and interference filtering using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$
-    \item Temporal decorrelation (or whitening) to get rid of correlation from neighboring EMG channels
-    \item Demodulation (this could be taking RMS?)
-    \item Smoothing: moving average with a window of $20ms$, i.e. 20 samples. As \citeauthor{Clancy2016} points out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $20ms$ is chosen to not introduce too much delay.
-    \item Relinearization
-\end{enumerate}
-
-\section{Training of the Neural Network}
+% \section{Training of the Neural Network}
 
 \end{document}

@@ -17,15 +17,36 @@ The CGM2.3 markerset \textcite{Leboeuf2019} (see Fig. \ref{fig:cgm23-markerset})
 The aktos nano \ac{sEMG} sensors from myon were used for the \ac{EMG} data capture. 
 The sensors were placed on the surface near 12 muscles (see table \ref{tab:muscle-names}) using skin preparation and placement recommendations from the SENIAM group \cite{Hermens1999, Hermens2000}.
 
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{img/CGM23_markerset3.png}
+%     \caption{CGM2.3 markerset protocol}
+%     \label{fig:cgm23-markerset}
+% \end{figure}
 \begin{figure}
-    \centering
-    \includegraphics[width=0.9\textwidth]{img/CGM23_markerset2.png}
-    \caption{CGM2.3 markerset protocol}
+     \centering
+     \begin{subfigure}[b]{0.5\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/CGM23_markerset3.png}
+         \caption{Figure is adapted from pyCGM2 official website \cite{Leboeuf2019}}
+         \label{fig:cgm23-markerset-guidelines}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.4\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/experiment_capture2.png}
+         \caption{Screenshot is taken from Vicon Nexus during gait trial.}
+         \label{fig:cgm23-markerset-experiment-capture}
+     \end{subfigure}
+    \caption{CGM2.3 marker set as seen from the guidelines (a) and one conducted gait trial (b). Description: (a) Optional markers with red cross were not used and calibration only markers were removed before dynamic trials. (b) The skeleton is built using the CGM2.3 marker set and pyCGM2-CGM2\_3 python scripts in Vicon Nexus 2.8.2. The colored spheres represent the markers. The knee joint center can be seen with its own coordinate system where the x-axis (red) and z-axis (blue) define the sagittal plane in which rotation around the y-axis (green) defines flexion and extension of the knee.}
     \label{fig:cgm23-markerset}
 \end{figure}
 
 All the data from the \ac{EMG} sensors (muscle activity), cameras (marker trajectories), and the \acp{FP} (\ac{GRF}) was collected and synchronized using the Vicon Nexus 2.8.2 system/software.
 The marker trajectories were sampled at 100Hz using the cameras while the analog data (i.e. \ac{GRF} and \ac{EMG}) was sampled at 1000Hz.
+
+Data was collected on x subjects with anthropometric data measured and some variation during trials as explained in table \ref{tab:subject-table}.
+\input{tables/subject-table.tex}
 
 In step B, before running \ac{IK} and \ac{ID}, the marker trajectories and the \ac{GRF} are filtered with a 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$. 
 Same cutoff frequency is used to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.
@@ -33,17 +54,29 @@ The \ac{EMG} was filtered with the "typical" steps as mentioned by \citeauthor{C
 Thus, the signal was noise and interference filtered using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$. 
 Then, for demodulation, smoothing, and relinearization, the RMS method was used where the smoothing was done with a moving average window of $20ms$. 
 As \citeauthor{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $20ms$ is chosen to not introduce too much delay.
-Finally, the \ac{EMG} is normalized so that all values are between $0$ and $1$, independent of subject.
-The normalization is given by equation \ref{eq:emg-normalization}:
-\begin{equation}
-\label{eq:emg-normalization}
-    EMG_{norm} = \frac{EMG - EMG_{min}}{EMG_{max} - EMG_{min}}
-\end{equation}
-where $EMG_{min}$ and $EMG_{max}$ are, respectively, the minimum and maximum measured \ac{EMG} from all walking exercises performed by the subject.
+Finally, the \ac{EMG} signal is downsampled to match the frequency of the model outputs which is $100Hz$. The downsampling is done simply by selecting one random sample from each $10ms$. The downsampling is only necessary for the training, not for running the \ac{NN} in real-time.
 
 The pyCGM2 package by \textcite{Leboeuf2019} was used to apply \ac{IK} and \ac{ID} on the motion and force data.
 The \ac{ID} computations are based on anthropometric segment measurements according to \textcite{Dempster1955} and the iterative Newton-Euler equations as described by \textcite{Dumas2004}.
 The model outputs are designed to have the same conventions as Vicon's \ac{PiG} model, and as such are normalized to the subject's height and body mass \cite{Leboeuf2019, viconpig}.
+
+Before training the network in step D, the \ac{EMG} data and joint moments data was split into training and testing set.
+Furthermore, for the purpose of standardizing the data between subjects, the datasets were normalized.
+\ac{EMG} is normalized so that all values from the training dataset are between $0$ and $1$, independent of subject.
+The normalization is given by equation \ref{eq:emg-normalization}:
+\begin{equation}
+\label{eq:emg-normalization}
+    X_{norm} = \frac{X - X_{min}}{X_{max} - X_{min}}
+\end{equation}
+where $X$ is the \ac{EMG} value to be normalized and $X_{min}$ and $X_{max}$ are, respectively, the minimum and maximum measured \ac{EMG} from the training dataset. 
+The testing dataset uses the same minimum and maximum values, to accurately portray new data that the \ac{NN} does not already "know".
+The moments are normalized similar to the \ac{EMG} in equation \ref{eq:emg-normalization} with addition clause to set the interval:
+\begin{equation}
+\label{eq:moment-normalization}
+    X_{norm} = \frac{X - X_{min}}{X_{max} - X_{min}}\left(1 - \frac{X_{min}}{X_{max}}\right) + \frac{X_{min}}{X_{max}}
+\end{equation}
+where $X$ represents moment values. 
+The extra clause makes sure the signal is scaled down to the interval $[-1,1]$ (assuming $\left|X_{min}\right| \leq \left|X_{max}\right|$) and that flexion and extension is still represented with positive and negative values respectively.
 
 TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
 

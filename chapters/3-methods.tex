@@ -43,7 +43,7 @@ where $EMG_{min}$ and $EMG_{max}$ are, respectively, the minimum and maximum mea
 
 The pyCGM2 package by \textcite{Leboeuf2019} was used to apply \ac{IK} and \ac{ID} on the motion and force data.
 The \ac{ID} computations are based on anthropometric segment measurements according to \textcite{Dempster1955} and the iterative Newton-Euler equations as described by \textcite{Dumas2004}.
-The model outputs are designed to have the same conventions as Vicon's \ac{PiG} model, and as such are normalized to the subject's height and body mass .
+The model outputs are designed to have the same conventions as Vicon's \ac{PiG} model, and as such are normalized to the subject's height and body mass \cite{Leboeuf2019, viconpig}.
 
 TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
 

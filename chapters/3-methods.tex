@@ -43,9 +43,15 @@ The sensors were placed on the surface near 12 muscles (see table \ref{tab:muscl
 \end{figure}
 
 All the data from the \ac{EMG} sensors (muscle activity), cameras (marker trajectories), and the \acp{FP} (\ac{GRF}) was collected and synchronized using the Vicon Nexus 2.8.2 system/software.
+The synchronization includes accounting for the latency of $14ms$ of the \ac{EMG} sensors.
 The marker trajectories were sampled at 100Hz using the cameras while the analog data (i.e. \ac{GRF} and \ac{EMG}) was sampled at 1000Hz.
 
-Data was collected on x subjects with anthropometric data measured and some variation during trials as explained in table \ref{tab:subject-table}.
+Data was collected on x subjects with anthropometric data measured for each subject (see table \ref{tab:subject-table}).
+The subjects were asked to walk front and back over the \acp{FP} either slowly, normally, or fast.
+Note that a subject refers to one individual, a trial refers to each experiment performed by the subject, and an exercise refers to each measured exercised performed in the trial. 
+Thus, each subject can have many trials (i.e. experiments conducted on separate days), and each trial has many exercises where, for example, walking 10 times results in 10 separate exercises.
+Furthermore, each exercise is cut down to gait cycles defined by the interval from the right foots heal strike on a \ac{FP} until its next heal strike.
+Some trials included 3 \acp{FP} resulting in some exercises having two gait cycles.
 \input{tables/subject-table.tex}
 
 In step B, before running \ac{IK} and \ac{ID}, the marker trajectories and the \ac{GRF} are filtered with a 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$. 
@@ -53,8 +59,10 @@ Same cutoff frequency is used to minimize an artifact introduced in the joint mo
 The \ac{EMG} was filtered with the "typical" steps as mentioned by \citeauthor{Clancy2016} \parencite[99]{Clancy2016}, but excluding the whitening step to keep the filtering real-time friendly.
 Thus, the signal was noise and interference filtered using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$. 
 Then, for demodulation, smoothing, and relinearization, the RMS method was used where the smoothing was done with a moving average window of $20ms$. 
-As \citeauthor{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $20ms$ is chosen to not introduce too much delay.
-Finally, the \ac{EMG} signal is downsampled to match the frequency of the model outputs which is $100Hz$. The downsampling is done simply by selecting one random sample from each $10ms$. The downsampling is only necessary for the training, not for running the \ac{NN} in real-time.
+As \citeauthor{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $50ms$ is chosen to not introduce too much delay. Furthermore, a little noise in the data is good for reducing overfitting.
+Finally, the \ac{EMG} signal is downsampled to match the frequency of the model outputs which is $100Hz$. The downsampling is done by simply taking the first \ac{EMG} sample from every $10ms$ windows. 
+The first sample is used rather than any other to decrease the delay from \ac{EMG} to moment prediction. In that way an \ac{EMG} sample taken at $t_{0ms}$ can predict a moment value at $t_{9ms}$. 
+% The downsampling is only necessary for the training, not for running the \ac{NN} in real-time.
 
 The pyCGM2 package by \textcite{Leboeuf2019} was used to apply \ac{IK} and \ac{ID} on the motion and force data.
 The \ac{ID} computations are based on anthropometric segment measurements according to \textcite{Dempster1955} and the iterative Newton-Euler equations as described by \textcite{Dumas2004}.

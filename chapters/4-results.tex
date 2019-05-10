@@ -6,11 +6,12 @@
 The results can be split into two parts: (1) pre-training, i.e. the experimental data after filtering and pre-processing before the training of the \ac{NN}, and (2) post-training, i.e. the output from the trained \ac{NN} model, including training and performance statistics.
 
 \section{Pre-training results}
-
+Before training the \ac{NN} it is useful to look at what the data looks like.
+Looking at Subject00, figure \ref{fig:knee-joint-moments-stat} shows a representation of the knee joint moments from all the gait cycles considered as "normal" walking speed, and figure \ref{fig:emg-to-moment-representation} shows \ac{EMG} activity from different muscle groups in relation to joint moments for that same dataset.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.75\textwidth]{img/results/knee_joint_moments.png}
+    \includegraphics[width=0.75\textwidth]{img/results/20190429_06_moments_normal_walk.png}
     \caption{Knee joint moments from the whole dataset. The moment values are normalized to the weight of the subject. The light-blue area around the average represents the standard deviation.}
     \label{fig:knee-joint-moments-stat}
 \end{figure}
@@ -27,7 +28,7 @@ The results can be split into two parts: (1) pre-training, i.e. the experimental
          \includegraphics[width=\textwidth]{img/results/norm_emg_knee_flex.png}
      \end{subfigure}
     \caption{Three simple graphs}
-    \label{fig:three graphs}
+    \label{fig:emg-to-moment-representation}
 \end{figure}
 
 \end{document}

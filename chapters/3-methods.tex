@@ -3,6 +3,7 @@
 \begin{document}
 
 \chapter{Methods}
+\label{sec:methods}
 The process from collecting data to training the \ac{NN} can be divided to 4 steps (see Fig. \ref{fig:process-diagram}): (A) motion lab experiment, (B) filtering and preprocessing EMG data, (C) performing \ac{IK} and \ac{ID} to retrieve knee joint moments as training labels and data preparation before training, and (D) training and testing the network.
 
 \begin{figure}[ht]
@@ -43,7 +44,7 @@ The sensors were placed on the surface near 12 muscles (see table \ref{tab:muscl
 \end{figure}
 
 All the data from the \ac{EMG} sensors (muscle activity), cameras (marker trajectories), and the \acp{FP} (\ac{GRF}) was collected and synchronized using the Vicon Nexus 2.8.2 system/software.
-The synchronization includes accounting for the latency of $14ms$ of the \ac{EMG} sensors.
+The synchronization includes accounting for the latency of $14ms$ of the \ac{EMG} sensors \cite{aktosEMG}.
 The marker trajectories were sampled at 100Hz using the cameras while the analog data (i.e. \ac{GRF} and \ac{EMG}) was sampled at 1000Hz.
 
 Data was collected on x subjects with anthropometric data measured for each subject (see table \ref{tab:subject-table}).
@@ -58,8 +59,8 @@ In step B, before running \ac{IK} and \ac{ID}, the marker trajectories and the \
 Same cutoff frequency is used to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.
 The \ac{EMG} was filtered with the "typical" steps as mentioned by \citeauthor{Clancy2016} \parencite[99]{Clancy2016}, but excluding the whitening step to keep the filtering real-time friendly.
 Thus, the signal was noise and interference filtered using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$. 
-Then, for demodulation, smoothing, and relinearization, the RMS method was used where the smoothing was done with a moving average window of $20ms$. 
-As \citeauthor{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $50ms$ is chosen to not introduce too much delay. Furthermore, a little noise in the data is good for reducing overfitting.
+Then, for demodulation, smoothing, and relinearization, the RMS method was used where the smoothing was done with a moving average window of $50ms$. 
+As \citeauthor{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $50ms$ is chosen to not introduce too much delay while still keeping the signal relatively smooth.
 Finally, the \ac{EMG} signal is downsampled to match the frequency of the model outputs which is $100Hz$. The downsampling is done by simply taking the first \ac{EMG} sample from every $10ms$ windows. 
 The first sample is used rather than any other to decrease the delay from \ac{EMG} to moment prediction. In that way an \ac{EMG} sample taken at $t_{0ms}$ can predict a moment value at $t_{9ms}$. 
 % The downsampling is only necessary for the training, not for running the \ac{NN} in real-time.
@@ -87,6 +88,7 @@ where $X$ represents moment values.
 The extra clause makes sure the signal is scaled down to the interval $[-1,1]$ (assuming $\left|X_{min}\right| \leq \left|X_{max}\right|$) and that flexion and extension is still represented with positive and negative values respectively.
 
 TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
+.... Talk about the design of the \ac{NN}
 
 % Introduce TensorFlow and the Keras API for the implementation of the \ac{NN}.
 % The training set for the \ac{NN} is normalized EMG data from regular walking.

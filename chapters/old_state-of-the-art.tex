@@ -35,6 +35,7 @@ Then it goes into detail about \ac{EMG} and its relation to muscle activity befo
 \subsection{Non-\ac{EMG}-based Models}
 \label{sec:A-NonEMGBasedModels}
 \textit{\Acl{ID}} is, as defined by the Dictionary of Sport and Exercise Science and Medicine \cite{inversedynamics}, "the calculation of forces and moments by using kinematics and data for mass and moment of inertia, effectively using Newton's second law of motion ($f = ma$) in reverse."
+%\footnote{"inverse dynamics." Dictionary of Sport and Exercise Science and Medicine by Churchill Livingstone. 2008. Elsevier Limited 18 Mar. 2019 \url{https://medical-dictionary.thefreedictionary.com/inverse+dynamics}}
 In relation to the human body this means the use of kinetics and kinematics, e.g. motion capture, scaled model, and force plate data from a motion lab, to calculate joint torque estimations.
 As the method works with the equation of motion, it relies on correct scaling of each body segment, and joints angles and positions relative to the reaction forces \cite{Erdemir2007, Buchanan2004}.
 Extensive research has been done on inverse dynamics and it is widely used in clinical applications such as, for example, gait analysis in rehabilitation \cite{Erdemir2007,Buchanan2004,Pizzolato2015}.
@@ -295,14 +296,5 @@ There are many muscles that contribute to the joint torque and with the nonlinea
 However, with higher dimension and the redundancy of the \ac{EMG} signal, there is a risk of overfitting.
 Furthermore, due to the variability it is difficult to get a solution that is generalizable.
 When working with \ac{EMG} data from many muscles it is useful to preprocess the data with dimensionality reduction and feature extraction and selection. This can contribute to learning efficiency and improve generalization \cite{Chen2018, Marsland2014}.
-
-\section{Platforms}
-
-\subsection{Vicon Nexus and Plug-in Gait}
-
-
-\subsection{pyCGM2}
-The pyCGM2 package is a python package which implements, among other things, kinematic and kinetic computations based on motion data contained in c3d files \cite{Leboeuf2019}.
-The package is an upgrade 
 
 \end{document}

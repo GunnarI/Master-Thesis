@@ -299,10 +299,19 @@ When working with \ac{EMG} data from many muscles it is useful to preprocess the
 \section{Platforms}
 
 \subsection{Vicon Nexus and Plug-in Gait}
+The Vicon Nexus motion capture system, equipped with motion capture cameras, is capable of capturing motion of a subject wearing markers, doing all sorts of exercises \cite{vicon-user-guide}.
+The motion data can be synchronized with analog data captures, such as \ac{FP} and \ac{EMG} data, and analyzed using the Vicon Nexus software.
+The software offers the option of running biomechanical models on the data captured, including scaling the labelling skeleton based on anthropometric data, performing inverse kinematics.
 
+\Ac{PiG} is a biomechanical model offering full body kinematic and kinetic modeling. 
+It is Vicon's implementation of the \ac{CGM} and is based on the Newington-Helen Hayes gait model \cite{vicon-user-guide, viconpig}. 
+The model  comprises 7 segments on the lower body, with an orthogonal coordinate system associated with each segment \cite{Baker2017}.
+The kinematic and kinetic outputs are based on the orientation of the distal segment relative to the proximal segment. 
+For the knee joint the origin of the coordinate system is located at the knee joint center, with the z axis pointing upwards in the coronal plane of the femur and the y axis pointing left (i.e. medial on right knee but lateral on left knee) in the coronal plane.
+\Ac{PiG} is included in the Vicon Nexus software and includes a markerset protocol, labelling skeleton, and pipelines for static and dynamic calibrations. 
 
 \subsection{pyCGM2}
 The pyCGM2 package is a python package which implements, among other things, kinematic and kinetic computations based on motion data contained in c3d files \cite{Leboeuf2019}.
-The package is an upgrade 
+The package is an upgrade to the \ac{PiG} model with the first version intended to replicate the \ac{PiG} model outputs exactly and following versions to build upon it, fixing known issues \cite{Leboeuf2019}.
 
 \end{document}

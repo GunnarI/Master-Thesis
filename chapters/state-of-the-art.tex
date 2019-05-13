@@ -310,6 +310,32 @@ The kinematic and kinetic outputs are based on the orientation of the distal seg
 For the knee joint the origin of the coordinate system is located at the knee joint center, with the z axis pointing upwards in the coronal plane of the femur and the y axis pointing left (i.e. medial on right knee but lateral on left knee) in the coronal plane.
 \Ac{PiG} is included in the Vicon Nexus software and includes a markerset protocol, labelling skeleton, and pipelines for static and dynamic calibrations. 
 
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/LeftFootFemur_PiG_wCoord.png}
+        \caption{Adapted from  \cite{Baker2017}}
+        \label{fig:cgm23-markerset-guidelines}
+    \end{subfigure}
+     ~
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/KneeJointAngles_wCoord_twisted.png}
+        \caption{Adapted from\\ pyCGM2 official website \cite{Leboeuf2019}}
+        \label{fig:cgm23-markerset-experiment-capture}
+    \end{subfigure}
+     ~
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/experiment_capture2.png}
+        \caption{Screenshot is taken from Vicon Nexus during gait trial.}
+        \label{fig:cgm23-markerset-experiment-capture}
+    \end{subfigure}
+    \caption{CGM2.3 marker set as seen from the guidelines (a) and one conducted gait trial (b). Description: (a) Optional markers with red cross were not used and calibration only markers were removed before dynamic trials. (b) The skeleton is built using the CGM2.3 marker set and pyCGM2-CGM2\_3 python scripts in Vicon Nexus 2.8.2. The colored spheres represent the markers. The knee joint center can be seen with its own coordinate system where the x-axis (red) and z-axis (blue) define the sagittal plane in which rotation around the y-axis (green) defines flexion and extension of the knee.}
+    \label{fig:knee-joint-coordinates}
+\end{figure}
+
 \subsection{pyCGM2}
 The pyCGM2 package is a python package which implements, among other things, kinematic and kinetic computations based on motion data contained in c3d files \cite{Leboeuf2019}.
 The package is an upgrade to the \ac{PiG} model with the first version intended to replicate the \ac{PiG} model outputs exactly and following versions to build upon it, fixing known issues \cite{Leboeuf2019}.

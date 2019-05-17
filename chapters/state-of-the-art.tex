@@ -17,7 +17,7 @@ This includes discussion about data acquisition, especially \ac{EMG} data, and i
 Second, the discussion is narrowed towards the methods and models that can be used as control systems in an exoskeleton.
 The flexibility for computation and data acquisition is lower in an exoskeleton where things happen in real-time and thus the number of methods that could be used more limited.
 Third, the discussion is focused toward the state of the art of one particular method which consists of joint torque prediction using \ac{ANN} with \ac{EMG} data acquisition. 
-This also includes general discussion about the research of different \acp{ANN} that have been used with \ac{EMG} data.
+This also includes discussion about the research of different \acp{ANN} used with \ac{EMG} data.
 
 \section{Kinetics of Human Motion: methods, models, and data acquisition}
 \label{sec:A-MSModels}
@@ -39,7 +39,7 @@ In relation to the human body this means the use of kinetics and kinematics, e.g
 As the method works with the equation of motion, it relies on correct scaling of each body segment, and joints angles and positions relative to the reaction forces \cite{Erdemir2007, Buchanan2004}.
 Extensive research has been done on inverse dynamics and it is widely used in clinical applications such as, for example, gait analysis in rehabilitation \cite{Erdemir2007,Buchanan2004,Pizzolato2015}.
 
-OpenSim \cite{Delp2007, Seth2018} is an open-source software offering biomechanical models and simulation tools to, among many other things, model and run inverse dynamic solution on a scaled musculoskeletal model \cite{Buchanan2004, Delp2007, Seth2018, Pizzolato2017}.
+% OpenSim \cite{Delp2007, Seth2018} is an open-source software offering biomechanical models and simulation tools to, among many other things, model and run inverse dynamic solution on a scaled musculoskeletal model \cite{Buchanan2004, Delp2007, Seth2018, Pizzolato2017}.
 
 The inverse dynamics method alone does not provide any information about muscle activation and muscle forces.
 There are several methods that have been implemented to estimate muscle activation and muscle forces \cite{Erdemir2007}.
@@ -132,11 +132,6 @@ The way that these models are base on $EMG$ is that the muscle activation, $a(t)
 Other parameters, such as $L^O_m$ and $L^S_T$, are difficult to measure \cite{Winby2008}.
 \textcite{Lloyd2003} handle this problem by giving these parameters initial estimations based on previous studies and measurements. The values are then allowed to be adjusted, within a certain limit, to best fit values obtained using an inverse dynamics approach.
 Thus, in a way, this \ac{EMG}-based model still uses optimization but it should better reflect on the muscle activation pattern than the previously discussed static and dynamic optimization \cite{Pizzolato2015, Lloyd2003}
-
-As previously stated, \textcite{Pizzolato2015} recognize the drawback of the optimization methods in regards to synergy variation. 
-Furthermore, they note that the optimization methods are easily accessible, which is for example reflected by the fact that OpenSim, a tool widely used by researchers, uses those methods in its models \cite{Pizzolato2015, Delp2007, Seth2018}. 
-They further state that this accessibility does not apply for EMG-driven methods which "have been developed by different research groups and they are not publicly available, or are limited to isometric tasks" \parencite[1]{Pizzolato2015}.
-That motivates their development of \ac{CEINMS}, a tool developed to increase said availability and allows researchers to use \ac{EMG}-driven (or \ac{EMG}-informed) models on collected kinematic, reaction force, and \ac{EMG} data \cite{Pizzolato2015}.
 
 \section{Exoskeletons as Assistive Devices}
 \label{sec:A-Exoskeletons}
@@ -309,7 +304,7 @@ The model  comprises 7 segments on the lower body, with an orthogonal coordinate
 The kinematic and kinetic outputs are based on the orientation of the distal segment relative to the proximal segment \cite{Leboeuf2019, Baker2017, cgm-outputs}. 
 Figure \ref{fig:knee-joint-coordinates} illustrates the coordinate system setup for the knee joint.
 Using the right-hand rule, one can determine that knee flexion/extension is indicated by positive/negative rotation around the y-axis.
-\begin{figure}[ht]
+\begin{figure}[!htb]
     \centering
     \begin{subfigure}[t]{0.3\textwidth}
         \centering
@@ -331,7 +326,7 @@ Using the right-hand rule, one can determine that knee flexion/extension is indi
         \caption{Screenshot from Vicon Nexus during trial.}
         \label{fig:cgm23-markerset-experiment-capture}
     \end{subfigure}
-    \caption{Knee joint center placement and coordinate system setup. The red, green, and blue (RGB) color code indicates X-, Y-, and Z-axis respectively. (a) The femur for the left leg. The faded yellow points show the hip and knee joint center on the femur while the solid yellow are the lateral epicondyle and lateral thigh markers. The knee center is defined by a right angle triangle formed by the hip joint center, epicondyle marker and the knee joint center in the coronal plane, indicated by the red shadow. (b) Grey circle shows the sagittal plane of the femur. The flexion/extension angle is defined by the rotation of the fibia around the y-axis in the sagittal plane, indicated by the green angle. (c) Model built from CGM2.3 setup but the orientation knee joint coordinates system is the same. Note that in the right leg, the y-axis points towards the medial epicondyle unlike in the left leg where it points towards the lateral epicondyle.}
+    \caption{\Ac{KJC} placement and coordinate system setup. The red, green, and blue (RGB) color code indicates x-, y-, and z-axis respectively. (a) The femur of the left leg. z-axis extends from the \ac{KJC} through the \ac{HJC} and the y-axis from the \ac{KJC} through the lateral epicondyle marker in the coronal plane of the femur. (b) Grey circle shows the sagittal plane of the femur. The flexion/extension angle is defined by the rotation of the tibia around the y-axis in the sagittal plane, indicated by the green angle. (c) Model built using CGM2.3 setup. The coordinate system is shown at the \ac{KJC}, notably oriented the same way for the left and the right leg.}
     \label{fig:knee-joint-coordinates}
 \end{figure}
 \Ac{PiG} is included in the Vicon Nexus software and includes a markerset protocol, labelling skeleton, and pipelines for static and dynamic calibrations. 
@@ -341,6 +336,6 @@ The pyCGM2 package is a python package which implements, among other things, kin
 The package is an upgrade to the \ac{PiG} model with the first version intended to replicate the \ac{PiG} model outputs exactly and following versions to build upon it, fixing known issues.
 One improvement worth mentioning, when looking at CGM2.2 \cite{cgm22}, is the change from how the model is kinematically fitted to the motion capture. CGM2.2 introduces the use of \ac{IK} and with it some improvements that can be read about on the CGM2 website. CGM2.3 then introduces additional markers to minimize a soft tissue artifact accompanying the method when using the thigh and calf wands.
 
-
+\subsection{TensorFlow}
 
 \end{document}

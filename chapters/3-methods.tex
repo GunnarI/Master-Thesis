@@ -4,7 +4,7 @@
 
 \chapter{Methods}
 \label{sec:methods}
-The process from collecting data to training the \ac{NN} can be divided to 4 steps (see Fig. \ref{fig:process-diagram}): (A) motion lab experiment, (B) filtering and preprocessing EMG data, (C) performing \ac{IK} and \ac{ID} to retrieve knee joint moments as training labels and data preparation before training, and (D) training and testing the network.
+The process from data collection to training the \ac{NN} can be divided to 4 steps (see Fig. \ref{fig:process-diagram}): (A) Motion lab experiment; (B) Filtering and preprocessing EMG data; (C) Performing \ac{IK} and \ac{ID} to retrieve knee joint moments as training labels and data preparation before training, and (D) training and testing the network.
 
 \begin{figure}[ht]
     \centering
@@ -51,8 +51,8 @@ Data was collected on x subjects with anthropometric data measured for each subj
 The subjects were asked to walk front and back over the \acp{FP} either slowly, normally, or fast.
 Note that a subject refers to one individual, a trial refers to each experiment performed by the subject, and an exercise refers to each measured exercised performed in the trial. 
 Thus, each subject can have many trials (i.e. experiments conducted on separate days), and each trial has many exercises where, for example, walking 10 times results in 10 separate exercises.
-Furthermore, each exercise is cut down to gait cycles defined by the interval from the right foots heal strike on a \ac{FP} until its next heal strike.
-Some trials included 3 \acp{FP} resulting in some exercises having two gait cycles.
+Furthermore, each exercise is cut down to gait cycles defined by the interval from the right foots heel strike on a \ac{FP} until its next heel strike.
+Some trials included 3 \acp1{FP} resulting in some exercises having two gait cycles.
 \input{tables/subject-table.tex}
 
 In step B, before running \ac{IK} and \ac{ID}, the marker trajectories and the \ac{GRF} are filtered with a 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$. 

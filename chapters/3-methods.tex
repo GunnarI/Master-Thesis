@@ -4,44 +4,43 @@
 
 \chapter{Methods}
 \label{sec:methods}
-The process from data collection to training the \ac{NN} can be divided to 4 steps (see Fig. \ref{fig:process-diagram}): (A) Motion lab experiment; (B) Filtering and preprocessing EMG data; (C) Performing \ac{IK} and \ac{ID} to retrieve knee joint moments as training labels and data preparation before training, and (D) training and testing the network.
+The process from data collection to training the \ac{NN} can be divided to 4 steps (see Fig. \ref{fig:process-diagram}): (A) Motion lab experiment; (B) Filtering and preprocessing \ac{EMG} data; (C) Performing \ac{IK} and \ac{ID} to retrieve knee joint moments as training labels and data preparation before training, and (D) training and testing the network.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/ProcessDiagram}
-    \caption{Flow diagram of the modelling procedure. The dashed box indicates procedure used only for training the \ac{NN} and the dashed arrows are feedback during training. (A) Subject walks in a motion lab collecting \ac{GRF} from force plates, marker trajectories, and muscle activity from \ac{sEMG} sensors; (B) The data is filtered and prepared for use in the models; (C) The \ac{GRF} and marker trajectories are used for \ac{IK} and \ac{ID} to retrieve knee joint moments; (D) During training the normalized \ac{EMG} is continuously fed through the \ac{NN}, the dashed arrows indicate feedback where the output is compared to the moments from (C) and the error used to update the \ac{NN}; (D) Once training is finished the \ac{EMG} can be fed through the \ac{NN} directly, producing knee joint moments to control motor torque in an exoskeleton}
+    \caption{Flow diagram of the modelling procedure. The dashed box indicates procedure used only for training the \ac{NN} and the dashed arrows are feedback during training. (A) Subject walks in a motion lab collecting \acf{GRF}, marker trajectories, and muscle activity; (B) The data is filtered and prepared for use in the models; (C) The \ac{GRF} and marker trajectories are used for \ac{IK} and \ac{ID} to retrieve knee joint moments; (D) During training, normalized \ac{EMG} is continuously fed through the \ac{NN}. Dashed arrows indicate feedback where the output is compared to the moments from (C) and the error used to update the \ac{NN}; (E) \ac{EMG} fed through the trained \ac{NN} produces knee joint moments prediction to control motor torque in an exoskeleton}
     \label{fig:process-diagram}
 \end{figure}
 
-For the experiment (step A), a motion lab equipped with 10 Vicon Vantage V16 cameras and 3 AMTI OR6 \acp{FP} was used. 
-The CGM2.3 markerset \textcite{Leboeuf2019} (see Fig. \ref{fig:cgm23-markerset}) was used without optional markers, except for RBAK which was included.
-The aktos nano \ac{sEMG} sensors from myon were used for the \ac{EMG} data capture. 
-The sensors were placed on the surface near 12 muscles (see table \ref{tab:muscle-names}) using skin preparation and placement recommendations from the SENIAM group \cite{Hermens1999, Hermens2000}.
-
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=0.9\textwidth]{img/CGM23_markerset3.png}
-%     \caption{CGM2.3 markerset protocol}
-%     \label{fig:cgm23-markerset}
-% \end{figure}
-\begin{figure}
+\section{Experiment setup}
+For the experiment, a motion lab equipped with 10 Vicon Vantage V16 cameras and 3 AMTI OR6 \acp{FP} was used. 
+Figure \ref{fig:cgm23-markerset} shows the markerset protocol used, which follows the CGM2.3 model's protocol. 
+CGM2.3 is a recent version of CGM2.i project which is meant to update the old \ac{CGM} by improving it and fixing some known issues \cite{Leboeuf2019}. 
+Section \ref{sec:pyCGM2} goes into further detail about the model and its scripts.
+\begin{figure}[!ht]
      \centering
-     \begin{subfigure}[b]{0.5\textwidth}
+     \begin{subfigure}[t]{0.58\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{img/CGM23_markerset3.png}
-         \caption{Figure is adapted from pyCGM2 official website \cite{Leboeuf2019}}
+         \includegraphics[width=\textwidth]{img/CGM23_markerset.pdf}
+         \caption{Adapted from pyCGM2 official website \cite{Leboeuf2019}}
          \label{fig:cgm23-markerset-guidelines}
      \end{subfigure}
      \hfill
-     \begin{subfigure}[b]{0.4\textwidth}
+     \begin{subfigure}[t]{0.40\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{img/experiment_capture2.png}
-         \caption{Screenshot is taken from Vicon Nexus during gait trial.}
+         \raisebox{10mm}{\includegraphics[width=\textwidth]{img/experiment_capture2.pdf}}
+         \caption{Screenshot from Vicon Nexus software during gait trial.}
          \label{fig:cgm23-markerset-experiment-capture}
      \end{subfigure}
-    \caption{CGM2.3 marker set as seen from the guidelines (a) and one conducted gait trial (b). Description: (a) Optional markers with red cross were not used and calibration only markers were removed before dynamic trials. (b) The skeleton is built using the CGM2.3 marker set and pyCGM2-CGM2\_3 python scripts in Vicon Nexus 2.8.2. The colored spheres represent the markers. The knee joint center can be seen with its own coordinate system where the x-axis (red) and z-axis (blue) define the sagittal plane in which rotation around the y-axis (green) defines flexion and extension of the knee.}
+    \caption{CGM2.3 marker set as seen from (a) the guidelines and (b) one conducted gait trial. (a) Optional markers with red cross were not used and calibration only markers were removed before dynamic trials. (b) The colored spheres represent the markers placed on the subject.}
     \label{fig:cgm23-markerset}
 \end{figure}
+
+% The knee joint center has its own coordinate system where the x-axis (red) and z-axis (blue) define the sagittal plane in which rotation around the y-axis (green) defines flexion and extension of the knee.
+
+The aktos nano \ac{sEMG} sensors from myon were used for the \ac{EMG} data capture. 
+The sensors were placed on the surface near 12 muscles, presented in table \ref{tab:muscle-names}. Skin preparation and placement recommendations from the SENIAM project \cite{Hermens1999, Hermens2000} were used. The SENIAM project is a European concerted action in the Biomed 2 program of the European Community 
 
 All the data from the \ac{EMG} sensors (muscle activity), cameras (marker trajectories), and the \acp{FP} (\ac{GRF}) was collected and synchronized using the Vicon Nexus 2.8.2 system/software.
 The synchronization includes accounting for the latency of $14ms$ of the \ac{EMG} sensors \cite{aktosEMG}.
@@ -52,7 +51,7 @@ The subjects were asked to walk front and back over the \acp{FP} either slowly, 
 Note that a subject refers to one individual, a trial refers to each experiment performed by the subject, and an exercise refers to each measured exercised performed in the trial. 
 Thus, each subject can have many trials (i.e. experiments conducted on separate days), and each trial has many exercises where, for example, walking 10 times results in 10 separate exercises.
 Furthermore, each exercise is cut down to gait cycles defined by the interval from the right foots heel strike on a \ac{FP} until its next heel strike.
-Some trials included 3 \acp1{FP} resulting in some exercises having two gait cycles.
+Some trials included 3 \acp{FP} resulting in some exercises having two gait cycles.
 \input{tables/subject-table.tex}
 
 In step B, before running \ac{IK} and \ac{ID}, the marker trajectories and the \ac{GRF} are filtered with a 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$. 

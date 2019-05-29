@@ -3,7 +3,8 @@
 \begin{document}
 
 \chapter{State of the Art}
-The concept of \textit{exoskeletons} as it will be used in this thesis refers to \textit{robotic exoskeletons} or \textit{powered exoskeletons} which can be defined as mobile, computer controlled, electromechanical structure which can be worn by a human to provide power amplification, support and/or assistance in human motion \cite{Anam2012, Gorgey2018}. 
+The concept of \textit{exoskeletons} as it will be used in this thesis refers to \textit{robotic exoskeletons} or \textit{powered exoskeletons}. 
+They can be defined as mobile, computer controlled, electromechanical structure which can be worn by a human to provide power amplification, support and/or assistance in human motion \cite{Anam2012, Gorgey2018}. 
 A typical powered exoskeleton would have a motor or some sort of actuator to produce torque at the joints (e.g. knee joint) to enable or assist the user.
 
 The amount of torque produced for any given motion depends on the control system of the exoskeleton.
@@ -41,26 +42,26 @@ Extensive research has been done on inverse dynamics and it is widely used in cl
 
 % OpenSim \cite{Delp2007, Seth2018} is an open-source software offering biomechanical models and simulation tools to, among many other things, model and run inverse dynamic solution on a scaled musculoskeletal model \cite{Buchanan2004, Delp2007, Seth2018, Pizzolato2017}.
 
-The inverse dynamics method alone does not provide any information about muscle activation and muscle forces.
-There are several methods that have been implemented to estimate muscle activation and muscle forces \cite{Erdemir2007}.
-Perhaps the most notable ones that are not \ac{EMG}-drive are the static and dynamic optimization methods \cite{Erdemir2007, Pizzolato2015, Delp2007}. 
+% The inverse dynamics method alone does not provide any information about muscle activation and muscle forces.
+% There are several methods that have been implemented to estimate muscle activation and muscle forces \cite{Erdemir2007}.
+% Perhaps the most notable ones that are not \ac{EMG}-drive are the static and dynamic optimization methods \cite{Erdemir2007, Pizzolato2015, Delp2007}. 
 
-The \textit{static optimization} method uses optimization with an objective function such as, for example, minimizing the sum of muscle forces from all muscles. 
-Through iteration the muscle forces, that both fit to the estimated joint torque from the inverse dynamics model and satisfy the objective function, are calculated \cite{Erdemir2007}. 
+% The \textit{static optimization} method uses optimization with an objective function such as, for example, minimizing the sum of muscle forces from all muscles. 
+% Through iteration the muscle forces, that both fit to the estimated joint torque from the inverse dynamics model and satisfy the objective function, are calculated \cite{Erdemir2007}. 
 
-\textit{Dynamic optimization} is an alternative to static optimization which, in short, uses forward dynamics to find the set of muscle activations that best fit the experimental kinematic data (e.g. with objective to minimize tracking error in kinematics and \ac{GRF}). 
-This method does not require inverse dynamics to first estimate joint torques since the constraint is rather the measured motion and \ac{GRF} data.
-\textcite{Erdemir2007} point out that this method is beneficial as compared to the static optimization because of its more straightforward inclusion of muscle dynamics within the solution.
-Furthermore, it is less vulnerable toward errors in the experimental measurements as the inclusion of the kinematic data is somewhat "weak", i.e. there is a slack on the kinematic data in favor of more intact muscle dynamics.
-However, the dynamic optimization method is more computationally heavy when compared to the static optimization method \cite{Erdemir2007}.
+% \textit{Dynamic optimization} is an alternative to static optimization which, in short, uses forward dynamics to find the set of muscle activations that best fit the experimental kinematic data (e.g. with objective to minimize tracking error in kinematics and \ac{GRF}). 
+% This method does not require inverse dynamics to first estimate joint torques since the constraint is rather the measured motion and \ac{GRF} data.
+% \textcite{Erdemir2007} point out that this method is beneficial as compared to the static optimization because of its more straightforward inclusion of muscle dynamics within the solution.
+% Furthermore, it is less vulnerable toward errors in the experimental measurements as the inclusion of the kinematic data is somewhat "weak", i.e. there is a slack on the kinematic data in favor of more intact muscle dynamics.
+% However, the dynamic optimization method is more computationally heavy when compared to the static optimization method \cite{Erdemir2007}.
 
-There is a limitation to these optimization methods due to variations in muscle synergies.
-\textcite{Ivanenko2016} define muscle synergies as representing "coordinated activations of groups of muscles, with specific activation balances or temporal profiles, that might reflect basic biomechanical properties of the musculoskeletal apparatus or statistical regularities in the muscle activation patterns involved in performing a specific motor behavior" \parencite[160]{Ivanenko2016}.
-This means that muscles are not necessarily recruited to produce a specific torque at a joint but rather they are recruited as part of a muscle synergy that relates to a specific task, such as taking a step.
-As pointed out by \textcite{Pizzolato2015} the optimization method, including static and dynamic optimization, cannot account for variations in muscle activation patterns (i.e. muscle synergies) between tasks and individuals.
-For example, if the objective function is to minimize the sum of muscle forces that fit a certain joint moment, it does not account for the fact different muscle synergies can produce the same joint moment. 
-Muscle synergies have been shown to be task-specific and vary between individuals and different pathologies \cite{Ivanenko2016, Safavynia2011}.
-To account for this drawback, muscle activation need to be measured and accounted for, for example by using \ac{sEMG} and \ac{EMG}-driven models \cite{Pizzolato2015}.
+% There is a limitation to these optimization methods due to variations in muscle synergies.
+% \textcite{Ivanenko2016} define muscle synergies as representing "coordinated activations of groups of muscles, with specific activation balances or temporal profiles, that might reflect basic biomechanical properties of the musculoskeletal apparatus or statistical regularities in the muscle activation patterns involved in performing a specific motor behavior" \parencite[160]{Ivanenko2016}.
+% This means that muscles are not necessarily recruited to produce a specific torque at a joint but rather they are recruited as part of a muscle synergy that relates to a specific task, such as taking a step.
+% As pointed out by \textcite{Pizzolato2015} the optimization method, including static and dynamic optimization, cannot account for variations in muscle activation patterns (i.e. muscle synergies) between tasks and individuals.
+% For example, if the objective function is to minimize the sum of muscle forces that fit a certain joint moment, it does not account for the fact different muscle synergies can produce the same joint moment. 
+% Muscle synergies have been shown to be task-specific and vary between individuals and different pathologies \cite{Ivanenko2016, Safavynia2011}.
+% To account for this drawback, muscle activation need to be measured and accounted for, for example by using \ac{sEMG} and \ac{EMG}-driven models \cite{Pizzolato2015}.
 
 \subsection{Electromyography and Muscle Activity}
 \label{sec:A-EMG}
@@ -72,7 +73,7 @@ The muscle force produced thus depends, but not exclusively, on the amount of fi
 Other factors influencing the muscle force include the fiber properties (e.g. cross-sectional area and specific force), the cooperation of different \acp{MU} within the muscle, \ac{AP} frequency, etc.
 Furthermore, if looking at the force exerted by the muscle to the skeleton to produce movement, i.e. the \ac{MTU} force, then the properties of the tendon, such as elasticity, need to be considered as well \cite{Pizzolato2015, Enoka2016, Farina2016}. 
 
-\textcite{Raez2006} provide the following definition for EMG signals: "The EMG signal is a biomedical signal that measures electrical currents generated in muscles during its contraction representing neuromuscular activities" \parencite[1]{Raez2006}, where biomedical signal refers to an electrical signal from any organ that represents a specific physical variable.
+\citeauthor{Raez2006} provide the following definition for EMG signals: "The EMG signal is a biomedical signal that measures electrical currents generated in muscles during its contraction representing neuromuscular activities" \parencite[1]{Raez2006}, where biomedical signal refers to an electrical signal from any organ that represents a specific physical variable.
 The \ac{EMG} signal also depends on the number of \acp{MU} activated and the \ac{AP} frequency and has been found to correlate with the muscle force.
 However, the relation between the two varies from muscle to muscle and furthermore, both relate non-linearly to the neural drive from the motor neuron.
 Consequently, \ac{EMG} does not directly measure muscle forces but rather how activated the \acp{MU} are \cite{Enoka2016, Farina2016}.
@@ -87,18 +88,8 @@ A common method to partially compensate for the spatial low-pass filtering is to
 This method also allows removing the common-mode component (e.g. $50Hz$ from power line interference) \cite{Farina2016}.
 
 Some other artifacts of the \ac{sEMG} signal include, for example end-of-fiber effect, electrode-skin impedance, and crosstalk \cite{Farina2016}.
-Due to all these implications and artifacts the signal recorded by the electrodes depends on a number of anatomical, physical, and detection system parameters. The following list are the most important factors as listed by \textcite[p. 41]{Farina2016}:
-\begin{quote}
-(1) the thickness of the subcutaneous tissue layer,
-(2) the depth of the sources within the muscle,
-(3) the inclination of the detection system with respect to the muscle fiber orientation,
-(4) the length of the fibers,
-(5) the location of the electrodes over the muscle,
-(6) the spatial filter (electrode montage) used for signal detection, including the inter-electrode distance,
-(7) the electrode size and shape, and
-(8) crosstalk among nearby muscles.
-\end{quote}
-Thus, it is easy to see that the \ac{sEMG} can vary highly between individuals as well as between days and measurements of the same individual.
+Due to all these implications and artifacts the signal recorded by the electrodes depends on a number of anatomical, physical, and detection system parameters, as discussed by \textcite[p. 41]{Farina2016}. 
+As a result, the \ac{sEMG} signal can vary highly between individuals as well as between days and measurements of the same individual.
 
 Guidelines have been made by \ac{SENIAM} in effort to make \ac{sEMG} procedures more standardized and comparable and to increase reproducibility of the experiment. 
 The \ac{SENIAM} project is a European concerted action towards development of recommendations on sensors, sensor placement, signal processing, and modelling for \ac{sEMG} \cite{Hermens1999, Hermens2000}.
@@ -322,7 +313,7 @@ Using the right-hand rule, one can determine that knee flexion/extension is indi
      ~
     \begin{subfigure}[t]{0.3\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{img/experiment_capture2.png}
+        \includegraphics[width=\textwidth]{img/experiment_capture2.pdf}
         \caption{Screenshot from Vicon Nexus during trial.}
         \label{fig:cgm23-markerset-experiment-capture}
     \end{subfigure}
@@ -337,6 +328,6 @@ The pyCGM2 package is a python package which implements, among other things, kin
 The package is an upgrade to the \ac{PiG} model with the first version intended to replicate the \ac{PiG} model outputs exactly and following versions to build upon it, fixing known issues.
 One improvement worth mentioning, when looking at CGM2.2 \cite{cgm22}, is the change from how the model is kinematically fitted to the motion capture. CGM2.2 introduces the use of \ac{IK} and with it some improvements that can be read about on the CGM2 website. CGM2.3 then introduces additional markers to minimize a soft tissue artifact accompanying the method when using the thigh and calf wands.
 
-\subsection{TensorFlow}
+\subsection{TensorFlow and Keras}
 
 \end{document}

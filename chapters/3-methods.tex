@@ -4,8 +4,8 @@
 
 \chapter{Methods}
 \label{sec:methods}
-The process from data collection to training the \ac{NN} can be divided to 4 steps (see Fig. \ref{fig:process-diagram}): (A) Motion lab experiment; (B) Filtering and preprocessing \ac{EMG} data; (C) Performing \ac{IK} and \ac{ID} to retrieve knee joint moments as training labels and data preparation before training, and (D) training and testing the network.
-
+The process from data collection to training and finally using the \ac{NN} is presented in figure \ref{fig:process-diagram}. 
+The process can be divided into 5 steps (A-E) and each step will be the subject of each subsection in this chapter, in the same order.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/ProcessDiagram}
@@ -14,7 +14,7 @@ The process from data collection to training the \ac{NN} can be divided to 4 ste
 \end{figure}
 
 \section{Experiment setup}
-For the experiment, a motion lab equipped with 10 Vicon Vantage V16 cameras and 3 AMTI OR6 \acp{FP} was used. 
+For the experiment (step A of figure \ref{fig:process-diagram}), a motion lab equipped with 10 Vicon Vantage V16 cameras and 3 AMTI OR6 \acp{FP} was used. 
 Figure \ref{fig:cgm23-markerset} shows the markerset protocol used, which follows the CGM2.3 model's protocol. 
 CGM2.3 is a recent version of CGM2.i project which is meant to update the old \ac{CGM} by improving it and fixing some known issues \cite{Leboeuf2019}. 
 Section \ref{sec:pyCGM2} goes into further detail about the model and its scripts.
@@ -40,28 +40,35 @@ Section \ref{sec:pyCGM2} goes into further detail about the model and its script
 % The knee joint center has its own coordinate system where the x-axis (red) and z-axis (blue) define the sagittal plane in which rotation around the y-axis (green) defines flexion and extension of the knee.
 
 The aktos nano \ac{sEMG} sensors from myon were used for the \ac{EMG} data capture. 
-The sensors were placed on the surface near 12 muscles, presented in table \ref{tab:muscle-names}. Skin preparation and placement recommendations from the SENIAM project \cite{Hermens1999, Hermens2000} were used. The SENIAM project is a European concerted action in the Biomed 2 program of the European Community 
+The sensors were placed on the surface near 12 muscles on the right leg, presented in table \ref{tab:muscle-names}. Skin preparation and placement recommendations from the SENIAM project \cite{Stegeman2007, Hermens1999, Hermens2000} were used. The SENIAM project is a European concerted action in the Biomed 2 program of the European Community \cite{Stegeman2007}. It provides recommendations when measuring \ac{sEMG} to increase standardization within the field.
 
 All the data from the \ac{EMG} sensors (muscle activity), cameras (marker trajectories), and the \acp{FP} (\ac{GRF}) was collected and synchronized using the Vicon Nexus 2.8.2 system/software.
 The synchronization includes accounting for the latency of $14ms$ of the \ac{EMG} sensors \cite{aktosEMG}.
 The marker trajectories were sampled at 100Hz using the cameras while the analog data (i.e. \ac{GRF} and \ac{EMG}) was sampled at 1000Hz.
 
-Data was collected on x subjects with anthropometric data measured for each subject (see table \ref{tab:subject-table}).
+Data was collected from x subjects with anthropometric data measured for each subject (see table \ref{tab:subject-table}).
 The subjects were asked to walk front and back over the \acp{FP} either slowly, normally, or fast.
-Note that a subject refers to one individual, a trial refers to each experiment performed by the subject, and an exercise refers to each measured exercised performed in the trial. 
-Thus, each subject can have many trials (i.e. experiments conducted on separate days), and each trial has many exercises where, for example, walking 10 times results in 10 separate exercises.
-Furthermore, each exercise is cut down to gait cycles defined by the interval from the right foots heel strike on a \ac{FP} until its next heel strike.
-Some trials included 3 \acp{FP} resulting in some exercises having two gait cycles.
+This was to increase variance in the data and thus help prevent overfitting of the \ac{NN} model.
+Note that a subject refers to one individual, a session refers to each experiment performed by the subject, and a trial refers to each measured exercised performed in the trial. 
+Thus, each subject can have many sessions (i.e. experiments conducted on separate days), and each session has many trials where, for example, walking 10 times results in 10 separate trials.
+Furthermore, each trial was cut down to gait cycles defined by the interval from the right foot's heel strike on a \ac{FP} until its next heel strike.
+Some sessions included 3 \acp{FP} resulting in some trials having two gait cycles.
 \input{tables/subject-table.tex}
 
-In step B, before running \ac{IK} and \ac{ID}, the marker trajectories and the \ac{GRF} are filtered with a 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$. 
-Same cutoff frequency is used to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.
-The \ac{EMG} was filtered with the "typical" steps as mentioned by \citeauthor{Clancy2016} \parencite[99]{Clancy2016}, but excluding the whitening step to keep the filtering real-time friendly.
+\section{Data processing}
+In step B of figure \ref{fig:process-diagram}, before running \ac{IK} and \ac{ID}, the marker trajectories and the \ac{GRF} were filtered with a 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$. 
+Same cutoff frequency was used to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.
+The \ac{EMG} was filtered with the "typical" steps as mentioned by \textcite[99]{Clancy2016}, but excluding the whitening step to keep the filtering real-time friendly.
 Thus, the signal was noise and interference filtered using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$. 
 Then, for demodulation, smoothing, and relinearization, the RMS method was used where the smoothing was done with a moving average window of $50ms$. 
-As \citeauthor{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $50ms$ is chosen to not introduce too much delay while still keeping the signal relatively smooth.
-Finally, the \ac{EMG} signal is downsampled to match the frequency of the model outputs which is $100Hz$. The downsampling is done by simply taking the first \ac{EMG} sample from every $10ms$ windows. 
-The first sample is used rather than any other to decrease the delay from \ac{EMG} to moment prediction. In that way an \ac{EMG} sample taken at $t_{0ms}$ can predict a moment value at $t_{9ms}$. 
+As \textcite{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $50ms$ was chose.
+That is, to not introduce too much delay while still keeping the signal relatively smooth.
+
+\section{Training preparation}
+Finally, the \ac{EMG} signal was downsampled to match the frequency of the model outputs which was $100Hz$. 
+The downsampling was done by simply taking the first \ac{EMG} sample from every $10ms$ windows. 
+The first sample from the window was used rather than any other to decrease the delay from \ac{EMG} to moment prediction. 
+In that way an \ac{EMG} sample taken at $t$ can predict a moment value at $t+9ms$. 
 % The downsampling is only necessary for the training, not for running the \ac{NN} in real-time.
 
 The pyCGM2 package by \textcite{Leboeuf2019} was used to apply \ac{IK} and \ac{ID} on the motion and force data.
@@ -70,7 +77,7 @@ The model outputs are designed to have the same conventions as Vicon's \ac{PiG} 
 
 Before training the network in step D, the \ac{EMG} data and joint moments data was split into training and testing set.
 Furthermore, for the purpose of standardizing the data between subjects, the datasets were normalized.
-\ac{EMG} is normalized so that all values from the training dataset are between $0$ and $1$, independent of subject.
+\ac{EMG} was normalized so that all values from the training dataset were between $0$ and $1$, independent of subject.
 The normalization is given by equation \ref{eq:emg-normalization}:
 \begin{equation}
 \label{eq:emg-normalization}
@@ -78,14 +85,15 @@ The normalization is given by equation \ref{eq:emg-normalization}:
 \end{equation}
 where $X$ is the \ac{EMG} value to be normalized and $X_{min}$ and $X_{max}$ are, respectively, the minimum and maximum measured \ac{EMG} from the training dataset. 
 The testing dataset uses the same minimum and maximum values, to accurately portray new data that the \ac{NN} does not already "know".
-The moments are normalized similar to the \ac{EMG} in equation \ref{eq:emg-normalization} with addition clause to set the interval:
+The moments were normalized similar to the \ac{EMG} in equation \ref{eq:emg-normalization} with addition clause to set the interval:
 \begin{equation}
 \label{eq:moment-normalization}
     X_{norm} = \frac{X - X_{min}}{X_{max} - X_{min}}\left(1 - \frac{X_{min}}{X_{max}}\right) + \frac{X_{min}}{X_{max}}
 \end{equation}
 where $X$ represents moment values. 
-The extra clause makes sure the signal is scaled down to the interval $[-1,1]$ (assuming $\left|X_{min}\right| \leq \left|X_{max}\right|$) and that flexion and extension is still represented with positive and negative values respectively.
+The extra clause made sure the signal was scaled down to the interval $[-1,1]$ (assuming $\left|X_{min}\right| \leq \left|X_{max}\right|$) and that flexion and extension was still represented with positive and negative values respectively.
 
+\section{Architecture and Training of the Neural Network}
 TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
 .... Talk about the design of the \ac{NN}
 

@@ -330,18 +330,17 @@ Using the right-hand rule, one can determine that knee flexion/extension is indi
 The pyCGM2 package is a python package which implements, among other things, kinematic and kinetic computations based on motion data contained in c3d files \cite{Leboeuf2019}.
 The package is an upgrade to the \ac{PiG} model intended to improve it by fixing known issues \cite{Leboeuf2019}.
 The first version, CGM1.0 was intended to replicate the \ac{PiG} model outputs exactly and following versions to build upon it.
-% From CGM1.0 to CGM2.1 the medial knee marker for knee joint center calibration.
-% Furthermore, hip joint center calibration calculations are improved and pelvic angles defined to 
+From CGM1.0 to CGM2.1 the medial knee marker for knee joint center calibration, demonstrated in figure \ref{fig:cgm23-markerset-sota}.
+Furthermore, known issues and inconsistencies withing kinematic calculations and hip joint center calibration calculations are fixed \cite{Leboeuf2019}.
 % CGM1.1 fixes the definition of pelvis rotation to be the rotation of the pelvis with respect to its own axis rather than the axis of the laboratory.
 % It also fixes
-One improvement worth mentioning, when looking at CGM2.2 \cite{cgm22}, is the change from how the model is kinematically fitted to the motion capture. 
-CGM2.2 introduces the use of \ac{IK} and with it some improvements that can be read about on the CGM2 website. 
-CGM2.3 then introduces additional markers to minimize a soft tissue artifact accompanying the method when using the thigh and calf wands.
-\begin{figure}[t]
+CGM2.2 introduces the use of \ac{IK} and with it some improvements that can be read about on the CGM2 website \cite{cgm22}. 
+CGM2.3 then introduces additional markers to minimize a soft tissue artifact accompanying the \ac{IK} method when using the thigh and calf wands.
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=0.7\textwidth]{img/CGM23_markerset_highlight.png}
     \caption{The markerset as defined for version CGM2.3. The changes from the original CGM1.0 markerset are highlighted with orange circles/arrows. Adapted from pyCGM2 official website \cite{Leboeuf2019}}
-    \label{fig:cgm23-markerset-guidelines}
+    \label{fig:cgm23-markerset-sota}
 \end{figure}
 
 \subsection{TensorFlow and Keras}

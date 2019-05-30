@@ -11,7 +11,8 @@ The amount of torque produced for any given motion depends on the control system
 Many different methods have been researched and implemented towards the goal of making a good control system that provides exactly the assist that the user wants and/or needs.
 The key to that goal is to estimate or predict the joint torque associated with a certain motion performed by the user.
 
-This chapter discusses the state of the art of exoskeleton control systems and joint torque and muscle force prediction models.
+This chapter discusses the state of the art of exoskeleton control systems and joint torque estimation.
+That includes kinetic methods for joint torque estimation and the relationship of muscle activity and \ac{EMG} signals to joint torque.
 Note that the overall focus is on lower extremities.
 First, the discussion is aimed towards methods and models that are used today for kinetics of human motion analysis in general research and clinical applications.
 This includes discussion about data acquisition, especially \ac{EMG} data, and its relation to the body dynamics, i.e. muscle forces.
@@ -23,8 +24,9 @@ This also includes discussion about the research of different \acp{ANN} used wit
 \section{Kinetics of Human Motion: methods, models, and data acquisition}
 \label{sec:A-MSModels}
 Kinetics of human motion is the study of the forces that cause human motion. 
-This includes muscle forces as well as external forces, such as \ac{GRF}.
-It is challenging to measure \textit{in vivo} muscle forces and it requires at least a minimally invasive methods or an open surgery, so that a force transducer can be placed on a tendon attached to the muscle \cite{Erdemir2007}. 
+This includes muscle forces as well as external forces, such as \acp{GRF}.
+It is challenging to measure \textit{in vivo} muscle forces directly.
+It requires at least a minimally invasive methods or an open surgery, so that a force transducer can be placed on a tendon attached to the muscle \cite{Erdemir2007}. 
 Thus, in general clinical application as well as in exoskeletons, measuring muscle forces directly is hardly an option.
 However, it is possible with non-invasive methods to measure reaction forces like \ac{GRF}, human motion, and \ac{EMG}.
 Several methods have then been developed to estimate joint torques and muscle forces using this data \cite{Erdemir2007}.
@@ -287,7 +289,8 @@ When working with \ac{EMG} data from many muscles it is useful to preprocess the
 \subsection{Vicon Nexus and Plug-in Gait}
 The Vicon Nexus motion capture system, equipped with motion capture cameras, is capable of capturing motion of a subject wearing markers, doing all sorts of exercises \cite{vicon-user-guide}.
 The motion data can be synchronized with analog data captures, such as \ac{FP} and \ac{EMG} data, and analyzed using the Vicon Nexus software.
-The software offers the option of running biomechanical models on the data captured, including scaling the labelling skeleton based on anthropometric data, performing inverse kinematics.
+The software offers the option of running biomechanical models on the data captured. 
+That includes scaling the labelling skeleton based on anthropometric data and performing inverse kinematics.
 
 \Ac{PiG} is a biomechanical model offering full body kinematic and kinetic modeling. 
 It is Vicon's implementation of the \ac{CGM} and is based on the Newington-Helen Hayes gait model \cite{vicon-user-guide, viconpig}. 
@@ -325,8 +328,21 @@ Using the right-hand rule, one can determine that knee flexion/extension is indi
 \subsection{pyCGM2}
 \label{sec:pyCGM2}
 The pyCGM2 package is a python package which implements, among other things, kinematic and kinetic computations based on motion data contained in c3d files \cite{Leboeuf2019}.
-The package is an upgrade to the \ac{PiG} model with the first version intended to replicate the \ac{PiG} model outputs exactly and following versions to build upon it, fixing known issues.
-One improvement worth mentioning, when looking at CGM2.2 \cite{cgm22}, is the change from how the model is kinematically fitted to the motion capture. CGM2.2 introduces the use of \ac{IK} and with it some improvements that can be read about on the CGM2 website. CGM2.3 then introduces additional markers to minimize a soft tissue artifact accompanying the method when using the thigh and calf wands.
+The package is an upgrade to the \ac{PiG} model intended to improve it by fixing known issues \cite{Leboeuf2019}.
+The first version, CGM1.0 was intended to replicate the \ac{PiG} model outputs exactly and following versions to build upon it.
+% From CGM1.0 to CGM2.1 the medial knee marker for knee joint center calibration.
+% Furthermore, hip joint center calibration calculations are improved and pelvic angles defined to 
+% CGM1.1 fixes the definition of pelvis rotation to be the rotation of the pelvis with respect to its own axis rather than the axis of the laboratory.
+% It also fixes
+One improvement worth mentioning, when looking at CGM2.2 \cite{cgm22}, is the change from how the model is kinematically fitted to the motion capture. 
+CGM2.2 introduces the use of \ac{IK} and with it some improvements that can be read about on the CGM2 website. 
+CGM2.3 then introduces additional markers to minimize a soft tissue artifact accompanying the method when using the thigh and calf wands.
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/CGM23_markerset_highlight.png}
+    \caption{The markerset as defined for version CGM2.3. The changes from the original CGM1.0 markerset are highlighted with orange circles/arrows. Adapted from pyCGM2 official website \cite{Leboeuf2019}}
+    \label{fig:cgm23-markerset-guidelines}
+\end{figure}
 
 \subsection{TensorFlow and Keras}
 

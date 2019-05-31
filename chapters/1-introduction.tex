@@ -11,11 +11,19 @@ Exoskeletons are suggested to give the patients assistance in gait training so t
 The assistance can be provided by an actuator, such as a motor, controlled by the exoskeletons control system.
 In rehabilitation, the powered assistance from the actuator should ideally be enough to help the patient finish the motion correctly but not so much that the patient does not need to do anything.
 This balance needs to come from the control system and calls for a smooth human-machine interaction.
-\Ac{EMG} signal from muscle activity is non-linearly related to joint torque and can thus be used as a responsive human-machine control strategy for the actuator \cite{Young2017}.
-Therefore, by measuring \ac{EMG} from the leg a model could be constructed to estimate the \ac{KJM} from the muscle activity.
-Kinematic data 
 
-Exoskeletons are .....
+\Ac{EMG} signal from muscle activity is non-linearly related to joint torque and can thus be used as a responsive human-machine control strategy for the actuator \cite{Young2017}.
+Therefore, by measuring \ac{EMG} from the leg, a model could be constructed to estimate the \ac{KJM} from the muscle activity.
+Such \ac{EMG}-based models have been developed, such as the modified Hill-type muscle model discussed in section \ref{sec:A-EMGBasedModels} \cite{Pizzolato2015, Erdemir2007, Lloyd2003}.
+However, due to the nature of how \ac{EMG} is related to muscle forces, these models require complicated measurements such as maximum isometric muscle force, and muscle geometries.
+A possible alternative to these kind of models is to train a \ac{NN} to map the \ac{EMG} signal as closely as possible to the joint torque moments.
+A \ac{NN} is a machine learning model which is capable of representing a mapping function from one set of parameters to another. 
+The mapping function could be trained to represent the mapping from \ac{EMG} to joint torque as closely as possible, based on an objective/error function.
+
+
+% Kinematic data 
+
+% Exoskeletons are .....
 
 % What to talk about:
 % Talk about exoskeletons:
@@ -40,7 +48,7 @@ Exoskeletons are .....
 %the work of \textcite{Lloyd2003}.
 
 \section{Research Question}
-Is \ac{ANN} feasible to use as a myoelectric control model in an exoskeleton and how does it perform compared to joint moment prediction in relation to inverse dynamics. 
-Is it possible to generalize \ac{EMG} to torque prediction across different conditions of the same subject or even across different subjects doing the same task.
+Is \ac{ANN} feasible to use as a myoelectric control model in an exoskeleton and how does it perform compared to joint moment prediction in relation to inverse dynamics?
+Is it possible to generalize \ac{EMG} to torque prediction across different conditions of the same subject or even across different subjects doing the same task?
 
 \end{document}

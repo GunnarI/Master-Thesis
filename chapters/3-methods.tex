@@ -62,8 +62,6 @@ Some sessions included 3 \acp{FP} resulting in some trials having two gait cycle
 In step B of figure \ref{fig:process-diagram}, before running \ac{IK} and \ac{ID}, the marker trajectories and the \ac{GRF} were filtered with a 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$. 
 Same cutoff frequency was used to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.
 
-
-
 The \ac{EMG} was filtered with the "typical" steps as mentioned by \textcite[99]{Clancy2016}, but excluding the whitening step to keep the filtering real-time friendly.
 Thus, the signal was noise and interference filtered using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$. 
 Then, for demodulation, smoothing, and relinearization, the RMS method was used where the smoothing was done with a moving average window of $50ms$. 

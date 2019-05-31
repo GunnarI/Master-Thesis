@@ -36,9 +36,9 @@ Several methods have then been developed to estimate joint torques and muscle fo
 % That includes inverse dynamics for joint torque estimations and static and dynamic optimization for muscle force estimation. 
 % Then it goes into detail about \ac{EMG} and its relation to muscle activity before discussing the models that do use \ac{EMG} data, namely \ac{EMG}-driven models.
 
-\subsection{Non-\ac{EMG}-based Models}
-\label{sec:A-NonEMGBasedModels}
-\textit{\Acl{ID}} is, as defined by the Dictionary of Sport and Exercise Science and Medicine \cite{inversedynamics}, "the calculation of forces and moments by using kinematics and data for mass and moment of inertia, effectively using Newton's second law of motion ($f = ma$) in reverse."
+\subsection{Joint Moments from Inverse Dynamics}
+\label{sec:A-Inverse-Dynamics}
+\textit{\Acf{ID}} is, as defined by the Dictionary of Sport and Exercise Science and Medicine \cite{inversedynamics}, "the calculation of forces and moments by using kinematics and data for mass and moment of inertia, effectively using Newton's second law of motion ($f = ma$) in reverse."
 In relation to the human body this means the use of kinetics and kinematics, e.g. motion capture, scaled model, and force plate data from a motion lab, to calculate joint torque estimations.
 As the method works with the equation of motion, it relies on correct scaling of each body segment, and joints angles and positions relative to the reaction forces \cite{Erdemir2007, Buchanan2004}.
 
@@ -55,21 +55,84 @@ The \ac{IK} problem then involves minimizing the objective function \cite{Delp20
 \end{align}
 where $\Vec{x_i}^{sub}$ and $\Vec{x_i}^{mod}$ are the global ($xyz$) coordinates of the $i$-th marker for the subject and model, respectively; 
 and $\theta_j^{sub}$ and $\theta_j^{mod}$ the angles of the $j$-th joint.
-The weights can be used to set the importance 
-Exspeciftensivicrs or joints to be fitted accurately.
+The weights can be used to set the relative importance of specific joints to be fitted accurately.
 
 After applying \ac{IK}, the model and its kinematics, have been fitted in the global coordinate system, relative to the \ac{GRF} from the force plates.
 Finally, \ac{ID} can be applied using those kinematics and \acp{GRF} together with the anthropometric data of the segments.
-Figure 
-\begin{figure}
+Figure \ref{fig:ID-forces-and-segments} shows the translation of the \ac{GRF} to the segments' center of mass and joint centers \cite{cgm-ID, Dumas2004}.
+\begin{figure}[!htb]
     \centering
-    \includegraphics{}
-    \caption{Caption}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/ID_CGM2_labeled.png}
+        \caption{Adapted from \cite{cgm-ID}}
+        \label{fig:cgm-ID-force-prop}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Conventional_ID_labeled.png}
+        \caption{Adapted from \cite{Dumas2004}}
+        \label{fig:ID-thigh-force-def}
+    \end{subfigure}
+    \caption{Force propagation from the \ac{GRF} through the legs segments and how the forces and moments translate at the segment's center of mass (CoM) and joint centers (JC). Figure (a) demonstrates how the \ac{GRF} translates to moments in the joint centers. Figure (b) demonstrates how the forces and moments are calculated in each segment using the conventional \ac{ID} method; variables refer to equation \ref{eq:conventional-id} adapted from \cite{Dumas2004}.}
     \label{fig:ID-forces-and-segments}
 \end{figure}
- markee research has been done of on inverse dynamics and it is widely used in clinical applications such as, for example, gait analysis in rehabilitation \cite{Erdemir2007,Buchanan2004,Pizzolato2015}.
+Newton-Euler equations of motion are then used to calculate the net joint forces and moments for each segment as described by figure \ref{fig:cgm-ID-force-prop} and the following equations \cite{Dumas2004}:
+\begin{align}
+\label{eq:conventional-id}
+\begin{split}
+    \mathbf{F}_{ip} &= m_i\mathbf{a}_i - m_i\mathbf{g} - \mathbf{F}_{id} \\
+    \mathbf{M}^S_{ip} &= \Dot{\mathbf{H}}^S_i - \mathbf{M}^S_{id} - (\mathbf{k}_i^S \times \mathbf{F}^S_{ip}) - (\ell^S_i\times\mathbf{F}^S_{id})
+\end{split}
+\end{align}
+where the subscript $i$ indicates the $i$-th segment, $p$ the proximal end of the segment, and $d$ the distal end. $\mathbf{F}$ is a force vector, $m$ is mass, $\mathbf{a}$ is acceleration, $\mathbf{g}$ is gravitational acceleration, $\mathbf{M}$ is a moment vector, $\Dot{\mathbf{H}}$ is time derivative of the angular momentum, $\mathbf{k}$ and $\ell$ are lever arm vectors from the center of mass to the proximal and distal end, respectively.
+The superscript $S$ indicates the segment coordinate system (SCS) as opposed to the inertial coordinate system (ICS).
+Therefore, in this conventional method of \ac{ID} the force and moments are calculated in separate coordinate systems and thus requires coordinate transformations.
+First for the force to be used in the equation for the moments and then for the moments to be transformed into the ICS.
+This complicates the calculations as well as the translation of the force from one segment to the next.
 
+\textcite{Dumas2004} present the \textit{generic} method for \ac{ID} using wrench notation.
+With this method the forces and moments can be computed at the same time in the same predefined ICS, thus facilitating the translation from one segment to another.
+Figure \ref{fig:generic-ID-forces-and-segments} demonstrate how this method is used to define moments and forces in the femur segment.
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/Generic_ID_original.PNG}
+    \caption{The generic method for \ac{ID} computation using wrench notation. Variable names refer to equation \ref{eq:generic-id}. Adapted from \cite{Dumas2004}.}
+    \label{fig:generic-ID-forces-and-segments}
+\end{figure}
+Calculating the force and moment at the proximal end of the $i$-th segment thus goes as follows \cite{Dumas2004}:
+\begin{align}
+\label{eq:generic-id}
+    \biggl\{
+            \begin{array}{ll}
+              \mathbf{F}_i\\
+              \mathbf{M}_i
+            \end{array} =&
+        \biggl\{
+            \begin{array}{cc}
+                \mathbf{m}_i\bm{a}_i\\
+                \mathbf{I}_i\bm{\alpha}_i + \bm{\omega}_i \times \mathbf{I}_i\bm{\omega}_i + \mathbf{c}_i \times m_i\mathbf{a}_i
+            \end{array}
+         \nonumber\\
+    &- 
+    \biggl\{
+            \begin{array}{cc}
+                m_i\mathbf{g}\\
+                \mathbf{c}_i \times m_i\mathbf{g}
+            \end{array} -
+        \biggl\{
+            \begin{array}{cc}
+                -\mathbf{F}_{i-1}\\
+                -\mathbf{M}_{i-1}-\mathbf{d}_i \times \mathbf{F}_{i-1}
+            \end{array}
+\end{align}
+where $\mathbf{I}$ is the inertia tensor, $\bm{\alpha}$ is the angular acceleration, $\bm{\omega}$ is the angular velocity, $\mathbf{c}$ is the lever arm from proximal end to the center of mass, and $\mathbf{d}$ the lever arm from the proximal end to the distal end.
+Notably, the force and moment from previous segment are used in the equation, indicated by the subscript $i-1$.
+The initial case is simply the wrench at the center of pressure on the \ac{FP}, defined by the \ac{FP} measured data.
+
+% Extensive research has been done of on inverse dynamics and it is widely used in clinical applications such as, for example, gait analysis in rehabilitation \cite{Erdemir2007,Buchanan2004,Pizzolato2015}.
 
 % OpenSim \cite{Delp2007, Seth2018} is an open-source software offering biomechanical models and simulation tools to, among many other things, model and run inverse dynamic solution on a scaled musculoskeletal model \cite{Buchanan2004, Delp2007, Seth2018, Pizzolato2017}.
 
@@ -92,10 +155,11 @@ The muscle force produced thus depends, but not exclusively, on the amount of fi
 Other factors influencing the muscle force include the fiber properties (e.g. cross-sectional area and specific force), the cooperation of different \acp{MU} within the muscle, \ac{AP} frequency, etc.
 Furthermore, if looking at the force exerted by the muscle to the skeleton to produce movement, i.e. the \ac{MTU} force, then the properties of the tendon, such as elasticity, need to be considered as well \cite{Pizzolato2015, Enoka2016, Farina2016}. 
 
-\citeauthor{Raez2006} provide the following definition for EMG signals: "The EMG signal is a biomedical signal that measures electrical currents generated in muscles during its contraction representing neuromuscular activities" \parencite[1]{Raez2006}, where biomedical signal refers to an electrical signal from any organ that represents a specific physical variable.
-The \ac{EMG} signal also depends on the number of \acp{MU} activated and the \ac{AP} frequency and has been found to correlate with the muscle force.
+\Ac{EMG} is a way to measure the activity of the muscles.
+The \ac{EMG} signal is a biomedical signal measuring the electrical currents that are generated in the muscle as a result from the \ac{AP} \cite{Raez2006}.
+The \ac{EMG} signal depends on the number of \acp{MU} activated and the \ac{AP} frequency and has been found to correlate with the muscle force.
 However, the relation between the two varies from muscle to muscle and furthermore, both relate non-linearly to the neural drive from the motor neuron.
-Consequently, \ac{EMG} does not directly measure muscle forces but rather how activated the \acp{MU} are \cite{Enoka2016, Farina2016}.
+Consequently, \ac{EMG} does not directly measure muscle forces but is rather an indication of how activated the \acp{MU} are \cite{Enoka2016, Farina2016}.
 
 There are two common methods of measuring \ac{EMG}, one being the invasive method where a needle electrode is inserted percutaneously to the target muscle, and the second being the surface \ac{EMG} method where electrodes are placed on the skin close to the target muscle. 
 Although the invasive method can give more accurate signal, the \ac{sEMG} method is more widely used due to the fact that it is non-invasive and easier to implement. 
@@ -119,53 +183,63 @@ The \ac{SENIAM} project provides \ac{sEMG} electrode placement recommendations f
 The amplitude of \ac{EMG} signal is in the range of $\pm 5$ or $0-10 mV$ but it is random in nature \cite{Raez2006}.
 The firing rate of the \acp{MU} is in the range of $0-20Hz$.
 
-\subsection{\ac{EMG}-based Models}
+\subsection{Joint Moments from \ac{EMG} and Muscle Force}
 \label{sec:A-EMGBasedModels}
 As previously mentioned, \ac{EMG} measure muscle activation and not muscle forces but there is a correlation between the two.
 \ac{EMG}-based models are models developed towards estimating muscle forces and/or joint torques base on \ac{EMG} data \cite{Erdemir2007, Pizzolato2015}.
-These models are often based on a modified Hill-type muscle model which describes how the muscle's normalized isometric force  ($F^{norm}_t$) depends on the optimal fibre length ($L^O_m$), tendon slack length ($L^S_T$), and the muscle pennation angle ($\phi (t)$) \cite{Winby2008, Lloyd2003}.
+These models are often based on a modified Hill-type muscle model. 
+It describes how the muscle's normalized isometric force  ($F^{norm}_t$) depends on the optimal fibre length ($L^O_m$), tendon slack length ($L^S_T$), and the muscle pennation angle ($\phi (t)$) \cite{Winby2008, Lloyd2003}.
 The equation for this type of model, as presented by \textcite{Lloyd2003}, and represented by calculating the \ac{MTU} force ($F^{mt}(t)$) is given by
 \begin{align}
 \label{eq:hill-equation}
-    F^{mt}(t) &= F^{max} \left[ f(l)f(v)a(t) + f_p(l) \right] \cos{\left(\phi (t)\right)} \\ \nonumber
+\begin{split}
+    F^{mt}(t) &= F^{max} \left[ f(l)f(v)a(t) + f_p(l) \right] \cos{\left(\phi (t)\right)} \\
     \phi (t) &= \sin^{-1}\left( \frac{L^O_m\sin{\phi_0}}{L^m(t)}\right)
+\end{split}
 \end{align}
 where $F^{max}$ is the maximum isometric muscle force; $f(v)$ and $f(l)$ the normalized fiber forces dependent on velocity and length respectively; $a(t)$ the time varying muscle activation; $f_p(l)$ the parallel passive elastic force–length; $L^m(t)$ the muscle fiber length at time $t$; and $\phi_0$ the pennation angle at $L^O_m$ \cite{Buchanan2004, Winby2008, Lloyd2003}.
-The model geometry of a single \ac{MTU} is represented in figure \ref{fig:MTU-unit}.
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.75\textwidth]{img/MTU-unit}
-    \caption{Representation of a \ac{MTU} showing the muscle force $F^m$, tendon force $F^t$, muscle and tendon lengths $L^m$ and $L^t$ respectively, and the pennation angle $\phi$. The figure is adapted and modified from \cite[Fig. 5]{Buchanan2004}}
-    \label{fig:MTU-unit}
-\end{figure}
-The way that these models are base on $EMG$ is that the muscle activation, $a(t)$ in equation \ref{eq:hill-equation}, can be measured with $EMG$.
+% The model geometry of a single \ac{MTU} is represented in figure \ref{fig:MTU-unit}.
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=0.75\textwidth]{img/MTU-unit}
+%     \caption{Representation of a \ac{MTU} showing the muscle force $F^m$, tendon force $F^t$, muscle and tendon lengths $L^m$ and $L^t$ respectively, and the pennation angle $\phi$. The figure is adapted and modified from \cite[Fig. 5]{Buchanan2004}}
+%     \label{fig:MTU-unit}
+% \end{figure}
+
+The way these models are base on \ac{EMG} is that the muscle activation, $a(t)$ in equation \ref{eq:hill-equation}, can be measured with \ac{EMG}.
 Other parameters, such as $L^O_m$ and $L^S_T$, are difficult to measure \cite{Winby2008}.
-\textcite{Lloyd2003} handle this problem by giving these parameters initial estimations based on previous studies and measurements. The values are then allowed to be adjusted, within a certain limit, to best fit values obtained using an inverse dynamics approach.
-Thus, in a way, this \ac{EMG}-based model still uses optimization but it should better reflect on the muscle activation pattern than the previously discussed static and dynamic optimization \cite{Pizzolato2015, Lloyd2003}
+\textcite{Lloyd2003} handle this problem by giving these parameters initial estimations based on previous studies and measurements. 
+The values are then allowed to be adjusted, within a certain limit, to best fit values obtained using an \ac{ID} approach.
+Thus, the model can be calibrated using the \ac{ID} and then used independently using only the \ac{EMG} signal and the measured parameters from equation \ref{eq:hill-equation}, as long as they do not change with time.
+However, if the parameters do change, for example if the individual might become stronger or weaker, they need to be measured again and the model re-calibrated.
+
+% Thus, in a way, this \ac{EMG}-based model is still uses optimization but it should better reflect on the muscle activation pattern than the previously discussed static and dynamic optimization \cite{Pizzolato2015, Lloyd2003}
 
 \section{Exoskeletons as Assistive Devices}
 \label{sec:A-Exoskeletons}
-The exoskeleton, as it will be discussed here, refers to a mobile electromechanical structure which can be worn by a human to provide power amplification, support and/or assistance in human motion (see figure \ref{fig:exoskeleton}). Exoskeletons can also be used for haptic interactions \cite{Anam2012}, but the focus here will be on the groups mentioned before. More specifically, the focus is on exoskeletons as assistive devices for those with physical impairment, i.e. for rehabilitation and/or normal human motion. This excludes exoskeletons as power amplification for professional or military purposes.
+As previously mentioned, an exoskeleton can be defined as mobile, computer controlled, electromechanical structure which can be worn by a human to provide power amplification, support and/or assistance in human motion \cite{Anam2012, Gorgey2018}.
+Figure \ref{fig:exoskeleton} shows an example of exoskeletons currently on the market.
+The focus here will be on exoskeletons as assistive devices for those with physical impairment, i.e. for rehabilitation and/or assisting healthy human motion. 
+This excludes exoskeletons as power amplification for professional or military purposes.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/exoskeleton_fig}
     \caption{Two different designs of an exoskeleton. The one on the left is the Hyprid Assistive Limb exoskeleton developed by Cyberdyne for the purpose of aiding individuals with disabilities. The one on the right is the Ekso exoskeleton which is mostly used for rehabilitation purposes. The figure is adapted from \cite[Fig. 3]{Young2017}}
     \label{fig:exoskeleton}
 \end{figure}
-
 To be able to provide assist to motion the exoskeleton needs a human-exoskeleton interaction together with a control system. 
 The control system is how the human motion is translated into mechanical activation, and vice versa. 
 \textcite{Anam2012} list four different categorizations of control systems in exoskeletons, namely \textit{Model-based}, \textit{Hierarchy based}, \textit{Physical parameters based}, and \textit{Usage based}. 
 For the purpose of this review the focus is set on the first categorization, i.e. \textit{Model-based} control systems.
 The article states that the control strategy of an exoskeleton can be divided into two types depending on the model used, namely the \textit{dynamic model} and the \textit{muscle model} based control. 
-%One could argue for a third type being a brain model based control like the one implemented in \cite{Wang2017a}, however this type of model will not be discussed further here.
 
 \textcite{Anam2012} divide the \textit{dynamic model} into three different categories, each with its strengths and weaknesses.
 These models use systems physical characteristics and motion data to estimate moments and/or forces required from the exoskeleton. 
 For example, one of the categories is the artificial intelligent method where one study has used the joint angle, angle velocity, and angle acceleration as input to the model and the joint torque as output, behaving like an inverse dynamics model.
 %One might argue that what these models lack in relation to the exoskeleton is responsiveness. 
 
-The \textit{muscle model} uses muscle neural activity and/or joint kinematics to predict muscle forces and resulting joint moments. These models can be split into the two categories: parametric and non-parametric muscle model. 
+The \textit{muscle model} uses muscle neural activity and/or joint kinematics to predict muscle forces and resulting joint moments. 
+These models can be split into the two categories: parametric and non-parametric muscle model. 
 The difference between them is that in addition to \ac{EMG} data the parametric model needs anthropometric data with information of muscle and joint dynamic \cite{Anam2012}.
 This is much like the \ac{EMG}-driven models discussed in the previous chapter \cite{Pizzolato2015}.
 The \textit{muscle model} has been researched as a way to provide real-time prediction of muscle forces and joint torques \cite{Pizzolato2015, Anam2012, durandau}. 
@@ -187,7 +261,7 @@ Motion data and reaction forces are needed to get joint torque from dynamic mode
 %The aim of the \ac{ANN} model is simply to find the best fit based statistical methods and probability.
 
 \subsection{Machine Learning}
-Machine learning refers to a computer algorithm with the ability to learn from data \cite{Goodfellow2016}. \citeauthor{Mitchell1997} gives the following definition of that learning: "A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$" \parencite[2]{Mitchell1997}.
+Machine learning refers to a computer algorithm with the ability to learn from data \cite{Goodfellow2016}. \textcite{Mitchell1997} gives the following definition of that learning: "A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$" \parencite[2]{Mitchell1997}.
 
 Machine learning algorithms contains subcategories of different algorithms within which \acp{ANN}, which this chapter will focus on, is only one of many.
 In addition, \ac{ANN} contains even more subcategories depending on number of design factors such as topology.
@@ -272,7 +346,7 @@ To enable this method the activation function has to be differentiable, i.e. it 
 Popular activation functions include, for example the sigmoid or the hyperbolic tangent function and the ReLu or softplus function \cite{Goodfellow2016, Haykin2009, Rojas1996}.
 
 Although this brief introduction of neural networks and how they learn has been focused around the feed-forward network, much of the same or similar principles apply to other networks. 
-They are, to quote \citeauthor{Goodfellow2016}, "the quintessential deep learning models" \parencite[164]{Goodfellow2016}.
+They are, to quote \textcite{Goodfellow2016}, "the quintessential deep learning models" \parencite[164]{Goodfellow2016}.
 
 
 
@@ -322,22 +396,22 @@ Using the right-hand rule, one can determine that knee flexion/extension is indi
     \begin{subfigure}[t]{0.3\textwidth}
         \centering
         \includegraphics[width=0.8\textwidth]{img/LeftFootFemur_PiG_wCoord.png}
-        \caption{Adapted from  \cite{Baker2017}}
-        \label{fig:cgm23-markerset-guidelines}
+        \caption{Adapted from \cite{Baker2017}}
+        \label{fig:cgm23-femur-jc}
     \end{subfigure}
      ~
     \begin{subfigure}[t]{0.3\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/KneeJointAngles_wCoord_twisted.png}
         \caption{Adapted from \cite{cgm-outputs}}
-        \label{fig:cgm23-markerset-experiment-capture}
+        \label{fig:cgm23-knee-coordinate-system}
     \end{subfigure}
      ~
     \begin{subfigure}[t]{0.3\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/experiment_capture2.pdf}
         \caption{Screenshot from Vicon Nexus during trial.}
-        \label{fig:cgm23-markerset-experiment-capture}
+        \label{fig:A-cgm23-markerset-experiment-capture}
     \end{subfigure}
     \caption{\Ac{KJC} placement and coordinate system setup. The red, green, and blue (RGB) color code indicates x-, y-, and z-axis respectively. (a) The femur of the left leg. z-axis extends from the \ac{KJC} through the \ac{HJC} and the y-axis from the \ac{KJC} through the lateral epicondyle marker in the coronal plane of the femur. (b) Grey circle shows the sagittal plane of the femur. The flexion/extension angle is defined by the rotation of the tibia around the y-axis in the sagittal plane, indicated by the green angle. (c) Model built using CGM2.3 setup. The coordinate system is shown at the \ac{KJC}, notably oriented the same way for the left and the right leg.}
     \label{fig:knee-joint-coordinates}
@@ -369,6 +443,6 @@ Both projects offer open-source python packages.
 The algorithm within TensorFlow consist of a directed \textit{graph}, composed of a set of connected \textit{nodes}, containing states and computations, much like previously explained in section \ref{sec:A-NeuralNetworks}.
 TensorFlow offers high flexibility towards how the graphs are constructed and configured \cite{tensorflow2015-whitepaper}.
 Keras offers a high-level \ac{NN} \ac{API} which can run on top of TensorFlow \cite{chollet2015keras}.
-This facilitates building a conventional \ac{NN}, layer-wise, in a TensorFlow graph.
+The API facilitates building a conventional \ac{NN}, layer-wise, in a TensorFlow graph.
 
 \end{document}

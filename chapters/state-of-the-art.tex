@@ -30,32 +30,49 @@ It requires at least a minimally invasive methods or an open surgery, so that a 
 Thus, in general clinical application as well as in exoskeletons, measuring muscle forces directly is hardly an option.
 However, it is possible with non-invasive methods to measure reaction forces like \ac{GRF}, human motion, and \ac{EMG}.
 Several methods have then been developed to estimate joint torques and muscle forces using this data \cite{Erdemir2007}.
-For the purpose of this chapter these methods will be split into two groups, namely those who use \ac{EMG} data (\ac{EMG}-based methods) and those who do not use \ac{EMG} data (Non-\ac{EMG}-based methods).
-This chapter begins with the models that do not use \ac{EMG} data.
-That includes inverse dynamics for joint torque estimations and static and dynamic optimization for muscle force estimation. 
-Then it goes into detail about \ac{EMG} and its relation to muscle activity before discussing the models that do use \ac{EMG} data, namely \ac{EMG}-driven models.
+
+% For the purpose of this chapter these methods will be split into two groups, namely those who use \ac{EMG} data (\ac{EMG}-based methods) and those who do not use \ac{EMG} data (Non-\ac{EMG}-based methods).
+% This chapter begins with the models that do not use \ac{EMG} data.
+% That includes inverse dynamics for joint torque estimations and static and dynamic optimization for muscle force estimation. 
+% Then it goes into detail about \ac{EMG} and its relation to muscle activity before discussing the models that do use \ac{EMG} data, namely \ac{EMG}-driven models.
 
 \subsection{Non-\ac{EMG}-based Models}
 \label{sec:A-NonEMGBasedModels}
 \textit{\Acl{ID}} is, as defined by the Dictionary of Sport and Exercise Science and Medicine \cite{inversedynamics}, "the calculation of forces and moments by using kinematics and data for mass and moment of inertia, effectively using Newton's second law of motion ($f = ma$) in reverse."
 In relation to the human body this means the use of kinetics and kinematics, e.g. motion capture, scaled model, and force plate data from a motion lab, to calculate joint torque estimations.
 As the method works with the equation of motion, it relies on correct scaling of each body segment, and joints angles and positions relative to the reaction forces \cite{Erdemir2007, Buchanan2004}.
-Extensive research has been done on inverse dynamics and it is widely used in clinical applications such as, for example, gait analysis in rehabilitation \cite{Erdemir2007,Buchanan2004,Pizzolato2015}.
+
+Using a motion lab one can collect the positions and motions of body segments using reflective markers that are sensed by specially designed motion cameras.
+Sections \ref{sec:A-Vicon-and-PiG} and \ref{sec:A-pyCGM2} go into further detail about the definition of different body segments using specific markersets.
+This includes scaling a skeleton model to the subject and defining joint centers relative to the markers.
+Once the skeleton model has been scaled, it can be fitted to the motion capture by using \ac{IK}.
+For the \ac{IK} problem, the objective function is the weighted squared error of the subject's measured markers and joint angles to the model's markers and angles, respectively.
+The \ac{IK} problem then involves minimizing the objective function \cite{Delp2007}:
+\begin{align}
+\label{eq:ik-obj-func}
+    \min(obj) = \min\biggl\{ &\sum_{i=1}^{\text{markers}}w_i \left(\Vec{x_i}^{sub}-\Vec{x_i}^{mod}\right)^2 \nonumber\\ 
+    &+ \sum_{j=1}^{\text{joint angles}}w_j \left( \theta_j^{sub}-\theta_j^{mod}\right)^2 \biggr\}
+\end{align}
+where $\Vec{x_i}^{sub}$ and $\Vec{x_i}^{mod}$ are the global ($xyz$) coordinates of the $i$-th marker for the subject and model, respectively; 
+and $\theta_j^{sub}$ and $\theta_j^{mod}$ the angles of the $j$-th joint.
+The weights can be used to set the importance 
+Exspeciftensivicrs or joints to be fitted accurately.
+
+After applying \ac{IK}, the model and its kinematics, have been fitted in the global coordinate system, relative to the \ac{GRF} from the force plates.
+Finally, \ac{ID} can be applied using those kinematics and \acp{GRF} together with the anthropometric data of the segments.
+Figure 
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:ID-forces-and-segments}
+\end{figure}
+ markee research has been done of on inverse dynamics and it is widely used in clinical applications such as, for example, gait analysis in rehabilitation \cite{Erdemir2007,Buchanan2004,Pizzolato2015}.
+
+
 
 % OpenSim \cite{Delp2007, Seth2018} is an open-source software offering biomechanical models and simulation tools to, among many other things, model and run inverse dynamic solution on a scaled musculoskeletal model \cite{Buchanan2004, Delp2007, Seth2018, Pizzolato2017}.
 
-% The inverse dynamics method alone does not provide any information about muscle activation and muscle forces.
-% There are several methods that have been implemented to estimate muscle activation and muscle forces \cite{Erdemir2007}.
-% Perhaps the most notable ones that are not \ac{EMG}-drive are the static and dynamic optimization methods \cite{Erdemir2007, Pizzolato2015, Delp2007}. 
-
-% The \textit{static optimization} method uses optimization with an objective function such as, for example, minimizing the sum of muscle forces from all muscles. 
-% Through iteration the muscle forces, that both fit to the estimated joint torque from the inverse dynamics model and satisfy the objective function, are calculated \cite{Erdemir2007}. 
-
-% \textit{Dynamic optimization} is an alternative to static optimization which, in short, uses forward dynamics to find the set of muscle activations that best fit the experimental kinematic data (e.g. with objective to minimize tracking error in kinematics and \ac{GRF}). 
-% This method does not require inverse dynamics to first estimate joint torques since the constraint is rather the measured motion and \ac{GRF} data.
-% \textcite{Erdemir2007} point out that this method is beneficial as compared to the static optimization because of its more straightforward inclusion of muscle dynamics within the solution.
-% Furthermore, it is less vulnerable toward errors in the experimental measurements as the inclusion of the kinematic data is somewhat "weak", i.e. there is a slack on the kinematic data in favor of more intact muscle dynamics.
-% However, the dynamic optimization method is more computationally heavy when compared to the static optimization method \cite{Erdemir2007}.
 
 % There is a limitation to these optimization methods due to variations in muscle synergies.
 % \textcite{Ivanenko2016} define muscle synergies as representing "coordinated activations of groups of muscles, with specific activation balances or temporal profiles, that might reflect basic biomechanical properties of the musculoskeletal apparatus or statistical regularities in the muscle activation patterns involved in performing a specific motor behavior" \parencite[160]{Ivanenko2016}.
@@ -212,6 +229,7 @@ This highly relates to the concepts of overfitting and underfitting, as defined 
 \end{figure}
 
 \subsection{Neural Networks}
+\label{sec:A-NeuralNetworks}
 Like the name suggests \acp{ANN} consist of multiple "artificial neurons", often called nodes, that are interconnected by pathways for communication.
 \textit{Topology} refers to how these nodes are placed (e.g. into layers), how many there are, and how they are connected.
 Figure \ref{fig:generic-ann} shows an example of a generic multilayer feed-forward \ac{ANN}, also known as \ac{DNN} or \ac{MLP}.
@@ -285,8 +303,9 @@ Furthermore, due to the variability it is difficult to get a solution that is ge
 When working with \ac{EMG} data from many muscles it is useful to preprocess the data with dimensionality reduction and feature extraction and selection. This can contribute to learning efficiency and improve generalization \cite{Chen2018, Marsland2014}.
 
 \section{Platforms}
-
+\label{sec:A-Platforms}
 \subsection{Vicon Nexus and Plug-in Gait}
+\label{sec:A-Vicon-and-PiG}
 The Vicon Nexus motion capture system, equipped with motion capture cameras, is capable of capturing motion of a subject wearing markers, doing all sorts of exercises \cite{vicon-user-guide}.
 The motion data can be synchronized with analog data captures, such as \ac{FP} and \ac{EMG} data, and analyzed using the Vicon Nexus software.
 The software offers the option of running biomechanical models on the data captured. 
@@ -326,7 +345,7 @@ Using the right-hand rule, one can determine that knee flexion/extension is indi
 \Ac{PiG} is included in the Vicon Nexus software and includes a markerset protocol, labelling skeleton, and pipelines for static and dynamic calibrations. 
 
 \subsection{pyCGM2}
-\label{sec:pyCGM2}
+\label{sec:A-pyCGM2}
 The pyCGM2 package is a python package which implements, among other things, kinematic and kinetic computations based on motion data contained in c3d files \cite{Leboeuf2019}.
 The package is an upgrade to the \ac{PiG} model intended to improve it by fixing known issues \cite{Leboeuf2019}.
 The first version, CGM1.0 was intended to replicate the \ac{PiG} model outputs exactly and following versions to build upon it.
@@ -335,14 +354,21 @@ Furthermore, known issues and inconsistencies withing kinematic calculations and
 % CGM1.1 fixes the definition of pelvis rotation to be the rotation of the pelvis with respect to its own axis rather than the axis of the laboratory.
 % It also fixes
 CGM2.2 introduces the use of \ac{IK} and with it some improvements that can be read about on the CGM2 website \cite{cgm22}. 
-CGM2.3 then introduces additional markers to minimize a soft tissue artifact accompanying the \ac{IK} method when using the thigh and calf wands.
+CGM2.3 then introduces additional markers to minimize a soft tissue artifact accompanying the \ac{IK} method when using the thigh and calf wands \cite{cgm23}.
 \begin{figure}[!hbt]
     \centering
-    \includegraphics[width=0.7\textwidth]{img/CGM23_markerset_highlight.png}
-    \caption{The markerset as defined for version CGM2.3. The changes from the original CGM1.0 markerset are highlighted with orange circles/arrows. Adapted from pyCGM2 official website \cite{Leboeuf2019}}
+    \includegraphics[width=0.6\textwidth]{img/CGM23_markerset_highlight.png}
+    \caption{The markerset as defined for version CGM2.3. The changes from the original CGM1.0 markerset are highlighted with orange circles/arrows. Adapted from pyCGM2 official website \cite{cgm23}}
     \label{fig:cgm23-markerset-sota}
 \end{figure}
 
 \subsection{TensorFlow and Keras}
+\label{sec:A-Tensorflow-and-Keras}
+TensorFlow and Keras are \acp{API} that can be used to design, run, and evaluate machine learning algorithms \cite{tensorflow2015-whitepaper, chollet2015keras}.
+Both projects offer open-source python packages.
+The algorithm within TensorFlow consist of a directed \textit{graph}, composed of a set of connected \textit{nodes}, containing states and computations, much like previously explained in section \ref{sec:A-NeuralNetworks}.
+TensorFlow offers high flexibility towards how the graphs are constructed and configured \cite{tensorflow2015-whitepaper}.
+Keras offers a high-level \ac{NN} \ac{API} which can run on top of TensorFlow \cite{chollet2015keras}.
+This facilitates building a conventional \ac{NN}, layer-wise, in a TensorFlow graph.
 
 \end{document}

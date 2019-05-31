@@ -9,7 +9,7 @@ The process can be divided into 5 steps (A-E) and each step will be the subject 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/ProcessDiagram}
-    \caption{Flow diagram of the modelling procedure. The dashed box indicates procedure used only for training the \ac{NN} and the dashed arrows are feedback during training. (A) Subject walks in a motion lab collecting \acf{GRF}, marker trajectories, and muscle activity; (B) The data is filtered and prepared for use in the models; (C) The \ac{GRF} and marker trajectories are used for \ac{IK} and \ac{ID} to retrieve knee joint moments; (D) During training, normalized \ac{EMG} is continuously fed through the \ac{NN}. Dashed arrows indicate feedback where the output is compared to the moments from (C) and the error used to update the \ac{NN}; (E) \ac{EMG} fed through the trained \ac{NN} produces knee joint moments prediction to control motor torque in an exoskeleton}
+    \caption{Flow diagram of the modelling procedure. The dashed box indicates procedure used only for training the \ac{NN} and the dashed arrows are feedback during training. (A) Subject walks in a motion lab collecting \acf{GRF}, marker trajectories, and muscle activity; (B) The data is filtered and prepared for use in the models; (C) The \ac{GRF} and marker trajectories are used for \ac{IK} and \ac{ID} to retrieve \acp{KJM}; (D) During training, \ac{EMG} data is continuously fed through the \ac{NN}. Output is compared to the moments from (C) and the error used as feedback to update the \ac{NN}; (E) \ac{EMG} fed through the trained \ac{NN} produces \acp{KJM} prediction to control motor torque in an exoskeleton}
     \label{fig:process-diagram}
 \end{figure}
 
@@ -17,7 +17,7 @@ The process can be divided into 5 steps (A-E) and each step will be the subject 
 For the experiment (step A of figure \ref{fig:process-diagram}), a motion lab equipped with 10 Vicon Vantage V16 cameras and 3 AMTI OR6 \acp{FP} was used. 
 Figure \ref{fig:cgm23-markerset} shows the markerset protocol used, which follows the CGM2.3 model's protocol. 
 CGM2.3 is a recent version of CGM2.i project which is meant to update the old \ac{CGM} by improving it and fixing some known issues \cite{Leboeuf2019}. 
-Section \ref{sec:pyCGM2} goes into further detail about the model and its scripts.
+Further details about the model and its scripts are discussed in appendix \ref{sec:A-pyCGM2}.
 \begin{figure}[!ht]
      \centering
      \begin{subfigure}[t]{0.58\textwidth}
@@ -47,35 +47,56 @@ The synchronization includes accounting for the latency of $14ms$ of the \ac{EMG
 The marker trajectories were sampled at 100Hz using the cameras while the analog data (i.e. \ac{GRF} and \ac{EMG}) was sampled at 1000Hz.
 
 Data was collected from x subjects with anthropometric data measured for each subject (see table \ref{tab:subject-table}).
+A static trial was captured to use for scaling the model, as described in appendix \ref{sec:A-pyCGM2}, and run as part of step C in figure \ref{fig:process-diagram}.
 The subjects were asked to walk front and back over the \acp{FP} either slowly, normally, or fast.
 This was to increase variance in the data and thus help prevent overfitting of the \ac{NN} model.
 Note that a subject refers to one individual, a session refers to each experiment performed by the subject, and a trial refers to each measured exercised performed in the trial. 
-Thus, each subject can have many sessions (i.e. experiments conducted on separate days), and each session has many trials where, for example, walking 10 times results in 10 separate trials.
-Furthermore, each trial was cut down to gait cycles defined by the interval from the right foot's heel strike on a \ac{FP} until its next heel strike.
+Thus, each subject can have many sessions, e.g. experiments conducted on separate days.
+Furthermore, each session has many trials and each trial was cut down to gait cycles. 
+The gait cycles are defined by the interval from the right foot's heel strike on a \ac{FP} until its next heel strike.
 Some sessions included 3 \acp{FP} resulting in some trials having two gait cycles.
 \input{tables/subject-table.tex}
 
 \section{Data processing}
+\label{sec:data-processing}
 In step B of figure \ref{fig:process-diagram}, before running \ac{IK} and \ac{ID}, the marker trajectories and the \ac{GRF} were filtered with a 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$. 
 Same cutoff frequency was used to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.
+
+
+
 The \ac{EMG} was filtered with the "typical" steps as mentioned by \textcite[99]{Clancy2016}, but excluding the whitening step to keep the filtering real-time friendly.
 Thus, the signal was noise and interference filtered using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$. 
 Then, for demodulation, smoothing, and relinearization, the RMS method was used where the smoothing was done with a moving average window of $50ms$. 
-As \textcite{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $50ms$ was chose.
+As \textcite{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly, $50ms$ was chosen.
 That is, to not introduce too much delay while still keeping the signal relatively smooth.
 
 \section{Training preparation}
-Finally, the \ac{EMG} signal was downsampled to match the frequency of the model outputs which was $100Hz$. 
+The training preparation, or step C of figure \ref{fig:process-diagram}, consisted creating the training, validation, and testing datasets as well as the training, validation, and testing labels.
+In this case the datasets are the \ac{EMG} data and the labels are the corresponding \acp{KJM}.
+
+Before dividing the data into separate datasets, the \acp{KJM} need to be estimated from the motion and \ac{GRF} data.
+For that purpose, the pyCGM2 package by \textcite{Leboeuf2019} was used to apply \ac{IK} and \ac{ID} on the data.
+The skeleton model is first scaled using the static trial and the Newington-Gage model with improvements from the CGM2 project, as described in appendix \ref{sec:A-Vicon-and-PiG} and \ref{sec:A-pyCGM2}.
+The model is then fitted to the measured data using \ac{IK} as described in \ref{sec:A-MSModels}. 
+The objective function from equation \ref{eq:ik-obj-func} is rewritten here for clarity:
+\begin{align*}
+    \min(obj) = \min\biggl\{ &\sum_{i=1}^{\text{markers}}w_i \left(\Vec{x_i}^{subject}-\Vec{x_i}^{model}\right)^2 \nonumber\\ 
+    &+ \sum_{j=1}^{\text{joint angles}}w_j \left( \theta_j^{subject}-\theta_j^{model}\right)^2 \biggr\}
+\end{align*}
+The weights ($w_i$ and $w_j$) where set equal for every marker used and the threshold for the objective function was set to $10^{-8}$.
+The \ac{ID} computations are based on anthropometric segment measurements according to \textcite{Dempster1955} and the iterative Newton-Euler equations as described by \textcite{Dumas2004}\cite{Leboeuf2019}.
+The model outputs are designed to have the same conventions as Vicon's \ac{PiG} model, and as such were normalized to the subject's height and body mass \cite{Leboeuf2019, viconpig}.
+Furthermore, the \acp{KJM} were represented as positive for knee flexion and negative for extension.
+
+The model outputs were calculated for each frame.
+That means the \acp{KJM} had a sampling frequency of $100Hz$ unlike the \ac{EMG} which was sampled at $1000Hz$.
+The \ac{EMG} signal was downsampled to match the frequency of the \acp{KJM}. 
 The downsampling was done by simply taking the first \ac{EMG} sample from every $10ms$ windows. 
 The first sample from the window was used rather than any other to decrease the delay from \ac{EMG} to moment prediction. 
 In that way an \ac{EMG} sample taken at $t$ can predict a moment value at $t+9ms$. 
-% The downsampling is only necessary for the training, not for running the \ac{NN} in real-time.
 
-The pyCGM2 package by \textcite{Leboeuf2019} was used to apply \ac{IK} and \ac{ID} on the motion and force data.
-The \ac{ID} computations are based on anthropometric segment measurements according to \textcite{Dempster1955} and the iterative Newton-Euler equations as described by \textcite{Dumas2004}.
-The model outputs are designed to have the same conventions as Vicon's \ac{PiG} model, and as such are normalized to the subject's height and body mass \cite{Leboeuf2019, viconpig}.
-
-Before training the network in step D, the \ac{EMG} data and joint moments data was split into training and testing set.
+Finally, once each sample had been matched the data was split into training, validation, and testing datasets.
+The split was done by randomly selecting $70\%$ of the gait cycles for the training, $10\%$ for the validation, and remaining $20\%$ for the testing dataset.
 Furthermore, for the purpose of standardizing the data between subjects, the datasets were normalized.
 \ac{EMG} was normalized so that all values from the training dataset were between $0$ and $1$, independent of subject.
 The normalization is given by equation \ref{eq:emg-normalization}:
@@ -84,8 +105,8 @@ The normalization is given by equation \ref{eq:emg-normalization}:
     X_{norm} = \frac{X - X_{min}}{X_{max} - X_{min}}
 \end{equation}
 where $X$ is the \ac{EMG} value to be normalized and $X_{min}$ and $X_{max}$ are, respectively, the minimum and maximum measured \ac{EMG} from the training dataset. 
-The testing dataset uses the same minimum and maximum values, to accurately portray new data that the \ac{NN} does not already "know".
-The moments were normalized similar to the \ac{EMG} in equation \ref{eq:emg-normalization} with addition clause to set the interval:
+For the validation and testing datasets, the same minimum and maximum values were used, to accurately portray new data that the \ac{NN} does not already "know".
+The \acp{KJM} were normalized similar to the \ac{EMG} in equation \ref{eq:emg-normalization} with addition clause to set the interval:
 \begin{equation}
 \label{eq:moment-normalization}
     X_{norm} = \frac{X - X_{min}}{X_{max} - X_{min}}\left(1 - \frac{X_{min}}{X_{max}}\right) + \frac{X_{min}}{X_{max}}
@@ -96,6 +117,10 @@ The extra clause made sure the signal was scaled down to the interval $[-1,1]$ (
 \section{Architecture and Training of the Neural Network}
 TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
 .... Talk about the design of the \ac{NN}
+
+As discussed in appendix \ref{sec:A-NeuralNetworks}, the training of the \ac{NN} consists of optimizing an objective function.
+In this case, it involved minimizing the error between the output of the \ac{NN} and the calculated \acp{KJM}.
+This is represented by the bracket and dashed arrows in step D of figure \ref{fig:process-diagram}.
 
 % Introduce TensorFlow and the Keras API for the implementation of the \ac{NN}.
 % The training set for the \ac{NN} is normalized EMG data from regular walking.

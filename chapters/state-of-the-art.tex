@@ -31,11 +31,6 @@ Thus, in general clinical application as well as in exoskeletons, measuring musc
 However, it is possible with non-invasive methods to measure reaction forces like \ac{GRF}, human motion, and \ac{EMG}.
 Several methods have then been developed to estimate joint torques and muscle forces using this data \cite{Erdemir2007}.
 
-% For the purpose of this chapter these methods will be split into two groups, namely those who use \ac{EMG} data (\ac{EMG}-based methods) and those who do not use \ac{EMG} data (Non-\ac{EMG}-based methods).
-% This chapter begins with the models that do not use \ac{EMG} data.
-% That includes inverse dynamics for joint torque estimations and static and dynamic optimization for muscle force estimation. 
-% Then it goes into detail about \ac{EMG} and its relation to muscle activity before discussing the models that do use \ac{EMG} data, namely \ac{EMG}-driven models.
-
 \subsection{Joint Moments from Inverse Dynamics}
 \label{sec:A-Inverse-Dynamics}
 \textit{\Acf{ID}} is, as defined by the Dictionary of Sport and Exercise Science and Medicine \cite{inversedynamics}, "the calculation of forces and moments by using kinematics and data for mass and moment of inertia, effectively using Newton's second law of motion ($f = ma$) in reverse."
@@ -261,10 +256,11 @@ Motion data and reaction forces are needed to get joint torque from dynamic mode
 %The aim of the \ac{ANN} model is simply to find the best fit based statistical methods and probability.
 
 \subsection{Machine Learning}
-Machine learning refers to a computer algorithm with the ability to learn from data \cite{Goodfellow2016}. \textcite{Mitchell1997} gives the following definition of that learning: "A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$" \parencite[2]{Mitchell1997}.
+Machine learning refers to a computer algorithm with the ability to learn from data \cite{Goodfellow2016}. 
+\textcite{Mitchell1997} gives the following definition of that learning: "A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$" \parencite[2]{Mitchell1997}.
 
-Machine learning algorithms contains subcategories of different algorithms within which \acp{ANN}, which this chapter will focus on, is only one of many.
-In addition, \ac{ANN} contains even more subcategories depending on number of design factors such as topology.
+Machine learning algorithms contains subcategories of different algorithms within which \acp{ANN} is only one of many.
+In addition, \ac{ANN} contains more subcategories depending on number of design factors such as topology.
 
 Most machine learning algorithms, including \acp{ANN}, can be categorized into two groups depending on the manner of learning.
 These categories are \textit{supervised learning} and \textit{unsupervised learning} \cite{Goodfellow2016}.
@@ -358,11 +354,11 @@ The use of neural networks to predict joint dynamics is nothing new.
 The training of this relatively small network took a very long time.
 Furthermore, the results of the trained algorithm indicate overfitting.
 Since then, extended processing power of modern computers has enabled use of more complicated and deeper networks.
-Furthermore, extended research into machine learning in recent years has created a lot of recommendations and best practices to aid in development of the best algorithm and improved generalization.
+Furthermore, extended research into machine learning in recent years has created a lot of recommendations and best practices to improve the algorithm's design and performance.
 
 With the current immense popularity with neural networks, many researches have provided alternative algorithms to solve the task of joint torque prediction.
 \textcite{Ardestani2014} provide a multi-dimensional wavelet neural network to estimate lower extremity joint moments. 
-The input to the network is \ac{EMG} and \ac{GRF} data collected during gait trials of four patients with different conditions. 
+The input to the network is \ac{EMG} and \ac{GRF} data collected during gait trials of four patients with knee prosthesis. 
 \textcite{Lee14-1} use a NNARX (Neural Network, AutoRegressive, eXternal Input) model to estimate knee joint moment in sit-to-stand movement. 
 The input was \ac{EMG}, joint angle, and joint velocity as well as previously predicted joint moment. 
 \textcite{Kiguchi2012} present a neuro-fuzzy system to estimate joint torques in the upper-limb to use with a power-assist exoskeleton. 
@@ -444,5 +440,7 @@ The algorithm within TensorFlow consist of a directed \textit{graph}, composed o
 TensorFlow offers high flexibility towards how the graphs are constructed and configured \cite{tensorflow2015-whitepaper}.
 Keras offers a high-level \ac{NN} \ac{API} which can run on top of TensorFlow \cite{chollet2015keras}.
 The API facilitates building a conventional \ac{NN}, layer-wise, in a TensorFlow graph.
+An example of a layer in Keras is the \textit{Dense} function which constructs the regular, densely connected layer as described in figure \ref{fig:generic-ann}.
+The function takes as an input, the number of nodes (or units) and the activation functions, weight, and bias initialization applied to each node as described in figure \ref{fig:node-diagram}.
 
 \end{document}

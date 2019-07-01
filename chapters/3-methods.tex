@@ -4,8 +4,8 @@
 
 \chapter{Methods}
 \label{sec:methods}
-The process from data collection to training and finally using the \ac{NN} is presented in figure \ref{fig:process-diagram}. 
-The process can be divided into 5 steps (A-E) and each step will be the subject of each subsection in this chapter, in the same order.
+The process from data collection to training and then using the \ac{NN} is presented in figure \ref{fig:process-diagram}. 
+The process can be divided into 5 steps (A-E) and each step will be the subject of each subsection in this chapter, in that order.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/ProcessDiagram}
@@ -13,8 +13,8 @@ The process can be divided into 5 steps (A-E) and each step will be the subject 
     \label{fig:process-diagram}
 \end{figure}
 
-\section{Experiment setup}
-For the experiment (step A of figure \ref{fig:process-diagram}), a motion lab equipped with 10 Vicon Vantage V16 cameras and 3 AMTI OR6 \acp{FP} was used. 
+\section{Step A - Experiment Setup}
+For the experiment, a motion lab equipped with 10 Vicon Vantage V16 cameras and 3 AMTI OR6 \acp{FP} was used. 
 Figure \ref{fig:cgm23-markerset} shows the markerset protocol used, which follows the CGM2.3 model's protocol. 
 CGM2.3 is a recent version of CGM2.i project which is meant to update the old \ac{CGM} by improving it and fixing some known issues \cite{Leboeuf2019}. 
 Further details about the model and its scripts are discussed in appendix \ref{sec:A-pyCGM2}.
@@ -47,28 +47,32 @@ The synchronization includes accounting for the latency of $14ms$ of the \ac{EMG
 The marker trajectories were sampled at 100Hz using the cameras while the analog data (i.e. \ac{GRF} and \ac{EMG}) was sampled at 1000Hz.
 
 Data was collected from x subjects with anthropometric data measured for each subject (see table \ref{tab:subject-table}).
+Each subject was a young, healthy individual without any disorders in the muscles.
 A static trial was captured to use for scaling the model, as described in appendix \ref{sec:A-pyCGM2}, and run as part of step C in figure \ref{fig:process-diagram}.
 The subjects were asked to walk front and back over the \acp{FP} either slowly, normally, or fast.
 This was to increase variance in the data and thus help prevent overfitting of the \ac{NN} model.
+\input{tables/subject-table.tex}
+
 Note that a subject refers to one individual, a session refers to each experiment performed by the subject, and a trial refers to each measured exercised performed in the trial. 
 Thus, each subject can have many sessions, e.g. experiments conducted on separate days.
 Furthermore, each session has many trials and each trial was cut down to gait cycles. 
 The gait cycles are defined by the interval from the right foot's heel strike on a \ac{FP} until its next heel strike.
-Some sessions included 3 \acp{FP} resulting in some trials having two gait cycles.
-\input{tables/subject-table.tex}
+Some sessions included 3 \acp{FP} resulting in some trials having two gait cycles for the right leg.
 
-\section{Data processing}
+\section{Step B - Data processing}
 \label{sec:data-processing}
-In step B of figure \ref{fig:process-diagram}, before running \ac{IK} and \ac{ID}, the marker trajectories and the \ac{GRF} were filtered with a 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$. 
-Same cutoff frequency was used to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.
+In step B of figure \ref{fig:process-diagram}, before running \ac{IK} and \ac{ID}, the marker trajectories and the \ac{GRF} were filtered.
+Both were filtered with a 4th order Butterworth lowpass filter and a cutoff frequency of $10Hz$. 
+The same cutoff frequency was used for both to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force \cite{Kristianslund2012}.
 
 The \ac{EMG} was filtered with the "typical" steps as mentioned by \textcite[99]{Clancy2016}, but excluding the whitening step to keep the filtering real-time friendly.
+Real-time friendly means here to minimizing the delay introduced by the processing of the \ac{EMG} signal.
 Thus, the signal was noise and interference filtered using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$. 
 Then, for demodulation, smoothing, and relinearization, the RMS method was used where the smoothing was done with a moving average window of $50ms$. 
 As \textcite{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly, $50ms$ was chosen.
 That is, to not introduce too much delay while still keeping the signal relatively smooth.
 
-\section{Training preparation}
+\section{Step C - Training preparation}
 The training preparation, or step C of figure \ref{fig:process-diagram}, consisted creating the training, validation, and testing datasets as well as the training, validation, and testing labels.
 In this case the datasets are the \ac{EMG} data and the labels are the corresponding \acp{KJM}.
 
@@ -93,6 +97,11 @@ The downsampling was done by simply taking the first \ac{EMG} sample from every 
 The first sample from the window was used rather than any other to decrease the delay from \ac{EMG} to moment prediction. 
 In that way an \ac{EMG} sample taken at $t$ can predict a moment value at $t+9ms$. 
 
+The final step before dividing the data into training and testing sets was feature selection.
+Section \ref{sec:A-NeuralNetworks} discusses briefly the importance of feature selection.
+First step was to look at correlations in muscle activity between different muscles.
+
+
 Finally, once each sample had been matched the data was split into training, validation, and testing datasets.
 The split was done by randomly selecting $70\%$ of the gait cycles for the training, $10\%$ for the validation, and remaining $20\%$ for the testing dataset.
 Furthermore, for the purpose of standardizing the data between subjects, the datasets were normalized.
@@ -112,7 +121,7 @@ The \acp{KJM} were normalized similar to the \ac{EMG} in equation \ref{eq:emg-no
 where $X$ represents moment values. 
 The extra clause made sure the signal was scaled down to the interval $[-1,1]$ (assuming $\left|X_{min}\right| \leq \left|X_{max}\right|$) and that flexion and extension was still represented with positive and negative values respectively.
 
-\section{Architecture and Training of the Neural Network}
+\section{Step D - Architecture and Training of the Neural Network}
 TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
 .... Talk about the design of the \ac{NN}
 
@@ -137,6 +146,6 @@ This is represented by the bracket and dashed arrows in step D of figure \ref{fi
 %     \item Relinearization
 % \end{enumerate}
 
-% \section{Training of the Neural Network}
+\section{Step E - Real-time motor control and performance}
 
 \end{document}

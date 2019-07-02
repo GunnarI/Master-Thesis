@@ -33,25 +33,30 @@ Further details about the model and its scripts are discussed in appendix \ref{s
          \caption{Screenshot from Vicon Nexus software during gait trial.}
          \label{fig:cgm23-markerset-experiment-capture}
      \end{subfigure}
-    \caption{CGM2.3 marker set as seen from (a) the guidelines and (b) one conducted gait trial. (a) Optional markers with red cross were not used and calibration only markers were removed before dynamic trials. (b) The colored spheres represent the markers placed on the subject.}
+    \caption{CGM2.3 marker set as seen from (a) the guidelines and (b) one conducted gait trial. (a) The RBAK optional marker was included and calibration only markers were removed before dynamic trials. (b) The colored spheres represent the markers placed on the subject.}
     \label{fig:cgm23-markerset}
 \end{figure}
 
 % The knee joint center has its own coordinate system where the x-axis (red) and z-axis (blue) define the sagittal plane in which rotation around the y-axis (green) defines flexion and extension of the knee.
 
 The aktos nano \ac{sEMG} sensors from myon were used for the \ac{EMG} data capture. 
-The sensors were placed on the surface near 12 muscles on the right leg, presented in table \ref{tab:muscle-names}. Skin preparation and placement recommendations from the SENIAM project \cite{Stegeman2007, Hermens1999, Hermens2000} were used. The SENIAM project is a European concerted action in the Biomed 2 program of the European Community \cite{Stegeman2007}. It provides recommendations when measuring \ac{sEMG} to increase standardization within the field.
+The sensors were placed on the surface near 12 muscles on the right leg, presented in table \ref{tab:muscle-names}. 
+\input{tables/muscle-names.tex}
+Skin preparation and placement recommendations from the SENIAM project \cite{Stegeman2007, Hermens1999, Hermens2000} were used. The SENIAM project is a European concerted action in the Biomed 2 program of the European Community \cite{Stegeman2007}. It provides recommendations when measuring \ac{sEMG} to increase standardization within the field.
 
 All the data from the \ac{EMG} sensors (muscle activity), cameras (marker trajectories), and the \acp{FP} (\ac{GRF}) was collected and synchronized using the Vicon Nexus 2.8.2 system/software.
 The synchronization includes accounting for the latency of $14ms$ of the \ac{EMG} sensors \cite{aktosEMG}.
 The marker trajectories were sampled at 100Hz using the cameras while the analog data (i.e. \ac{GRF} and \ac{EMG}) was sampled at 1000Hz.
 
-Data was collected from x subjects with anthropometric data measured for each subject (see table \ref{tab:subject-table}).
-Each subject was a young, healthy individual without any disorders in the muscles.
+Data was collected from 6 subjects with anthropometric data measured for each subject (see table \ref{tab:subject-table}).
+\input{tables/subject-table.tex}
+Each subject was a young, healthy individual without any muscle disorders.
 A static trial was captured to use for scaling the model, as described in appendix \ref{sec:A-pyCGM2}, and run as part of step C in figure \ref{fig:process-diagram}.
 The subjects were asked to walk front and back over the \acp{FP} either slowly, normally, or fast.
 This was to increase variance in the data and thus help prevent overfitting of the \ac{NN} model.
-\input{tables/subject-table.tex}
+The definition of slow, normal, or fast walking was not set to a specific speed but rather to what the subjects felt was natural.
+Furthermore, about 80\% of the trials for each subject were measured with normal walking speed.
+The slow and fast walking speeds each covered about 10\% of the trials for each subject.
 
 Note that a subject refers to one individual, a session refers to each experiment performed by the subject, and a trial refers to each measured exercised performed in the trial. 
 Thus, each subject can have many sessions, e.g. experiments conducted on separate days.
@@ -66,14 +71,14 @@ Both were filtered with a 4th order Butterworth lowpass filter and a cutoff freq
 The same cutoff frequency was used for both to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force \cite{Kristianslund2012}.
 
 The \ac{EMG} was filtered with the "typical" steps as mentioned by \textcite[99]{Clancy2016}, but excluding the whitening step to keep the filtering real-time friendly.
-Real-time friendly means here to minimizing the delay introduced by the processing of the \ac{EMG} signal.
-Thus, the signal was noise and interference filtered using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$. 
+The meaning of real-time friendly here means to minimizing the delay introduced by the processing of the \ac{EMG} signal.
+The signal was noise and interference filtered using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$. 
 Then, for demodulation, smoothing, and relinearization, the RMS method was used where the smoothing was done with a moving average window of $50ms$. 
 As \textcite{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly, $50ms$ was chosen.
 That is, to not introduce too much delay while still keeping the signal relatively smooth.
 
 \section{Step C - Training preparation}
-The training preparation, or step C of figure \ref{fig:process-diagram}, consisted creating the training, validation, and testing datasets as well as the training, validation, and testing labels.
+The training preparation consisted of creating the training, validation, and testing datasets as well as the training, validation, and testing labels.
 In this case the datasets are the \ac{EMG} data and the labels are the corresponding \acp{KJM}.
 
 Before dividing the data into separate datasets, the \acp{KJM} need to be estimated from the motion and \ac{GRF} data.
@@ -86,7 +91,7 @@ The objective function from equation \ref{eq:ik-obj-func} is rewritten here for 
     &+ \sum_{j=1}^{\text{joint angles}}w_j \left( \theta_j^{subject}-\theta_j^{model}\right)^2 \biggr\}
 \end{align*}
 The weights ($w_i$ and $w_j$) where set equal for every marker used and the threshold for the objective function was set to $10^{-8}$.
-The \ac{ID} computations are based on anthropometric segment measurements according to \textcite{Dempster1955} and the iterative Newton-Euler equations as described by \textcite{Dumas2004}\cite{Leboeuf2019}.
+The \ac{ID} computations are based on anthropometric segment measurements according to \textcite{Dempster1955} and the iterative Newton-Euler equations as described by \textcite{Dumas2004}.
 The model outputs are designed to have the same conventions as Vicon's \ac{PiG} model, and as such were normalized to the subject's height and body mass \cite{Leboeuf2019, viconpig}.
 Furthermore, the \acp{KJM} were represented as positive for knee flexion and negative for extension.
 
@@ -99,12 +104,15 @@ In that way an \ac{EMG} sample taken at $t$ can predict a moment value at $t+9ms
 
 The final step before dividing the data into training and testing sets was feature selection.
 Section \ref{sec:A-NeuralNetworks} discusses briefly the importance of feature selection.
-First step was to look at correlations in muscle activity between different muscles.
-
+First step was to look at correlations in muscle activity between different muscles using the Pearson standard correlation coefficient.
+Muscles which were found to correlate highly to one another and which are not contributors to knee flexion or extension were considered redundant.
+To decrease complexity of the model, the data from these muscles was removed from the datasets.
 
 Finally, once each sample had been matched the data was split into training, validation, and testing datasets.
-The split was done by randomly selecting $70\%$ of the gait cycles for the training, $10\%$ for the validation, and remaining $20\%$ for the testing dataset.
-Furthermore, for the purpose of standardizing the data between subjects, the datasets were normalized.
+The split was done by randomly selecting $80\%$ of the gait cycles for the training and $20\%$ for the testing set.
+Further $10\%$ of cycles in the training set were randomly selected for the validation set.
+
+For the purpose of standardizing the data between subjects, the datasets were normalized.
 \ac{EMG} was normalized so that all values from the training dataset were between $0$ and $1$, independent of subject.
 The normalization is given by equation \ref{eq:emg-normalization}:
 \begin{equation}

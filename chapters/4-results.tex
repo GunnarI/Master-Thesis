@@ -3,46 +3,135 @@
 \begin{document}
 
 \chapter{Results}
-The results can be split into two parts: (1) pre-training, i.e. the experimental data after filtering and pre-processing before the training of the \ac{NN}, and (2) post-training, i.e. the output from the trained \ac{NN} model, including training and performance statistics.
+The results can be split into two parts: (1) pre-training, i.e. the experimental data after filtering and pre-processing and before the training of the \ac{NN}, and (2) post-training, i.e. the output from the trained \ac{NN} model, including training and performance statistics.
 
 \section{Pre-training results}
 Before training the \ac{NN} it is useful to look at what the data looks like.
-Figure \ref{fig:knee-joint-moments-stat} shows a representation of the knee joint moments from all the gait cycles for subjects 1, 2 and 6.  and figure \ref{fig:emg-to-moment-representation} shows \ac{EMG} activity from different muscle groups in relation to joint moments for that same dataset.
+Figure \ref{fig:kjm-average} shows a representation of the \ac{KJM} from all the gait cycles for subjects 1, 2 and 6.  and figure \ref{fig:emg-to-moment-representation} shows \ac{EMG} activity from different muscle groups in relation to joint moments for that same dataset.
 \begin{figure}
-    \centering
-    \includegraphics[width=0.75\textwidth]{img/results/20190429_06_moments_normal_walk.png}
-    \caption{Knee joint moments from part of the trial of subject00 where gait cycles are considered as "normal" walking speed. Positive moment means knee flexion and negative knee extension. The values are normalized as explained in the chapter \ref{sec:methods}. The light-blue area around the average represents the standard deviation. This dataset includes 523 gait cycles. See figure \ref{fig:knee-joint-moments-stat-compl} for complementing dataset, i.e. "slow" and "fast" walking speeds. }
-    \label{fig:knee-joint-moments-stat}
+     \centering
+     \begin{subfigure}[b]{0.325\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/moment_avg/subject01_all_set1_moment_avg.png}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.325\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/moment_avg/subject02_all_set1_moment_avg.png}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.325\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/moment_avg/subject06_all_set1_moment_avg.png}
+     \end{subfigure}
+    \caption{Normalized \ac{KJM} for subjects 1, 2, and 6, from left to right respectively. The solid blue line is the average from all the gait cycles and the shaded area around it is the standard deviation.}
+    \label{fig:kjm-average}
 \end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.75\textwidth]{img/results/20190429_06_moments_normal_walk.png}
+%     \caption{Knee joint moments from part of the trial of subject00 where gait cycles are considered as "normal" walking speed. Positive moment means knee flexion and negative knee extension. The values are normalized as explained in the chapter \ref{sec:methods}. The light-blue area around the average represents the standard deviation. This dataset includes 523 gait cycles. See figure \ref{fig:knee-joint-moments-stat-compl} for complementing dataset, i.e. "slow" and "fast" walking speeds. }
+%     \label{fig:knee-joint-moments-stat}
+% \end{figure}
 From figure \ref{fig:emg-to-moment-representation} it is clear that the \ac{EMG} amplitude does not always line up with the knee moment and furthermore that when looking at each specific time step, similar \ac{EMG} values can correspond to very different moment values. 
 This can be easily identified at time stamps $0.38s$ and $0.54$ presented with the horizontal lines cutting the moment plot at very different values but the \ac{EMG} at similar values, no matter the muscle.
-For this reason it may be unsuccessful to train a regular \ac{MLP} which bases its prediction on the input at each time point exclusively. 
+For this reason it may be unsuccessful to train a regular \ac{MLP} which bases its prediction on the input at each time point exclusively.
 This is where the stateful \ac{LSTM} model comes in where the outputs from previous predictions are also included as input to the current prediction. 
 This way the model may use the previous moment values as addition feature to the \ac{EMG} input.
 Thus, at time stamps $0.38s$ and $0.54$ the model may know if previous moment value was flexion or extension and base the prediction on that knowledge.
 \begin{figure}
-     \centering
-     \begin{subfigure}[b]{0.45\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{img/results/norm_emg_knee_ext_hline.png}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.45\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{img/results/norm_emg_knee_flex_hline.png}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.45\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{img/results/norm_emg_hip_ext_hline.png}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.45\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{img/results/norm_emg_ankle_flex_hline.png}
-     \end{subfigure}
-    \caption{Muscle activity in relation to knee joint moments. All activities and moments are taken as average from 523 different gait cycles considered as "normal" walking speeds for subject00.}
-    \label{fig:emg-to-moment-representation}
+    \centering
+    \includegraphics[width=\textwidth]{img/results/emg_avg/all_subject_grid_emg_avg.png}
+    \caption{Caption}
+    \label{fig:my_label}
 \end{figure}
+% \begin{figure}
+%      \centering
+%      \begin{subfigure}[b]{0.325\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/emg_avg/subject01_all_set1_knee_extensors_emg_avg.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.325\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/emg_avg/subject02_all_set1_knee_extensors_emg_avg.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.325\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/emg_avg/subject06_all_set1_knee_extensors_emg_avg.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.325\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/emg_avg/subject01_all_set1_knee_flexors_emg_avg.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.325\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/emg_avg/subject02_all_set1_knee_flexors_emg_avg.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.325\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/emg_avg/subject06_all_set1_knee_flexors_emg_avg.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.325\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/emg_avg/subject01_all_set1_ankle_flexors_emg_avg.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.325\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/emg_avg/subject02_all_set1_ankle_flexors_emg_avg.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.325\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/emg_avg/subject06_all_set1_ankle_flexors_emg_avg.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.325\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/emg_avg/subject01_all_set1_hip_extensor_emg_avg.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.325\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/emg_avg/subject02_all_set1_hip_extensor_emg_avg.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.325\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/emg_avg/subject06_all_set1_hip_extensor_emg_avg.png}
+%      \end{subfigure}
+%     \caption{Muscle activity in relation to knee joint moments. All activities and moments are taken as average from 523 different gait cycles considered as "normal" walking speeds for subject00.}
+%     \label{fig:emg-to-moment-representation}
+% \end{figure}
+% \begin{figure}
+%      \centering
+%      \begin{subfigure}[b]{0.45\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/norm_emg_knee_ext_hline.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.45\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/norm_emg_knee_flex_hline.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.45\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/norm_emg_hip_ext_hline.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.45\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/norm_emg_ankle_flex_hline.png}
+%      \end{subfigure}
+%     \caption{Muscle activity in relation to knee joint moments. All activities and moments are taken as average from 523 different gait cycles considered as "normal" walking speeds for subject00.}
+%     \label{fig:emg-to-moment-representation}
+% \end{figure}
 
 \end{document}

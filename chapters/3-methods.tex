@@ -109,7 +109,8 @@ Muscles which were found to correlate highly to one another and which are not co
 To decrease complexity of the model, the data from these muscles was removed from the datasets.
 
 Finally, once each sample had been matched the data was split into training, validation, and testing datasets.
-The split was done by randomly selecting $80\%$ of the gait cycles for the training and $20\%$ for the testing set.
+The split was done by randomly selecting $80\%$ of the gait cycles, from each group of slow, fast, and regular walking speeds, for the training set.
+The remaining $20\%$ from each group was the testing set.
 Further $10\%$ of cycles in the training set were randomly selected for the validation set.
 
 For the purpose of standardizing the data between subjects, the datasets were normalized.
@@ -132,6 +133,10 @@ The extra clause made sure the signal was scaled down to the interval $[-1,1]$ (
 \section{Step D - Architecture and Training of the Neural Network}
 TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
 .... Talk about the design of the \ac{NN}
+
+The \ac{LSTM} based network that was used is represented in figure x.
+The \ac{LSTM} function provided with the Keras API was used to create the \ac{LSTM} layer \cite{chollet2015keras}.
+The function
 
 As discussed in appendix \ref{sec:A-NeuralNetworks}, the training of the \ac{NN} consists of optimizing an objective function.
 In this case, it involved minimizing the error between the output of the \ac{NN} and the calculated \acp{KJM}.

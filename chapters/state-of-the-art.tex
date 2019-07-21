@@ -341,8 +341,32 @@ The weights are then typically updated to minimize the cost function using gradi
 To enable this method the activation function has to be differentiable, i.e. it can not be the step function for example.
 Popular activation functions include, for example the sigmoid or the hyperbolic tangent function and the ReLu or softplus function \cite{Goodfellow2016, Haykin2009, Rojas1996}.
 
-Although this brief introduction of neural networks and how they learn has been focused around the feed-forward network, much of the same or similar principles apply to other networks. 
-They are, to quote \textcite{Goodfellow2016}, "the quintessential deep learning models" \parencite[164]{Goodfellow2016}.
+This brief introduction of neural networks and how they learn has been focused around the feed-forward network.
+They are sort of the basis of deep learning models and much of the same or similar principles apply to other deep neural networks \cite{Goodfellow2016}.
+
+\subsection{Recurrent Neural Networks}
+\Acp{RNN} are \acp{DNN} specifically designed to work on sequences of data.
+It introduces the recurrence wherein the hidden state and/or output from one time step in a sequence is fed into the next time step.
+This introduces a time dependency in the network which can more accurately portray the dependency between time steps in a sequence.
+Figure \ref{fig:generic-rnn} illustrates an representation example for such a network.
+\begin{figure}[ht]
+    \centering
+    \includegraphics{img/generic-rnn-diagram}
+    \caption{Generic \ac{RNN}: To the left is a general representation of a \ac{RNN} and to the right is the unfold representation of that same \ac{RNN}. $\mathbf{x}^{(t)}$ represents all the features at time step $t$; $U$, $V$, and $W$ are the weight matrices;}
+    \label{fig:generic-rnn}
+\end{figure}
+Each 
+The time steps do not necessarily represent actual steps through time.
+They can simply refer to steps in an atemporal sequence.
+Although, with this thesis in mind one could consider them as temporal sequence steps.
+More specifically, each time step is an \ac{EMG} sample in a temporal sequence of \ac{EMG} samples.
+
+There is a known issue with the so called vanishing gradient (or exploding gradient) in deep learning networks, including \acp{RNN}.
+Simply put, the issue is introduced from the repeated multiplication of the weight matrices in the backpropagation algorithm.
+When the weight is small and multiplied by itself many times, like in an long-term time dependency in a \ac{RNN}, the product becomes very small.
+The backpropagation is used for computing the gradient which in turn is used to update the weights to minimize the cost function.
+As a result, the issue of the vanishing gradient results in the weights not being updated, and thus the algorithm stops learning.
+One solution to the problem in long-term time dependency networks is the \ac{LSTM}.
 
 
 
@@ -358,7 +382,10 @@ Furthermore, extended research into machine learning in recent years has created
 
 With the current immense popularity with neural networks, many researches have provided alternative algorithms to solve the task of joint torque prediction.
 \textcite{Ardestani2014} provide a multi-dimensional wavelet neural network to estimate lower extremity joint moments. 
-The input to the network is \ac{EMG} and \ac{GRF} data collected during gait trials of four patients with knee prosthesis. 
+The input to the network is \ac{EMG} and \ac{GRF} data collected during gait trials of four patients with knee prosthesis.
+Notably, the dataset used in their research could not be considered very large in relation to machine learning (i.e. 120 gait cycles in total).
+Including the \ac{GRF} as input decreases the flexibility of using the model in real time since \ac{GRF} measurements are typically more difficult to obtain than \ac{EMG}.
+The prediction error of \ac{KJM} seems to be up to around 10\% Normalized-RMSE, depending on walking pattern.
 \textcite{Lee14-1} use a NNARX (Neural Network, AutoRegressive, eXternal Input) model to estimate knee joint moment in sit-to-stand movement. 
 The input was \ac{EMG}, joint angle, and joint velocity as well as previously predicted joint moment. 
 \textcite{Kiguchi2012} present a neuro-fuzzy system to estimate joint torques in the upper-limb to use with a power-assist exoskeleton. 

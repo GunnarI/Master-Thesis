@@ -1,14 +1,18 @@
 \titlepage
 
 \begin{abstract}
-  \begin{enumerate}
-      \item Talk about general background of exoskeleton as an assistive device for people with impaired or lost motor functions or for rehabilitation. Put emphasize on the control and the need for accurate real-time control. 
-      \item Talk about myoelectric control, EMG-based models to predict joint torque, and how to make it real-time. State my research hypothesis which is that ANN algorithm could be used for EMG pattern recognition to allow real-time myoelectric control of joint torques.
-      \item Talk about methodology, i.e. motion capture > Vicon postprocessing > OpenSim and CEINMS postprocessing inverse dynamics to retrieve the joint torques which are the training labels for the network > type of neural network
-      \item Talk about the results and implications
-  \end{enumerate}
+Exoskeletons have potential to help with recovery during rehabilitation or assisting patients with impaired mobility.
+An essential part of an active exoskeletons to pursue the role of assistance is its control system.
+The exoskeletons needs to assist and reinforce motion of the user rather than hinder or counteract it.
+One way of providing such a control system is to use signals from the body as an input to the system.
+Factors such as motion of body parts, acceleration, velocity, rotation, reaction forces, and muscle activity can be measured to indicate the power needed at the joints.
+\Ac{EMG} can be used to indicate muscle activity and is relatively easy to measure with low power consumption.
+\Ac{EMG} signal is however non-linearly related to muscle force and joint moments.
+Furthermore, the relationship depends on many factors which are hard to measure (e.g. muscle fiber length, elasticity, and maximum isometric muscle force).
+In this thesis the possibility of using a \ac{NN} to map the \ac{EMG} signal to \ac{KJM} during gait is explored.
+The aim is also to provide a basis for a model which could be used in real-time in an exoskeleton while using \ac{EMG} signal as the only input.
+The \ac{KJM} to map the signal onto is estimated using a state-of-the-art motion capture system and modelling tools for human motion including \ac{IK} and \ac{ID} calculations.
 
-  %\blindtext
 \end{abstract}
 
 

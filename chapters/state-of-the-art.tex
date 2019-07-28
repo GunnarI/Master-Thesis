@@ -345,6 +345,7 @@ This brief introduction of neural networks and how they learn has been focused a
 They are sort of the basis of deep learning models and much of the same or similar principles apply to other deep neural networks \cite{Goodfellow2016}.
 
 \subsection{Recurrent Neural Networks}
+\label{sec:A-rnn}
 \Acp{RNN} are \acp{DNN} specifically designed to work on sequences of data.
 It introduces the recurrence wherein the hidden state and/or output from one time step in a sequence is fed into the next time step.
 This introduces a time dependency in the network which can more accurately portray the dependency between time steps in a sequence.
@@ -372,10 +373,15 @@ A \ac{LSTM} based \ac{RNN} contains the \ac{LSTM}-cell which consists of a syste
 The gating units control the flow of the information through the network.
 They have the power to keep, partially keep, or getting rid of the information.
 The cell also holds a cell-state which is recurrent and is updated by the gates.
-Figure x demonstrates the flow of information through the \ac{LSTM} and equations \ref{eq:lstm_sigmoid_generic}--\ref{eq:last_lstm_step} write out the process.
-
+Figure \ref{fig:lstm-cell} demonstrates the flow of information through the \ac{LSTM} and equations \ref{eq:lstm_sigmoid_generic}--\ref{eq:last_lstm_step} write out the process \cite{Goodfellow2016}.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics{img/LSTM-cell.pdf}
+    \caption{The \ac{LSTM} cell. Variables and operations reference equations \ref{eq:lstm-ff}. The boxes indicate a \ac{NN} layer and the circles indicate matrix math operations. The dashed arrow indicates the possibility of getting the output from this timesteps status. The diagram is a highly modified version of an image from http://colah.github.io/posts/2015-08-Understanding-LSTMs/}
+    \label{fig:lstm-cell}
+\end{figure}
 The cell contains four separate sigmoid units that work similar to the regular \ac{NN} node from figure \ref{fig:node-diagram}.
-Equations \ref{eq:ann-node} become:
+Equations \ref{eq:ann-node} become \cite{Goodfellow2016}:
 \begin{equation}
 \label{eq:lstm_sigmoid_generic}
     \sigma^{\alpha}\left(b^{\alpha} + \sum_i{U_i^{\alpha} x_i^{(t)}} + \sum_i{W_i^{\alpha} h_i^{(t-1)}} \right)
@@ -383,7 +389,7 @@ Equations \ref{eq:ann-node} become:
 where $b$, $U$, and $W$ are the biases, input weights, and recurrent weights, respectively.
 $x^(t)$ is the input at current step and $h^(t-1)$ the hidden state from the previous step.
 $\alpha$ is an indicator of the separate units and their parameters.
-The flow of data through the cell is then as shown in equations \ref{eq:lstm-ff}:
+The flow of data through the cell is then as shown in equations \ref{eq:lstm-ff} \cite{Goodfellow2016}:
 \begin{subequations}
 \label{eq:lstm-ff}
 \begin{align}
@@ -394,8 +400,10 @@ The flow of data through the cell is then as shown in equations \ref{eq:lstm-ff}
     h^{(t)} &= \tanh\left(s^{(t)}\right)q^{(t)} \label{eq:last_lstm_step}
 \end{align}
 \end{subequations}
-Note here that the variable $s^{(t-1)}$ is the state of the \ac{LSTM} cell from last time step, and serves here as an input into the cell at current state.
-This is additionally to the inputs into the sigmoid function, namely the input features and previous hidden state.
+As seen from figure \ref{fig:lstm-cell}, the input to the cell is the hidden state $h^{(t)}$, and the cell state from the previous timestep $s^{(t)}$, as well as the input sample from the current timestep $x^{(t)}$.
+The $\times$ operations from the figure are the gates where $f^{(t)}$ is the forget gate, $g{(t)}$ is the input gate, and $q^{(t)}$ the output gate.
+Essentially, what happens every time step is that the state of the cell is first updated with the current input before it is used to control the output through the output gate.
+The recurrence of $s^{(t)}$ introduces a path through time where the gradient can flow without the problem of vanishing (or exploding).
 
 
 

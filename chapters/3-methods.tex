@@ -114,6 +114,25 @@ Muscles which were found to correlate highly to one another and which are not co
 To decrease complexity of the model, the data from these muscles was removed from the datasets.
 
 Finally, once each sample had been matched, the data was split into training, validation, and testing datasets.
+Five different cases of training and testing sets were created to look at the ability of the model to generalize for variable cases:
+\begin{enumerate}
+    \item Training set: \textit{Subject06/Session1}\\
+            Testing set: \textit{Subject06/Session2}\\
+            Looking at the ability to generalize across sessions.
+    \item Training set: \textit{Subject01/Both, Subject02/Both, and Subject06/Session1}\\
+            Testing set: \textit{Subject06/Session2}\\
+            Evaluating if additional data from different subjects improves the performance from case 1.
+    \item Training set: \textit{Subject01/Both and Subject06/Both}\\
+            Testing set: \textit{Subject02/Both, Subject03, and Subject05}\\
+            Looking at the ability to generalize across subjects.
+    \item Training set: \textit{Subject02/Both and Subject06/Both}\\
+            Testing set: \textit{Subject01/Both, Subject03, and Subject05}\\
+            Evaluating if this compares to case 3, i.e. how sensitive is the model to which subjects it trains on.
+    \item Training set: \textit{Random 70\% of all the usable data}\\
+            Testing set: \textit{Random 20\% of all the usable data} (different data than the training set)\\
+            Performance indicates if the same model can be used for multiple subjects as long as they have similar parameter as the subjects that the model trained on.
+            
+\end{enumerate}
 The split was done by randomly selecting $80\%$ of the gait cycles, from each group of slow, fast, and regular walking speeds, for the training set.
 The remaining $20\%$ from each group was the testing set.
 Further $10\%$ of cycles in the training set were randomly selected for the validation set.
@@ -140,22 +159,28 @@ where $X$ represents moment values.
 The extra clause made sure the signal was scaled down to the interval $[-1,1]$ (assuming $\left|X_{min}\right| \leq \left|X_{max}\right|$) and that flexion and extension was still represented with positive and negative values respectively.
 
 \section{Step D - Architecture and Training of the Neural Network}
-TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
-.... Talk about the design of the \ac{NN}
-
-The \ac{LSTM} based network that was used is represented in figure x.
-\begin{figure}
-    \centering
-    \includegraphics[width=0.9\textwidth]{img/LSTM_model_used.pdf}
-    \caption{Topology of the \ac{LSTM} based \ac{NN} used. In this thesis $\tau = 20$ was used indicating that 20 \ac{EMG} samples from past steps were used for each \ac{KJM} prediction at time step $t$.}
-    \label{fig:lstm-model-used}
-\end{figure}
-The \ac{LSTM} function provided with the Keras API was used to create the \ac{LSTM} layer \cite{chollet2015keras}.
-The function
-
 As discussed in appendix \ref{sec:A-NeuralNetworks}, the training of the \ac{NN} consists of optimizing an objective function.
 In this case, it involved minimizing the error between the output of the \ac{NN} and the calculated \acp{KJM}.
 This is represented by the bracket and dashed arrows in step D of figure \ref{fig:process-diagram}.
+
+Two different kinds of networks were tested for comparison, one being the simple \ac{MLP} described in section \ref{sec:A-NeuralNetworks}, and the other one was the \ac{LSTM} based \ac{RNN} described in section \ref{sec:A-rnn}.
+The main difference between the two is that the \ac{LSTM} model contains time-dependency and thus looks at multiple timesteps for each prediction, while the \ac{MLP} does not.
+
+TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
+The Keras API provides functions for configuring the \ac{LSTM} layer and the so called \textit{dense} layer, which is the regular, densily connected, \ac{NN} layer which is used in the \ac{MLP}.
+The functions offer a number of parameters for the configuration, such as number of nodes, type of activation functions, regularization function, and dropout rates \cite{chollet2015keras}.
+The parameters used for each model are listed in tables x and \ref{tab:lstm-parameters}.
+
+The topology of the \ac{LSTM} based network that was used is represented in figure \ref{fig:lstm-model-used}.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics{img/LSTM_model_used.pdf}
+    \caption{Topology of the \ac{LSTM} based \ac{NN} that was used. The \ac{LSTM} cells represent the structure presented in section \ref{sec:A-rnn} and figure \ref{fig:lstm-cell}. Note, there is a recurrence of cell state between each timestep, even though it is not shown here. In this thesis $\tau = 20$ was used indicating that 20 \ac{EMG} samples from past steps were used for each \ac{KJM} prediction at time step $t$.}
+    \label{fig:lstm-model-used}
+\end{figure}
+Note that the \ac{LSTM} cell contains regular \ac{NN} layers, as presented in section \ref{sec:A-NeuralNetworks}, with a configurable number of nodes.
+\input{tables/lstm-parameters.tex}
+
 
 % \section{Surface-EMG filtering and feature extraction}
 % The filtering steps are \parencite[99]{Clancy2016}:

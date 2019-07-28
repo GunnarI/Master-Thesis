@@ -4,12 +4,12 @@
 
 \chapter{Methods}
 \label{sec:methods}
-The process from data collection to training and then using the \ac{NN} is presented in figure \ref{fig:process-diagram}. 
-The process can be divided into 5 steps (A-E) and each step will be the subject of each subsection in this chapter, in that order.
+The process from data collection to training to then using the \ac{NN} is presented in figure \ref{fig:process-diagram}. 
+The process can be divided into 5 steps (A-E), each of which will be discussed in dedicated subsections in this chapter.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/ProcessDiagram}
-    \caption{Flow diagram of the modelling procedure. The dashed box indicates procedure used only for training the \ac{NN} and the dashed arrows are feedback during training. (A) Subject walks in a motion lab collecting \acf{GRF}, marker trajectories, and muscle activity; (B) The data is filtered and prepared for use in the models; (C) The \ac{GRF} and marker trajectories are used for \ac{IK} and \ac{ID} to retrieve \acp{KJM}; (D) During training, \ac{EMG} data is continuously fed through the \ac{NN}. Output is compared to the moments from (C) and the error used as feedback to update the \ac{NN}; (E) \ac{EMG} fed through the trained \ac{NN} produces \acp{KJM} prediction to control motor torque in an exoskeleton}
+    \caption{Flow diagram of the modelling procedure. The dashed box indicates a procedure used only for training the \ac{NN} and the dashed arrows are feedback during training. (A) Subject walks in a motion lab collecting \acf{GRF}, marker trajectories, and muscle activity; (B) The data is filtered and prepared for use in the models; (C) The \ac{GRF} and marker trajectories are used for \ac{IK} and \ac{ID} to retrieve \acp{KJM}; (D) During training, \ac{EMG} data is continuously fed through the \ac{NN}. Output is compared to the moments from (C) and the error used as feedback to update the \ac{NN}; (E) \ac{EMG} fed through the trained \ac{NN} produces \acp{KJM} prediction to control motor torque in an exoskeleton}
     \label{fig:process-diagram}
 \end{figure}
 
@@ -37,8 +37,6 @@ Further details about the model and its scripts are discussed in appendix \ref{s
     \label{fig:cgm23-markerset}
 \end{figure}
 
-% The knee joint center has its own coordinate system where the x-axis (red) and z-axis (blue) define the sagittal plane in which rotation around the y-axis (green) defines flexion and extension of the knee.
-
 The aktos nano \ac{sEMG} sensors from myon were used for the \ac{EMG} data capture. 
 The sensors were placed on the surface near 12 muscles on the right leg, presented in table \ref{tab:muscle-names}. 
 \input{tables/muscle-names.tex}
@@ -48,7 +46,7 @@ All the data from the \ac{EMG} sensors (muscle activity), cameras (marker trajec
 The synchronization includes accounting for the latency of $14ms$ of the \ac{EMG} sensors \cite{aktosEMG}.
 The marker trajectories were sampled at 100Hz using the cameras while the analog data (i.e. \ac{GRF} and \ac{EMG}) was sampled at 1000Hz.
 
-Data was collected from 6 subjects with anthropometric data measured for each subject (see table \ref{tab:subject-table}).
+Data was collected from 6 subjects with anthropometric data measured for each subject, presented in \ref{tab:subject-table}.
 \input{tables/subject-table.tex}
 Each subject was a young, healthy individual without any muscle disorders.
 A static trial was captured to use for scaling the model, as described in appendix \ref{sec:A-pyCGM2}, and run as part of step C in figure \ref{fig:process-diagram}.
@@ -58,11 +56,17 @@ The definition of slow, normal, or fast walking was not set to a specific speed 
 Furthermore, about 80\% of the trials for each subject were measured with normal walking speed.
 The slow and fast walking speeds each covered about 10\% of the trials for each subject.
 
-Note that a subject refers to one individual, a session refers to each experiment performed by the subject, and a trial refers to each measured exercised performed in the trial. 
+Note that a subject refers to one individual, a session refers to each experiment performed by the subject, and a trial refers to each measured exercised performed in the session. 
 Thus, each subject can have many sessions, e.g. experiments conducted on separate days.
 Furthermore, each session has many trials and each trial was cut down to gait cycles. 
 The gait cycles are defined by the interval from the right foot's heel strike on a \ac{FP} until its next heel strike.
 Some sessions included 3 \acp{FP} resulting in some trials having two gait cycles for the right leg.
+
+Defective cycles were found by looking at outliers, e.g. the longest/shortest cycles indicating defect in heel strike detection and the cycles with highest deviation of \ac{KJM} estimation from the mean.
+Faulty signal from motion capture or \ac{GRF} makes the \ac{KJM} output from the \ac{ID} calculations wrong.
+All such cycles, that were found, were removed from the dataset since the \ac{KJM} are the labels and not the inputs for the \ac{NN}.
+The \ac{EMG} on the other hand is input to the model and any errors to the \ac{EMG} measurements might also happen in real live, given that it is not easily preventable.
+For that reason, the cycles that contained what appeared to be random errors (i.e. not systematic) were not removed from the dataset
 
 \section{Step B - Data processing}
 \label{sec:data-processing}
@@ -70,19 +74,20 @@ In step B of figure \ref{fig:process-diagram}, before running \ac{IK} and \ac{ID
 Both were filtered with a 4th order Butterworth lowpass filter and a cutoff frequency of $10Hz$. 
 The same cutoff frequency was used for both to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force \cite{Kristianslund2012}.
 
-The \ac{EMG} was filtered with the "typical" steps as mentioned by \textcite[99]{Clancy2016}, but excluding the whitening step to keep the filtering real-time friendly.
-The meaning of real-time friendly here means to minimizing the delay introduced by the processing of the \ac{EMG} signal.
+The \ac{EMG} was filtered with the ``typical'' steps as mentioned by \textcite[99]{Clancy2016}, but excluding the whitening step for simplicity.
+The purpose of whitening is to get rid of correlation between successive samples which affects information extraction due to temporal weights on consecutive samples.
+The effect of omitting this step or the possible gain in including it will be discussed in section \ref{sec:discussion}.
 The signal was noise and interference filtered using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$. 
 Then, for demodulation, smoothing, and relinearization, the RMS method was used where the smoothing was done with a moving average window of $50ms$. 
-As \textcite{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly, $50ms$ was chosen.
-That is, to not introduce too much delay while still keeping the signal relatively smooth.
+As \textcite{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of a real-time friendly solution, $50ms$ was chosen.
+That is, to not introduce too much delay of the signal while still keeping it relatively smooth.
 
 \section{Step C - Training preparation}
 The training preparation consisted of creating the training, validation, and testing datasets as well as the training, validation, and testing labels.
-In this case the datasets are the \ac{EMG} data and the labels are the corresponding \acp{KJM}.
+In this case the datasets consist of the \ac{EMG} data and the labels of the corresponding \acp{KJM}.
 
 Before dividing the data into separate datasets, the \acp{KJM} need to be estimated from the motion and \ac{GRF} data.
-For that purpose, the pyCGM2 package by \textcite{Leboeuf2019} was used to apply \ac{IK} and \ac{ID} on the data.
+For that purpose, the pyCGM2 package by \textcite{Leboeuf2019} was used to apply \ac{IK} and \ac{ID} to the data.
 The skeleton model is first scaled using the static trial and the Newington-Gage model with improvements from the CGM2 project, as described in appendix \ref{sec:A-Vicon-and-PiG} and \ref{sec:A-pyCGM2}.
 The model is then fitted to the measured data using \ac{IK} as described in \ref{sec:A-MSModels}. 
 The objective function from equation \ref{eq:ik-obj-func} is rewritten here for clarity:
@@ -104,11 +109,11 @@ In that way an \ac{EMG} sample taken at $t$ can predict a moment value at $t+9ms
 
 The final step before dividing the data into training and testing sets was feature selection.
 Section \ref{sec:A-NeuralNetworks} discusses briefly the importance of feature selection.
-First step was to look at correlations in muscle activity between different muscles using the Pearson standard correlation coefficient.
+The first step was to look at correlations in muscle activity between different muscles using the Pearson standard correlation coefficient.
 Muscles which were found to correlate highly to one another and which are not contributors to knee flexion or extension were considered redundant.
 To decrease complexity of the model, the data from these muscles was removed from the datasets.
 
-Finally, once each sample had been matched the data was split into training, validation, and testing datasets.
+Finally, once each sample had been matched, the data was split into training, validation, and testing datasets.
 The split was done by randomly selecting $80\%$ of the gait cycles, from each group of slow, fast, and regular walking speeds, for the training set.
 The remaining $20\%$ from each group was the testing set.
 Further $10\%$ of cycles in the training set were randomly selected for the validation set.
@@ -120,8 +125,12 @@ The normalization is given by equation \ref{eq:emg-normalization}:
 \label{eq:emg-normalization}
     X_{norm} = \frac{X - X_{min}}{X_{max} - X_{min}}
 \end{equation}
+% \begin{equation}
+% \label{eq:emg-normalization}
+%     X_{norm} = \frac{X - \mu_X}{\sigma_X}
+% \end{equation}
 where $X$ is the \ac{EMG} value to be normalized and $X_{min}$ and $X_{max}$ are, respectively, the minimum and maximum measured \ac{EMG} from the training dataset. 
-For the validation and testing datasets, the same minimum and maximum values were used, to accurately portray new data that the \ac{NN} does not already "know".
+For the validation and testing datasets, the same minimum and maximum values were used, to accurately portray new data that the \ac{NN} does not already ``know''.
 The \acp{KJM} were normalized similar to the \ac{EMG} in equation \ref{eq:emg-normalization} with addition clause to set the interval:
 \begin{equation}
 \label{eq:moment-normalization}
@@ -135,6 +144,12 @@ TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015k
 .... Talk about the design of the \ac{NN}
 
 The \ac{LSTM} based network that was used is represented in figure x.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/LSTM_model_used.pdf}
+    \caption{Topology of the \ac{LSTM} based \ac{NN} used. In this thesis $\tau = 20$ was used indicating that 20 \ac{EMG} samples from past steps were used for each \ac{KJM} prediction at time step $t$.}
+    \label{fig:lstm-model-used}
+\end{figure}
 The \ac{LSTM} function provided with the Keras API was used to create the \ac{LSTM} layer \cite{chollet2015keras}.
 The function
 
@@ -142,23 +157,27 @@ As discussed in appendix \ref{sec:A-NeuralNetworks}, the training of the \ac{NN}
 In this case, it involved minimizing the error between the output of the \ac{NN} and the calculated \acp{KJM}.
 This is represented by the bracket and dashed arrows in step D of figure \ref{fig:process-diagram}.
 
-% Introduce TensorFlow and the Keras API for the implementation of the \ac{NN}.
-% The training set for the \ac{NN} is normalized EMG data from regular walking.
-% The training labels are the corresponding joint torque values obtained from Vicon Nexus CGM2.
-
-% \section{Data collection and Inverse Dynamics}
-% Before running inverse dynamics on the model, the force plate and trajectory data is filtered. A 4th order Butterworth lowpass filter with a cutoff frequency of $10Hz$ is used here. Same cutoff frequency is used for both the force plate data and the trajectory data to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force at that time \cite{Kristianslund2012}.
-
 % \section{Surface-EMG filtering and feature extraction}
 % The filtering steps are \parencite[99]{Clancy2016}:
 % \begin{enumerate}
 %     \item Noise and interference filtering using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$
-%     \item Temporal decorrelation (or whitening) to get rid of correlation from neighboring EMG channels
+%     \item Temporal decorrelation (or whitening) to get rid of the correlation from preceding signal of the same EMG channel.
 %     \item Demodulation (this could be taking RMS?)
 %     \item Smoothing: moving average with a window of $20ms$, i.e. 20 samples. As \citeauthor{Clancy2016} points out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $20ms$ is chosen to not introduce too much delay.
 %     \item Relinearization
 % \end{enumerate}
 
 \section{Step E - Real-time motor control and performance}
+Although this part was not implemented in this thesis the following methods are thoughts about how it could be done.
+
+Once the network has been trained the weights can be saved for later use.
+This is helpful since the model would typically be run on a different system than where it was trained.
+In this case the model was trained using Python and the weights of the trained model were saved to a file.
+The trained model could then be transferred to C++ by using Tensorflow C++ library to replicate the model structure and then loading the saved weights onto the replica.
+This can be helpful since in an exoskeleton the trained model needs to be stored on an embedded system which often runs C++ rather than Python.
+Also, Vicon offers a Datastream SDK in C++ enabling real time computation that can be used with Vicon Nexus.
+This is further discussed in section \ref{sec:discussion}.
+
+
 
 \end{document}

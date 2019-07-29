@@ -119,23 +119,23 @@ Five different cases of training and testing sets were created to look at the ab
     \item Training set: \textit{Subject06/Session1}\\
             Testing set: \textit{Subject06/Session2}\\
             Looking at the ability to generalize across sessions.
-    \item Training set: \textit{Subject01/Both, Subject02/Both, and Subject06/Session1}\\
+    \item Training set: \textit{Subject01/Both, Subject02/Both,} and \textit{Subject06/Session1}\\
             Testing set: \textit{Subject06/Session2}\\
             Evaluating if additional data from different subjects improves the performance from case 1.
-    \item Training set: \textit{Subject01/Both and Subject06/Both}\\
-            Testing set: \textit{Subject02/Both, Subject03, and Subject05}\\
+    \item Training set: \textit{Subject01/Both} and \textit{Subject06/Both}\\
+            Testing set: \textit{Subject02/Both, Subject03,} and \textit{Subject05}\\
             Looking at the ability to generalize across subjects.
-    \item Training set: \textit{Subject02/Both and Subject06/Both}\\
-            Testing set: \textit{Subject01/Both, Subject03, and Subject05}\\
+    \item Training set: \textit{Subject02/Both} and \textit{Subject06/Both}\\
+            Testing set: \textit{Subject01/Both, Subject03,} and \textit{Subject05}\\
             Evaluating if this compares to case 3, i.e. how sensitive is the model to which subjects it trains on.
-    \item Training set: \textit{Random 70\% of all the usable data}\\
+    \item Training set: \textit{Random 80\% of all the usable data}\\
             Testing set: \textit{Random 20\% of all the usable data} (different data than the training set)\\
             Performance indicates if the same model can be used for multiple subjects as long as they have similar parameter as the subjects that the model trained on.
-            
 \end{enumerate}
-The split was done by randomly selecting $80\%$ of the gait cycles, from each group of slow, fast, and regular walking speeds, for the training set.
-The remaining $20\%$ from each group was the testing set.
-Further $10\%$ of cycles in the training set were randomly selected for the validation set.
+In all the case, the validation set was selected as random $10\%$ of the training set.
+% The split was done by randomly selecting $80\%$ of the gait cycles, from each group of slow, fast, and regular walking speeds, for the training set.
+% The remaining $20\%$ from each group was the testing set.
+% Further $10\%$ of cycles in the training set were randomly selected for the validation set.
 
 For the purpose of standardizing the data between subjects, the datasets were normalized.
 \ac{EMG} was normalized so that all values from the training dataset were between $0$ and $1$, independent of subject.
@@ -149,7 +149,7 @@ The normalization is given by equation \ref{eq:emg-normalization}:
 %     X_{norm} = \frac{X - \mu_X}{\sigma_X}
 % \end{equation}
 where $X$ is the \ac{EMG} value to be normalized and $X_{min}$ and $X_{max}$ are, respectively, the minimum and maximum measured \ac{EMG} from the training dataset. 
-For the validation and testing datasets, the same minimum and maximum values were used, to accurately portray new data that the \ac{NN} does not already ``know''.
+% For the validation and testing datasets, the same minimum and maximum values were used, to accurately portray new data that the \ac{NN} does not already ``know''.
 The \acp{KJM} were normalized similar to the \ac{EMG} in equation \ref{eq:emg-normalization} with addition clause to set the interval:
 \begin{equation}
 \label{eq:moment-normalization}
@@ -202,7 +202,5 @@ The trained model could then be transferred to C++ by using Tensorflow C++ libra
 This can be helpful since in an exoskeleton the trained model needs to be stored on an embedded system which often runs C++ rather than Python.
 Also, Vicon offers a Datastream SDK in C++ enabling real time computation that can be used with Vicon Nexus.
 This is further discussed in section \ref{sec:discussion}.
-
-
 
 \end{document}

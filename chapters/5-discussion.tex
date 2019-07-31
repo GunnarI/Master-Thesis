@@ -11,6 +11,8 @@ This includes a further discussion about why the model might generalize well for
 
 \section{Pre-training results}
 \label{sec:discussion_pre-training-results}
+The \ac{EMG} pattern from most of the muscles was shown to highly correlate between subjects.
+With that stated, it should be emphasized that the subjects were all young, healthy adults.
 
 The normalized \ac{EMG} signal from gluteus maximus on subject 2 is much lower than from the other subjects and no clear pattern is seen from the average.
 However, when looking closely, the standard deviation shows that a similar pattern might be found in some of the cycles.
@@ -21,5 +23,25 @@ Incidentally, data from subject 2 was collected in two separate sessions where o
 The shorter session, for some reason, also had much higher amplitude in \ac{EMG} signal from gluteus maximus.
 This explains why the average of the normalized values of the combined dataset from both sessions is near zero.
 The pattern in the standard deviation is the result of the signal from the shorter (higher amplitude) session.
+
+\section{Post-training results}
+\label{sec:discussion_post-training-results}
+Add text about how the models compare
+
+The design of the model had some iterations. 
+One notable design criteria, that changed throughout the process, is the number of timesteps included in the \ac{LSTM} model.
+Looking at 20 past samples of \ac{EMG} results in a rather deep network when considering running it on an embedded system.
+At first, much fewer timesteps were used.
+Those models performed alright in cases where the testing set was a part of the same session's dataset as the training set.
+However, they completely failed to generalize between subjects.
+It was not until using 20 timesteps that the the error on the test set was observed to decrease during the training of the model.
+
+\section{Real-time compatability}
+\label{sec:discussion_real-time}
+When used in an exoskeleton, the assistance (or resistance) of the exoskeleton may affect the \ac{EMG} signal.
+Since the model is based on the 20 past \ac{EMG} signals, this may create a bad feed-back loop.
+For example, if the model uses \ac{EMG} signals from $t-20$ to $t-1$ to make the exoskeleton assist knee-flexion at $t$ then this could affect the \ac{EMG} signal collected at $t$.
+This \ac{EMG} signal may be contradicting intended movement, and thus the prediction at $t+1$ might not be correct.
+This in turn has more affect on the user's motion and their \ac{EMG} signal, thus resulting in the bad feed-back loop.
 
 \end{document}

@@ -114,25 +114,27 @@ Muscles which were found to correlate highly to one another and which are not co
 To decrease complexity of the model, the data from these muscles was removed from the datasets.
 
 Finally, once each sample had been matched, the data was split into training, validation, and testing datasets.
-Five different cases of training and testing sets were created to look at the ability of the model to generalize for variable cases:
-\begin{enumerate}
-    \item Training set: \textit{Subject06/Session1}\\
-            Testing set: \textit{Subject06/Session2}\\
-            Looking at the ability to generalize across sessions.
-    \item Training set: \textit{Subject01/Both, Subject02/Both,} and \textit{Subject06/Session1}\\
-            Testing set: \textit{Subject06/Session2}\\
-            Evaluating if additional data from different subjects improves the performance from case 1.
-    \item Training set: \textit{Subject01/Both} and \textit{Subject06/Both}\\
-            Testing set: \textit{Subject02/Both, Subject03,} and \textit{Subject05}\\
-            Looking at the ability to generalize across subjects.
-    \item Training set: \textit{Subject02/Both} and \textit{Subject06/Both}\\
-            Testing set: \textit{Subject01/Both, Subject03,} and \textit{Subject05}\\
-            Evaluating if this compares to case 3, i.e. how sensitive is the model to which subjects it trains on.
-    \item Training set: \textit{Random 80\% of all the usable data}\\
-            Testing set: \textit{Random 20\% of all the usable data} (different data than the training set)\\
-            Performance indicates if the same model can be used for multiple subjects as long as they have similar parameter as the subjects that the model trained on.
-\end{enumerate}
-In all the case, the validation set was selected as random $10\%$ of the training set.
+Five different cases of training and testing sets were created to look at the ability of the model to generalize for variable cases.
+Table \ref{tab:training-cases} lists these cases and describes the purpose of each case.
+\input{tables/training_cases.tex}
+% \begin{enumerate}
+%     \item Training set: \textit{Subject06/Session1}\\
+%             Testing set: \textit{Subject06/Session2}\\
+%             Looking at the ability to generalize across sessions.
+%     \item Training set: \textit{Subject01/Both, Subject02/Both,} and \textit{Subject06/Session1}\\
+%             Testing set: \textit{Subject06/Session2}\\
+%             Evaluating if additional data from different subjects improves the performance from case 1.
+%     \item Training set: \textit{Subject01/Both} and \textit{Subject06/Both}\\
+%             Testing set: \textit{Subject02/Both, Subject03,} and \textit{Subject05}\\
+%             Looking at the ability to generalize across subjects.
+%     \item Training set: \textit{Subject02/Both} and \textit{Subject06/Both}\\
+%             Testing set: \textit{Subject01/Both, Subject03,} and \textit{Subject05}\\
+%             Evaluating if this compares to case 3, i.e. how sensitive is the model to which subjects it trains on.
+%     \item Training set: \textit{Random 80\% of all the usable data}\\
+%             Testing set: \textit{Random 20\% of all the usable data} (different data than the training set)\\
+%             Performance indicates if the same model can be used for multiple subjects as long as they have similar parameter as the subjects that the model trained on.
+% \end{enumerate}
+% In all the case, the validation set was selected as random $10\%$ of the training set.
 % The split was done by randomly selecting $80\%$ of the gait cycles, from each group of slow, fast, and regular walking speeds, for the training set.
 % The remaining $20\%$ from each group was the testing set.
 % Further $10\%$ of cycles in the training set were randomly selected for the validation set.
@@ -202,5 +204,10 @@ The trained model could then be transferred to C++ by using Tensorflow C++ libra
 This can be helpful since in an exoskeleton the trained model needs to be stored on an embedded system which often runs C++ rather than Python.
 Also, Vicon offers a Datastream SDK in C++ enabling real time computation that can be used with Vicon Nexus.
 This is further discussed in section \ref{sec:discussion}.
+
+The filtering methods were selected to be real-time friendly with minimal calibration.
+The only thing that would need calibration before running the model is the normalization, which uses the maximum \ac{EMG} from the whole set to scale down the \ac{EMG} using equation \ref{eq:emg-normalization}.
+The output would also need calibration, since the model outputs the normalized \ac{KJM} between $\left[-1,1\right]$.
+It should be enough to multiply the output with a single constant based on the users needs, since it should be linearly related to the actual \ac{KJM}.
 
 \end{document}

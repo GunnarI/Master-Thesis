@@ -4,9 +4,11 @@
     \caption{\ac{LSTM} parameter values used in the Keras API function.}
     \begin{tabular}{>{\raggedright}p{0.15\textwidth} | c | p{0.5\textwidth}}
         Parameter                       & Value         & Function \\ \hline
-        Units                           & 64            & The number of hidden units in the internal layers\\
-        Activation function             & Hard-Sigmoid  & The node's activation function of the \ac{LSTM} gate's \ac{NN} layers\\
-        Recurrent activation function   & ReLu          & The node's activation function for the \ac{LSTM} state recurrence \ac{NN} layer.
+        Units                           & 64            & The number of hidden units in the internal layers. \\ \hline
+        Activation function             & ReLu          & The node's activation function for the \ac{LSTM} input layer.\\ \hline
+        Recurrent activation function   & Hard-Sigmoid  & The node's activation function of the \ac{LSTM} gate's \ac{NN} layers.\\ \hline
+        Dropout rate                    & 0.3           & Dropout blocks a proportion of random tensors to prevent overfitting.\\
+        
     \end{tabular}
     \label{tab:lstm-parameters}
 \end{table}

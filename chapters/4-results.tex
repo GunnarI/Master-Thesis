@@ -46,7 +46,22 @@ Figure \ref{fig:emg-average} shows the corresponding \ac{EMG} activity of each m
 The figures show the subjects have similar patterns for \acp{KJM} and \ac{EMG} signals over the gait cycles.
 Note that the pattern for subject 1 is not as clear as for subjects 2 and 6 when looking at it on the same scale.
 However, as indicated by the ``fastest'' and ``slowest'' cycles, it is because subject 1 generally walked slower, in most trials, compared to their maximum speed.
-The similarities in the patterns indicates that an \ac{NN} might be able to generalize between subjects, at least up to some degree.
+
+Considering similar patterns across subjects, an \ac{NN} might be able to generalize between subjects, at least up to some degree.
+The linear correlation between the average for each subject, for each of the muscles and the\ac{KJM}, is plotted in figures \ref{fig:kjm-correlation}--\ref{fig:gaslat-correlation}.
+Table \ref{tab:correlation-sumu} outlines the results from these plots.
+\input{tables/correlations-sumup.tex}
+This table indicates that the patterns are generally correlated between subjects, except for the pattern of gluteus maximus.
+% Figure \ref{fig:kjm-correlation} shows the correlation of the \ac{KJM} between all the subjects.
+% \begin{figure}[ht!]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{img/results/correlations/KJM_correlation_between_subjects.png}
+%     \caption{\ac{KJM} correlation between subjects. The table shows the Pearson correlation coefficient between the average normalized \ac{KJM} of each subject.}
+%     \label{fig:kjm-correlation}
+% \end{figure}
+% The figure indicates high linear correlation between all the subjects.
+
+
 Nevertheless, there are also some dissimilarities between the signals which are discussed further in chapter \ref{sec:discussion}.
 
 Another notable observation is the amplitude of the normalized \ac{EMG}.
@@ -59,7 +74,7 @@ Figures x - x show the mixed datasets from cases 1-5 as described in the methods
 
 \section{Post-training results}
 \label{sec:post-training-results}
-
+The following figures and tables show the training and performance results of the model for each case.
 \subsection{Case 1}
 \label{sec:results-case1}
 

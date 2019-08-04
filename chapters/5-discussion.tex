@@ -13,8 +13,8 @@ This includes a further discussion about why the model might generalize well for
 \label{sec:discussion_pre-training-results}
 The \ac{EMG} pattern from most of the muscles was shown to highly correlate between subjects.
 With that stated, it should be emphasized that the subjects were all young, healthy adults.
-Many have researched difference in \ac{EMG} signal between various target groups.
-From these researches, it can be concluded that...
+Many have researched difference in \ac{EMG} signal between various target groups and varying conditions \cite{Rezgui2013,Sacco2010}.
+From these researches, it can be concluded that \ac{EMG} signal can vary in amplitude, lag, and/or pattern depending on pathology and conditions.
 
 The \ac{EMG} from gluteus maximus was observed to vary between subjects, much more than the \ac{EMG} from other muscles.
 There could be a number of reasons for this discrepancy.
@@ -29,6 +29,8 @@ More specifically, sweat has been shown to dampen the signal \cite{Abdoli-Eramak
 \section{Post-training results}
 \label{sec:discussion_post-training-results}
 Add text about how the models compare
+When looking at the results from section \ref{sec:post-training-results}, it is clear that the same model does not perform as well for every case.
+
 
 The design of the model had some iterations. 
 One notable design criteria, that changed throughout the process, is the number of timesteps included in the \ac{LSTM} model.

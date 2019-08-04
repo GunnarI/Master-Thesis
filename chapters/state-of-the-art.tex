@@ -325,8 +325,8 @@ The node diagram can be represented mathematically with the following two equati
 \end{align}
 \end{subequations}
 
-In this thesis, two activation functions are used.
-These are the \ac{ReLU} from equation \ref{eq:relu-function} and the hard-sigmoid from equation \ref{eq:hard-sigmoid-function} \cite{}
+In this thesis, two types of activation functions are used.
+These are the \ac{ReLU} from equation \ref{eq:relu-function} and the hard-sigmoid from equation \ref{eq:hard-sigmoid-function} \cite{Goodfellow2016, Nwankpa2018}:
 \begin{align}
 \label{eq:relu-function}
     \phi (z) = \max\left\{0,z\right\}
@@ -336,7 +336,10 @@ These are the \ac{ReLU} from equation \ref{eq:relu-function} and the hard-sigmoi
     \phi (z) = \max\left\{0,\min\left\{1,\frac{(z+1)}{2}\right\}\right\}-\left(1.6\right)
 \end{align}
 The \ac{ReLU} activation function is computationally light and has been shown to perform better than many other functions.
-This has resulted in it being the most widely used activation function since it was proposed in 2010 
+This has resulted in it being the most widely used activation function since it was proposed in 2010 \cite{Nwankpa2018}.
+Unlike the hard-sigmoid, and many other activation functions, the \ac{ReLU} does not saturate.
+In the gates of the \ac{LSTM}-cell, presented in next section, it is preferred to have saturation.
+That is where the hard-sigmoid function is used instead of the \ac{ReLU}.
 
 Relating figure \ref{fig:generic-ann} to previously defined learning, the \textit{task} might be classification where each $y$ represents a class.
 The \textit{experience} is the $n$ dimensional training data set which is fed into the input layer of the network, as the vector $\mathbf{x}$.

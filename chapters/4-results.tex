@@ -48,8 +48,8 @@ Note that the pattern for subject 1 is not as clear as for subjects 2 and 6 when
 However, as indicated by the ``fastest'' and ``slowest'' cycles, it is because subject 1 generally walked slower, in most trials, compared to their maximum speed.
 
 Considering similar patterns across subjects, an \ac{NN} might be able to generalize between subjects, at least up to some degree.
-The linear correlation between the average for each subject, for each of the muscles and the\ac{KJM}, is plotted in figures \ref{fig:kjm-correlation}--\ref{fig:gaslat-correlation}.
-Table \ref{tab:correlation-sumu} outlines the results from these plots.
+The linear correlation between the average for each subject, for each of the muscles and the \ac{KJM}, is plotted in figures \ref{fig:kjm-correlation}--\ref{fig:gaslat-correlation}.
+Table \ref{tab:correlation-sumup} outlines the results from these plots.
 \input{tables/correlations-sumup.tex}
 This table indicates that the patterns are generally correlated between subjects, except for the pattern of gluteus maximus.
 % Figure \ref{fig:kjm-correlation} shows the correlation of the \ac{KJM} between all the subjects.
@@ -77,6 +77,19 @@ Figures x - x show the mixed datasets from cases 1-5 as described in the methods
 The following figures and tables show the training and performance results of the model for each case.
 \subsection{Case 1}
 \label{sec:results-case1}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/results/training_history/Case1_LSTMvsMLP_training.png}
+    \caption{Case 1: Training and validation set's \ac{MSE} per epoch during training.}
+    \label{fig:cas1-lstm-vs-mlp-training}
+\end{figure}
+\input{tables/Case1_models_test-eval.tex}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/results/test_prediction_evaluation/Case1_LSTM_test_prediction.png}
+    \caption{Case 1: Average \ac{KJM} for the test set, \ac{LSTM} model prediction vs. actual (i.e. CGM2 model outputs).}
+    \label{fig:my_label}
+\end{figure}
 
 \subsection{Case 2}
 \label{sec:results-case1}

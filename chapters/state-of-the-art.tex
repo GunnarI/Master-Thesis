@@ -325,6 +325,18 @@ The node diagram can be represented mathematically with the following two equati
 \end{align}
 \end{subequations}
 
+In this thesis, two activation functions are used.
+These are the \ac{ReLU} from equation \ref{eq:relu-function} and the hard-sigmoid from equation \ref{eq:hard-sigmoid-function} \cite{}
+\begin{align}
+\label{eq:relu-function}
+    \phi (z) = \max\left\{0,z\right\}
+\end{align}
+\begin{align}
+\label{eq:hard-sigmoid-function}
+    \phi (z) = \max\left\{0,\min\left\{1,\frac{(z+1)}{2}\right\}\right\}-\left(1.6\right)
+\end{align}
+The \ac{ReLU} activation function is computationally light and has been shown to perform better than many other functions.
+This has resulted in it being the most widely used activation function since it was proposed in 2010 
 
 Relating figure \ref{fig:generic-ann} to previously defined learning, the \textit{task} might be classification where each $y$ represents a class.
 The \textit{experience} is the $n$ dimensional training data set which is fed into the input layer of the network, as the vector $\mathbf{x}$.
@@ -387,7 +399,7 @@ Equations \ref{eq:ann-node} become \cite{Goodfellow2016}:
     \sigma^{\alpha}\left(b^{\alpha} + \sum_i{U_i^{\alpha} x_i^{(t)}} + \sum_i{W_i^{\alpha} h_i^{(t-1)}} \right)
 \end{equation}
 where $b$, $U$, and $W$ are the biases, input weights, and recurrent weights, respectively.
-$x^(t)$ is the input at current step and $h^(t-1)$ the hidden state from the previous step.
+$x^{(t)}$ is the input at current step and $h^{(t-1)}$ the hidden state from the previous step.
 $\alpha$ is an indicator of the separate units and their parameters.
 The flow of data through the cell is then as shown in equations \ref{eq:lstm-ff} \cite{Goodfellow2016}:
 \begin{subequations}
@@ -401,7 +413,7 @@ The flow of data through the cell is then as shown in equations \ref{eq:lstm-ff}
 \end{align}
 \end{subequations}
 As seen from figure \ref{fig:lstm-cell}, the input to the cell is the hidden state $h^{(t)}$, and the cell state from the previous timestep $s^{(t)}$, as well as the input sample from the current timestep $x^{(t)}$.
-The $\times$ operations from the figure are the gates where $f^{(t)}$ is the forget gate, $g{(t)}$ is the input gate, and $q^{(t)}$ the output gate.
+The $\times$ operations from the figure are the gates where $f^{(t)}$ is the forget gate, $g^{(t)}$ is the input gate, and $q^{(t)}$ the output gate.
 Essentially, what happens every time step is that the state of the cell is first updated with the current input before it is used to control the output through the output gate.
 The recurrence of $s^{(t)}$ introduces a path through time where the gradient can flow without the problem of vanishing (or exploding).
 

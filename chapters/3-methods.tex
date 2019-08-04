@@ -117,27 +117,6 @@ Finally, once each sample had been matched, the data was split into training, va
 Five different cases of training and testing sets were created to look at the ability of the model to generalize for variable cases.
 Table \ref{tab:training-cases} lists these cases and describes the purpose of each case.
 \input{tables/training_cases.tex}
-% \begin{enumerate}
-%     \item Training set: \textit{Subject06/Session1}\\
-%             Testing set: \textit{Subject06/Session2}\\
-%             Looking at the ability to generalize across sessions.
-%     \item Training set: \textit{Subject01/Both, Subject02/Both,} and \textit{Subject06/Session1}\\
-%             Testing set: \textit{Subject06/Session2}\\
-%             Evaluating if additional data from different subjects improves the performance from case 1.
-%     \item Training set: \textit{Subject01/Both} and \textit{Subject06/Both}\\
-%             Testing set: \textit{Subject02/Both, Subject03,} and \textit{Subject05}\\
-%             Looking at the ability to generalize across subjects.
-%     \item Training set: \textit{Subject02/Both} and \textit{Subject06/Both}\\
-%             Testing set: \textit{Subject01/Both, Subject03,} and \textit{Subject05}\\
-%             Evaluating if this compares to case 3, i.e. how sensitive is the model to which subjects it trains on.
-%     \item Training set: \textit{Random 80\% of all the usable data}\\
-%             Testing set: \textit{Random 20\% of all the usable data} (different data than the training set)\\
-%             Performance indicates if the same model can be used for multiple subjects as long as they have similar parameter as the subjects that the model trained on.
-% \end{enumerate}
-% In all the case, the validation set was selected as random $10\%$ of the training set.
-% The split was done by randomly selecting $80\%$ of the gait cycles, from each group of slow, fast, and regular walking speeds, for the training set.
-% The remaining $20\%$ from each group was the testing set.
-% Further $10\%$ of cycles in the training set were randomly selected for the validation set.
 
 For the purpose of standardizing the data between subjects, the datasets were normalized.
 \ac{EMG} was normalized so that all values from the training dataset were between $0$ and $1$, independent of subject.
@@ -162,16 +141,23 @@ The extra clause made sure the signal was scaled down to the interval $[-1,1]$ (
 
 \section{Step D - Architecture and Training of the Neural Network}
 As discussed in appendix \ref{sec:A-NeuralNetworks}, the training of the \ac{NN} consists of optimizing an objective function.
-In this case, it involved minimizing the error between the output of the \ac{NN} and the calculated \acp{KJM}.
+In this case, it involved minimizing the \ac{MSE} between the output of the \ac{NN} and the calculated \acp{KJM}.
 This is represented by the bracket and dashed arrows in step D of figure \ref{fig:process-diagram}.
 
 Two different kinds of networks were tested for comparison, one being the simple \ac{MLP} described in section \ref{sec:A-NeuralNetworks}, and the other one was the \ac{LSTM} based \ac{RNN} described in section \ref{sec:A-rnn}.
 The main difference between the two is that the \ac{LSTM} model contains time-dependency and thus looks at multiple timesteps for each prediction, while the \ac{MLP} does not.
 
+The models were trained for 300 epochs with an early-stop validation interval of 50 epochs.
+This means that if the \ac{MSE} for the validation set had not decreased for an interval of 50 epochs, then the training was stopped before reaching 300 epochs.
+
 TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
 The Keras API provides functions for configuring the \ac{LSTM} layer and the so called \textit{dense} layer, which is the regular, densily connected, \ac{NN} layer which is used in the \ac{MLP}.
 The functions offer a number of parameters for the configuration, such as number of nodes, type of activation functions, regularization function, and dropout rates \cite{chollet2015keras}.
 The parameters used for each model are listed in tables x and \ref{tab:lstm-parameters}.
+\input{tables/lstm-parameters.tex}
+It should be noted that the batch size for the \ac{LSTM} network was equal to the length of the longest gait cycle, during the training of the model.
+To make all of the batches of equal length, each gait cycle was zero-padded to the maximum length.
+During prediction the batch size is only one, to enable real-time prediction.
 
 The topology of the \ac{LSTM} based network that was used is represented in figure \ref{fig:lstm-model-used}.
 \begin{figure}[ht!]
@@ -181,7 +167,7 @@ The topology of the \ac{LSTM} based network that was used is represented in figu
     \label{fig:lstm-model-used}
 \end{figure}
 Note that the \ac{LSTM} cell contains regular \ac{NN} layers, as presented in section \ref{sec:A-NeuralNetworks}, with a configurable number of nodes.
-\input{tables/lstm-parameters.tex}
+
 
 
 % \section{Surface-EMG filtering and feature extraction}

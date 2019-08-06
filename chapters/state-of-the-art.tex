@@ -298,22 +298,20 @@ This highly relates to the concepts of overfitting and underfitting, as defined 
 Like the name suggests \acp{ANN} consist of multiple ``artificial neurons'', often called nodes, that are interconnected by pathways for communication.
 \textit{Topology} refers to how these nodes are placed (e.g. into layers), how many there are, and how they are connected.
 Figure \ref{fig:generic-ann} shows an example of a generic multilayer feed-forward \ac{ANN}, also known as \ac{DNN} or \ac{MLP}.
-It is feed-forward since it does not contain any feed-back loops, as opposed to \acp{RNN} \cite{Goodfellow2016, Haykin2009}. Furthermore, it is multilayer as it contains, apart from the input and output layer, some hidden layers.
-
-\begin{figure}[ht]
+It is feed-forward since it does not contain any feed-back loops, as opposed to \acp{RNN} \cite{Goodfellow2016, Haykin2009}. 
+Furthermore, it is multilayer as it contains hidden layers, additionally to the input and output layer.
+\begin{figure}[ht!]
     \centering
     \includegraphics{img/generic-ann-diagram}
     \caption{Generic feed-forward neural network: Layers are (from left to right): an input layer (filled black nodes), two hidden layers, and an output layer. The arrows and the turquoise filled nodes together form a function $f$ which maps the input to the output: $f(\mathbf{x})=\mathbf{y} $.}
     \label{fig:generic-ann}
 \end{figure}
-
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.6\textwidth]{img/node-diagram}
     \caption{Single node diagram: Shows the inputs $\mathbf{x}$ into a single node of a \ac{NN} and the nodes functionality and process to get an output $\mathbf{y}$. The colored items can all be considered to be part of the node as represented in figure \ref{fig:generic-ann}. The circle denotes the summation of inputs and the square denotes the activation of the node. The figure is based on \cite[Fig. 5]{Haykin2009}.}
     \label{fig:node-diagram}
 \end{figure}
-
 Figure \ref{fig:node-diagram} shows a better visualization of what happens at each node of the network.
 Each arrow of the feed-forward network is associated with a weight, often denoted with $w$, and each node has a summation characteristic and an \textit{activation function} which determines if (or how much) the node activates.
 The node diagram can be represented mathematically with the following two equations:

@@ -1,14 +1,12 @@
-\begin{table}[ht!]
+\begin{table}[!htb]
     \centering
-    \caption{\ac{MLP} parameter values used in the Keras API function. The variable reference equations \ref{eq:lstm_sigmoid_generic}, \ref{eq:lstm-ff}, and figure \ref{fig:lstm-cell} from section \ref{sec:A-rnn}.}
+    \caption{\ac{MLP} parameter values used in the Keras API function.}
     \begin{tabular}{>{\raggedright}p{0.15\textwidth} | c | p{0.5\textwidth}}
-        Parameter                       & Value         & Function \\ \hline
-        Input shape                     & (?, 20, 10)   & These values are mapped to (batch size, time steps, features) \\ \hline
-        Units                           & 64            & The number of hidden units in the internal layers. \\ \hline
-        Activation function             & ReLu          & The node's activation function for $\sigma^s$.\\ \hline
-        Recurrent activation function   & Hard-Sigmoid  & The node's activation function for $\sigma^f$, $\sigma^g$, and $\sigma^q$.\\ \hline
-        Dropout rate                    & 0.4           & The dropout rate on the input tensors (i.e. weight matrix $U$). \\ \hline
-        Recurrent dropout rate          & 0.5           & The dropout rate on the recurrent tensors (i.e. weight matrix $W$). \\ \hline
+        Parameter                       & Value                     & Function \\ \hline
+        Hidden layers                   & $2$                       & The number of densely connected layers of \ac{NN} units (see figure \ref{fig:node-diagram}). \\ \hline
+        Units                           & $(64, 64)$     & The number of hidden units in each layer. \\ \hline
+        Activation function             & (ReLU, ReLU)              & The node's activation function for each layer.\\ \hline
+        Dropout rate                    & $(0.3, 0.3)$   & The dropout rate after each layer. \\ \hline
     \end{tabular}
-    \label{tab:lstm-parameters}
+    \label{tab:mlp-parameters}
 \end{table}

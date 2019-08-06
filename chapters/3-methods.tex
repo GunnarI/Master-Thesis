@@ -65,8 +65,9 @@ Some sessions included 3 \acp{FP} resulting in some trials having two gait cycle
 Defective cycles were found by looking at outliers, e.g. the longest/shortest cycles indicating defect in heel strike detection and the cycles with highest deviation of \ac{KJM} estimation from the mean.
 Faulty signal from motion capture or \ac{GRF} makes the \ac{KJM} output from the \ac{ID} calculations wrong.
 All such cycles, that were found, were removed from the dataset since the \ac{KJM} are the labels and not the inputs for the \ac{NN}.
-The \ac{EMG} on the other hand is input to the model and any errors to the \ac{EMG} measurements might also happen in real live, given that it is not easily preventable.
-For that reason, the cycles that contained what appeared to be random errors (i.e. not systematic) were not removed from the dataset
+The \ac{EMG} on the other hand is input to the model and any errors to the \ac{EMG} measurements might also happen in real live.
+That is, if it is not easily preventable, systematic error.
+For that reason, the cycles that contained what appeared to be non-systematic errors in the \ac{EMG} signal were not removed from the dataset.
 
 \section{Step B - Data processing}
 \label{sec:data-processing}
@@ -152,24 +153,22 @@ This means that if the \ac{MSE} for the validation set had not decreased for an 
 
 TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
 The Keras API provides functions for configuring the \ac{LSTM} layer and the so called \textit{dense} layer, which is the regular, densily connected, \ac{NN} layer which is used in the \ac{MLP}.
-The functions offer a number of parameters for the configuration, such as number of nodes, type of activation functions, regularization function, and dropout rates \cite{chollet2015keras}.
-The parameters used for each model are listed in tables x and \ref{tab:lstm-parameters}.
+The functions offer a number of parameters for the configuration, such as number of nodes, type of activation functions, and dropout rates \cite{chollet2015keras}.
+The parameters used for each model are listed in tables \ref{tab:mlp-parameters} and \ref{tab:lstm-parameters}.
+\input{tables/mlp-parameters.tex}
 \input{tables/lstm-parameters.tex}
 It should be noted that the batch size for the \ac{LSTM} network was equal to the length of the longest gait cycle, during the training of the model.
 To make all of the batches of equal length, each gait cycle was zero-padded to the maximum length.
 During prediction the batch size is only one, to enable real-time prediction.
 
 The topology of the \ac{LSTM} based network that was used is represented in figure \ref{fig:lstm-model-used}.
-\begin{figure}[ht!]
+\begin{figure}[!htb]
     \centering
     \includegraphics{img/LSTM_model_used.pdf}
     \caption{Topology of the \ac{LSTM} based \ac{NN} that was used. The \ac{LSTM} cells represent the structure presented in section \ref{sec:A-rnn} and figure \ref{fig:lstm-cell}. Note, there is a recurrence of cell state between each timestep, even though it is not shown here. In this thesis $\tau = 20$ was used indicating that 20 \ac{EMG} samples from past steps were used for each \ac{KJM} prediction at time step $t$.}
     \label{fig:lstm-model-used}
 \end{figure}
 Note that the \ac{LSTM} cell contains regular \ac{NN} layers, as presented in section \ref{sec:A-NeuralNetworks}, with a configurable number of nodes.
-
-
-
 % \section{Surface-EMG filtering and feature extraction}
 % The filtering steps are \parencite[99]{Clancy2016}:
 % \begin{enumerate}

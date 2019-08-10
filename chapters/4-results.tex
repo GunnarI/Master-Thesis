@@ -10,7 +10,7 @@ The results can be split into two parts: (1) \textit{pre-training} which include
 \label{sec:results_pre-training-results}
 Before training the \ac{NN} it is useful to examine what the data looks like.
 Figure \ref{fig:kjm-average} shows a representation of the \ac{KJM} from all the gait cycles for subjects 1, 2 and 6.
-Same plots can be found for subject 3 and 5 in the appendix \ref{sec:appendix}. 
+Same plots can be found for subject 3 and 5 in section \ref{sec:A-data-representation-4-subjects35} in the appendix. 
 Figure \ref{fig:emg-average} shows the corresponding \ac{EMG} activity of each muscle, grouped by the muscle's main function as per table \ref{tab:muscle-names}.
 \begin{figure}[ht!]
      \centering
@@ -67,100 +67,204 @@ Another notable observation is the amplitude of the normalized \ac{EMG}.
 It indicates that most of the values have below $0.5$ amplitude.
 This suggests that the normalization method might not be adequate.
 The discrepancy between the signals from gluteus maximus (GlutMax) may suggest the same. 
-This is further discussed in section \ref{sec:discussion}.
+This is further discussed in chapter \ref{sec:discussion}.
 
 \section{Post-training results}
 \label{sec:post-training-results}
 The following figures and tables show the training and performance results of the model for each case.
+This includes a short excerpt about each case's result.
+
 \subsection{Case 1}
 \label{sec:results-case1}
-\input{tables/Case1_models_test-eval.tex}
+Case 1 is where the model was trained on one session of subject 6 and tested on another session of same subject.
+Subject 6 was used here as it was the only subject with large enough datasets from separate sessions to reliably train and test the model.
+The model was trained on the bigger dataset, i.e. session 1.
+
+Table \ref{tab:case1-test-eval} shows the error from running the model on the test set.
+This error can be compared to the error trend of the validation and training set from figure \ref{fig:case1-training-performance}.
+This result shows little overfitting, with the \ac{MSE} of the validation set and testing set not being much higher than for the training set.
+Figure \ref{fig:case1-prediction-performance} shows that on average, the model's \ac{KJM} predictions are close to the \ac{ID} outputs.
 \begin{figure}[ht!]
+    \captionsetup[subfigure]{aboveskip=-12pt}
      \centering
      \begin{subfigure}[b]{0.475\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/training_history/Case1_LSTMvsMLP_training.png}
+         \label{fig:case1-training-performance}
+         \caption{The training and validation set's \ac{MSE} per epoch during training.}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.515\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/test_prediction_evaluation/Case1_LSTM_test_prediction.png}
+         \label{fig:case1-prediction-performance}
+         \caption{Test set's average \ac{KJM}; LSTM model prediction vs. actual (CGM2 output).}
      \end{subfigure}
-    \caption{Case 1 model performance: (left) The training and validation set's \ac{MSE} per epoch during training; (right) The average normalize \ac{KJM} for the test set, showing \ac{LSTM} model prediction vs. actual (i.e. CGM2 model outputs).}
+    \caption{Case 1 model performance}
     \label{fig:case1-performance-plots}
 \end{figure}
+\input{tables/Case1_models_test-eval.tex}
 
 \subsection{Case 2}
 \label{sec:results-case2}
-\input{tables/Case2_models_test-eval.tex}
+In case 2, both sessions from subjects 1 and 2 were added to the training set.
+This was done to look at how increasing variance in the training set would affect the results from case 1.
+
+From figure \ref{fig:case2-training-performance} it can be seen that the training error and validation error was significantly decreased and the discrepancy between them was low, indicating decreased risk of overfitting.
+However, the error of the test set increased when compared to case 1, as seen from tables \ref{tab:case1-test-eval} and \ref{tab:case2-test-eval}.
 \begin{figure}[ht!]
+    \captionsetup[subfigure]{aboveskip=-12pt}
      \centering
-     \begin{subfigure}[b]{0.466\textwidth}
+     \begin{subfigure}[b]{0.475\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/training_history/Case2_LSTMvsMLP_training.png}
+         \label{fig:case2-training-performance}
+         \caption{The training and validation set's \ac{MSE} per epoch during training.}
      \end{subfigure}
      \hfill
-     \begin{subfigure}[b]{0.524\textwidth}
+     \begin{subfigure}[b]{0.515\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/test_prediction_evaluation/Case2_LSTM_test_prediction.png}
+         \label{fig:case2-prediction-performance}
+         \caption{Test set's average \ac{KJM}; LSTM model prediction vs. actual (CGM2 output).}
      \end{subfigure}
-    \caption{Case 2 model performance: (left) The training and validation set's \ac{MSE} per epoch during training; (right) The average normalize \ac{KJM} for the test set, showing \ac{LSTM} model prediction vs. actual (i.e. CGM2 model outputs).}
+    \caption{Case 2 model performance}
     \label{fig:case2-performance-plots}
 \end{figure}
+\input{tables/Case2_models_test-eval.tex}
+% \begin{figure}[ht!]
+%      \centering
+%      \begin{subfigure}[b]{0.466\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/training_history/Case2_LSTMvsMLP_training.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.524\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/test_prediction_evaluation/Case2_LSTM_test_prediction.png}
+%      \end{subfigure}
+%     \caption{Case 2 model performance: (left) The training and validation set's \ac{MSE} per epoch during training; (right) The average normalize \ac{KJM} for the test set, showing \ac{LSTM} model prediction vs. actual (i.e. CGM2 model outputs).}
+%     \label{fig:case2-performance-plots}
+% \end{figure}
 
 \subsection{Case 3}
 \label{sec:results-case3}
-\input{tables/Case3_models_test-eval.tex}
+In case 3, the model was trained on subjects 1 and 6, and tested on subject 2.
+When comparing the \ac{MSE} from figure \ref{fig:case3-training-performance} and table \ref{tab:case3-test-eval}, a high level of overfitting can be observed.
+The error of the training set is much lower than for the validation set and more drastically the testing set.
+Incidentally, as seen on figure \ref{fig:case3-prediction-performance}, the model fails to predict the \acp{KJM} accurately, on average.
 \begin{figure}[ht!]
+    \captionsetup[subfigure]{aboveskip=-12pt}
      \centering
-     \begin{subfigure}[b]{0.466\textwidth}
+     \begin{subfigure}[b]{0.475\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/training_history/Case3_LSTMvsMLP_training.png}
+         \label{fig:case3-training-performance}
+         \caption{The training and validation set's \ac{MSE} per epoch during training.}
      \end{subfigure}
      \hfill
-     \begin{subfigure}[b]{0.524\textwidth}
+     \begin{subfigure}[b]{0.515\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/test_prediction_evaluation/Case3_LSTM_test_prediction.png}
+         \label{fig:case3-prediction-performance}
+         \caption{Test set's average \ac{KJM}; LSTM model prediction vs. actual (CGM2 output).}
      \end{subfigure}
-    \caption{Case 3 model performance: (left) The training and validation set's \ac{MSE} per epoch during training; (right) The average normalize \ac{KJM} for the test set, showing \ac{LSTM} model prediction vs. actual (i.e. CGM2 model outputs).}
+    \caption{Case 3 model performance}
     \label{fig:case3-performance-plots}
 \end{figure}
+\input{tables/Case3_models_test-eval.tex}
+% \begin{figure}[ht!]
+%      \centering
+%      \begin{subfigure}[b]{0.466\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/training_history/Case3_LSTMvsMLP_training.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.524\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/test_prediction_evaluation/Case3_LSTM_test_prediction.png}
+%      \end{subfigure}
+%     \caption{Case 3 model performance: (left) The training and validation set's \ac{MSE} per epoch during training; (right) The average normalize \ac{KJM} for the test set, showing \ac{LSTM} model prediction vs. actual (i.e. CGM2 model outputs).}
+%     \label{fig:case3-performance-plots}
+% \end{figure}
 
 \subsection{Case 4}
 \label{sec:results-case4}
-\input{tables/Case4_models_test-eval.tex}
+In case 4, the model was trained on subjects 2 and 6, and tested on subject 1.
+Comparing tables \ref{tab:case3-test-eval} and \ref{tab:case4-test-eval} and figures \ref{fig:case3-training-performance} and \ref{fig:case4-training-performance} it is observed that the training and validation error for case 4 is much higher than for case 3, but the testing error much lower.
+Interestingly, the testing error in case 4 is even lower than the validation error.
+The validation set contains unseen cycles from subject 2 which may induce similar results as in case 3.
 \begin{figure}[ht!]
+    \captionsetup[subfigure]{aboveskip=-12pt}
      \centering
-     \begin{subfigure}[b]{0.466\textwidth}
+     \begin{subfigure}[b]{0.475\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/training_history/Case4_LSTMvsMLP_training.png}
+         \label{fig:case4-training-performance}
+         \caption{The training and validation set's \ac{MSE} per epoch during training.}
      \end{subfigure}
      \hfill
-     \begin{subfigure}[b]{0.524\textwidth}
+     \begin{subfigure}[b]{0.515\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/test_prediction_evaluation/Case4_LSTM_test_prediction.png}
+         \label{fig:case4-prediction-performance}
+         \caption{Test set's average \ac{KJM}; LSTM model prediction vs. actual (CGM2 output).}
      \end{subfigure}
-    \caption{Case 4 model performance: (left) The training and validation set's \ac{MSE} per epoch during training; (right) The average normalize \ac{KJM} for the test set, showing \ac{LSTM} model prediction vs. actual (i.e. CGM2 model outputs).}
+    \caption{Case 4 model performance}
     \label{fig:case4-performance-plots}
 \end{figure}
+\input{tables/Case4_models_test-eval.tex}
+% \begin{figure}[ht!]
+%      \centering
+%      \begin{subfigure}[b]{0.466\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/training_history/Case4_LSTMvsMLP_training.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.524\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/test_prediction_evaluation/Case4_LSTM_test_prediction.png}
+%      \end{subfigure}
+%     \caption{Case 4 model performance: (left) The training and validation set's \ac{MSE} per epoch during training; (right) The average normalize \ac{KJM} for the test set, showing \ac{LSTM} model prediction vs. actual (i.e. CGM2 model outputs).}
+%     \label{fig:case4-performance-plots}
+% \end{figure}
 
 \subsection{Case 5}
 \label{sec:results-case5}
-\todo{This result looks weird, probably something wrong here which needs to be fixed.}
-\input{tables/Case5_models_test-eval.tex}
+
 \begin{figure}[ht!]
+    \captionsetup[subfigure]{aboveskip=-12pt}
      \centering
-     \begin{subfigure}[b]{0.466\textwidth}
+     \begin{subfigure}[b]{0.475\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/training_history/Case5_LSTMvsMLP_training.png}
+         \label{fig:case5-training-performance}
+         \caption{The training and validation set's \ac{MSE} per epoch during training.}
      \end{subfigure}
      \hfill
-     \begin{subfigure}[b]{0.524\textwidth}
+     \begin{subfigure}[b]{0.515\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/test_prediction_evaluation/Case5_LSTM_test_prediction.png}
+         \label{fig:case5-prediction-performance}
+         \caption{Test set's average \ac{KJM}; LSTM model prediction vs. actual (CGM2 output).}
      \end{subfigure}
-    \caption{Case 5 model performance: (left) The training and validation set's \ac{MSE} per epoch during training; (right) The average normalize \ac{KJM} for the test set, showing \ac{LSTM} model prediction vs. actual (i.e. CGM2 model outputs).}
+    \caption{Case 5 model performance}
     \label{fig:case5-performance-plots}
 \end{figure}
+\input{tables/Case5_models_test-eval.tex}
+% \begin{figure}[ht!]
+%      \centering
+%      \begin{subfigure}[b]{0.466\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/training_history/Case5_LSTMvsMLP_training.png}
+%      \end{subfigure}
+%      \hfill
+%      \begin{subfigure}[b]{0.524\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{img/results/test_prediction_evaluation/Case5_LSTM_test_prediction.png}
+%      \end{subfigure}
+%     \caption{Case 5 model performance: (left) The training and validation set's \ac{MSE} per epoch during training; (right) The average normalize \ac{KJM} for the test set, showing \ac{LSTM} model prediction vs. actual (i.e. CGM2 model outputs).}
+%     \label{fig:case5-performance-plots}
+% \end{figure}
 
 \end{document}

@@ -108,11 +108,11 @@ The downsampling was done by simply taking the first \ac{EMG} sample from every 
 The first sample from the window was used rather than any other to decrease the delay from \ac{EMG} to moment prediction. 
 In that way an \ac{EMG} sample taken at $t$ can predict a moment value at $t+9ms$. 
 
-The final step before dividing the data into training and testing sets was feature selection.
-Section \ref{sec:A-NeuralNetworks} discusses briefly the importance of feature selection.
-The first step was to look at correlations in muscle activity between different muscles using the Pearson standard correlation coefficient.
-Muscles which were found to correlate highly to one another and which are not contributors to knee flexion or extension were considered redundant.
-To decrease complexity of the model, the data from these muscles was removed from the datasets.
+% The final step before dividing the data into training and testing sets was feature selection.
+% Section \ref{sec:A-NeuralNetworks} discusses briefly the importance of feature selection.
+% The first step was to look at correlations in muscle activity between different muscles using the Pearson standard correlation coefficient.
+% Muscles which were found to correlate highly to one another and which are not contributors to knee flexion or extension were considered redundant.
+% To decrease complexity of the model, the data from these muscles was removed from the datasets.
 
 Finally, once each sample had been matched, the data was split into training, validation, and testing datasets.
 Five different cases of training and testing sets were created to look at the ability of the model to generalize for variable cases.

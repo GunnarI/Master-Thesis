@@ -4,7 +4,7 @@
 
 \chapter{Introduction}
 The concept of \textit{exoskeletons} as it will be used in this thesis refers to \textit{robotic exoskeletons} or \textit{powered exoskeletons}. 
-They can be defined as mobile, computer controlled, electromechanical structures which can be worn by a human to provide power amplification, support and/or assistance in human motion \cite{Anam2012, Gorgey2018}. 
+They can be defined as mobile, computer controlled, electromechanical structures which can be worn by a human being to provide power amplification, support and/or assistance in human motion \cite{Anam2012, Gorgey2018}. 
 Lower limb exoskeletons have been used in rehabilitation for motion assistance.
 Individuals that suffer from neurological/neuromuscular disorders, such as after a stroke or \ac{SCI}, can have difficulty walking and can benefit from gait training \cite{Gorgey2018, Young2017, Lerner2017}.
 Exoskeletons are suggested to give the patients assistance in gait training so that the patients can endure increased amount of training.
@@ -12,20 +12,22 @@ The assistance can be provided by an actuator, such as a motor, controlled by th
 In rehabilitation, the powered assistance from the actuator should ideally be enough to help the patient finish the motion correctly but not so much that the patient does not need to do anything.
 This balance needs to come from the control system and calls for a smooth human-machine interaction.
 
-\Ac{EMG} signal from muscle activity is non-linearly related to joint torque and can thus be used as a responsive human-machine control strategy for the actuator \cite{Young2017}.
-Therefore, by measuring \ac{EMG} from the leg, a model could be constructed to estimate the \ac{KJM} from the muscle activity.
+\Ac{EMG} signal from muscle activity is non-linearly related to joint torque \cite{Young2017}.
+Thus, with an appropriate model, it can be used as a responsive human-machine control strategy for the actuator.
+More specifically, by measuring \ac{EMG} from the leg, a model could be constructed to estimate the \ac{KJM} from the muscle activity.
 Such \ac{EMG}-based models have been developed, such as the modified Hill-type muscle model discussed in section \ref{sec:A-EMGBasedModels} \cite{Pizzolato2015, Erdemir2007, Lloyd2003}.
 However, due to the nature of how \ac{EMG} relates to muscle forces, these models require complicated measurements such as maximum isometric muscle force, and muscle geometries.
-A possible alternative to these kind of models is to train a \ac{NN} to map the \ac{EMG} signal as closely as possible to the joint torque moments.
-A \ac{NN} is a machine learning model which is capable of representing a mapping function from one set of parameters to another. 
+A possible alternative to these kind of models is to train a \ac{NN} to map the \ac{EMG} signal as closely as possible to the moments in the joints.
+A \ac{NN} is a machine learning model which is capable of \textit{learning} a mapping function from one set of parameters to another. 
 The mapping function could be trained to represent the mapping from \ac{EMG} to joint torque as closely as possible, based on an objective/error function.
-An \ac{LSTM} based \ac{NN} refers to a \ac{RNN} that uses \ac{LSTM} cells.
+A \ac{LSTM} based \ac{NN} refers to a \ac{RNN} that uses \ac{LSTM} cells.
 \acp{RNN} add time-dependency to the model by including several timesteps as inputs for each output.
-This means that the input to the model is not only one set of features but rather a sequence of these features.
+This means that the input to the model is not only one set of features but rather sequences of these features.
 In this case it means the input is a temporal window of a specific size where the data is a sequence of \ac{EMG} samples.
+\ac{EMG} sample here refers to the \ac{EMG} signal from each of the muscles at one timestep.
 Each sequence can then be mapped to a single \ac{KJM} value corresponding to the last sample of the sequence.
 This should allow the model to better recognize the pattern of the \ac{EMG} signal in relation to specific tasks.
-The effectiveness of including time-dependency will be reflected in this thesis by comparing the \ac{LSTM} based \ac{NN} to a regular \ac{MLP}, which does not include time-dependency.
+The effectiveness of including time-dependency will be reflected in this thesis by comparing the \ac{LSTM} model to a regular \ac{MLP}, which does not include time-dependency.
 These networks are further explained in section \ref{sec:A-NeuralNetworks}.
 
 \section{Research Question}

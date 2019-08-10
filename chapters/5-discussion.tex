@@ -33,6 +33,7 @@ Add text about how the models compare
 When looking at the results from section \ref{sec:post-training-results}, it is clear that the same model does not perform as well for every case.
 The \ac{MLP} model generally performed much worse than the \ac{LSTM} model and did not manage to generalize well.
 The \ac{MSE} of the training set always converged at a much higher value for the \ac{MLP} model than the \ac{LSTM} model.
+Regardless, with respect to the error on the test set, the model is observed to be overfitting.
 This indicates that an \ac{MLP} cannot be used to generalize between sessions.
 The \ac{MLP} is only looking at \ac{EMG} data at one timestep, and trying to map it to a \ac{KJM} at the same timestep.
 Arguably, this does not capture the task specific pattern of the \ac{EMG} as well as the \ac{LSTM} model.
@@ -47,40 +48,43 @@ It was not until using 20 timesteps that the model was able to generalize to som
 
 \subsection{Case 1}
 \label{sec:discussion-case1}
-Case 1 is where the model was trained on one session of subject 6 and tested on another session of same subject.
-This case was intended for looking at the ability of the model to generalize across sessions.
+Case 1 was intended for looking at the ability of the model to generalize across sessions.
 In each session the \ac{EMG} sensors were reapplied as per the \ac{SENIAM} guidelines \cite{Hermens1999, Hermens2000}.
 However, the location and orientation of the sensors are most likely not exactly the same between sessions.
 Furthermore, the condition of the subjects is also not the same between session.
 Number of factors may affect difference between the sessions such as muscle soreness or tiredness, more sweating by the subject, or other skin conditions.
 
-Subject 6 was used here as it was the only subject with large enough datasets from separate sessions to reliably train and test the model.
-The model was trained on the bigger dataset, i.e. session 1.
-The result showed little overfitting, with the \ac{MSE} of the validation set and testing set not being much higher than for the training set.
-The error was generally rather low and the model seemed to perform well on the test set.
+The results indicated that the model can generalize well between sessions.
+However, this test should be conducted on more subjects with added number of separate sessions to reach a reliable conclusion.
 
 \subsection{Case 2}
 \label{sec:discussion-case2}
-In case 2, both sessions from subjects 1 and 2 were added to the training set.
-This was done to look at how increasing variance in the training set would affect the results from case 1.
-
-It is interesting to see that the training error and validation error was significantly decreased and the discrepancy between them was low, indicating decreased risk of overfitting.
-However, the error of the test set was increased from case 1.
-This is perhaps not surprising, since the difference in \ac{EMG} signals can be assumed to be more between subjects rather than between sessions of the same subject.
+The increased test set error in case 2 as compared to case 1 is perhaps not surprising. 
+The difference in \ac{EMG} signals can be assumed to be more between subjects rather than between sessions of the same subject.
 The increase in error is however, not large, and the model still performs reasonably well.
-Further research could add additional sessions of the same subject to test if this case increases flexibility to higher variation between sessions.
+Further research could add more sessions from the same subject to the testing set, in order to see if there is increased flexibility to higher variation between sessions.
 More specifically, to test if the overall testing error of several separate sessions would decrease when using case 2 rather than case 1.
 
-\subsection{Case 3}
-\label{sec:discussion-case3}
-For case 3 the model failed to generalize well.
-The results indicate high level of overfitting with the error of the training set being much lower than for the validation set and the testing set.
+\subsection{Case 3 and 4}
+\label{sec:discussion-case3and4}
+% In case 3, the model was trained on subjects 1 and 6, and tested on subject 2.
+% The results indicate high level of overfitting with the error of the training set being much lower than for the validation set and the testing set.
+The results from case 3 indicated that the model does not generalize well across subjects.
+However, as seen in case 4, it depends on which subjects are being trained on and which are being tested on.
 
-\subsection{Case 4}
-\label{sec:discussion-case4}
+It is difficult to say why the model performs better in case 4 than case 3.
+One explanation could be the discrepancy in the \ac{EMG} signal of the gluteus maximus, discussed in chapter \ref{sec:results}
+When looking at figure \ref{fig:emg-average} it is clear that the \ac{EMG} signal from gluteus maximus of subject 2 varies quite a bit from subjects 1 and 6.
+In that way, the pattern of this \ac{EMG} signal is completely unknown to the model in case 3.
+Furthermore, since the overall amplitude of the signal is much lower in the training set, the model may be too sensitive to the high values from the test set.
 
 \subsection{Case 5}
 \label{sec:discussion-case5}
+In case 5, the model was trained on all the subjects, where 80\% of the data was randomly selected for the training set and the rest for the testing set.
+The model performed well in this case and the error for the validation set and testing set about the same.
+This is as expected since they are both unseen data subsets of the same dataset.
+
+\subsection{Comparison}
 
 % The study included 5 subjects and two of those subjects measured minimal amount of non-corrupt data.
 % Thus, only 3 subjects measured enough data to be used to train the \acp{NN}.

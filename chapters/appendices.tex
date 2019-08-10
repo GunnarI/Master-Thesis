@@ -2,11 +2,34 @@
 
 \chapter{Additional material}
 \label{sec:appendix}
+The data presented here is any relevant data that may be referenced in the report but is either too vast or otherwise deemed unnecessary to put in the main chapters.
 
-\input{tables/muscle-names.tex}
+\section{Data representation for subjects 3 and 5}
+\label{sec:A-data-representation-4-subjects35}
+\begin{figure}[ht!]
+     \centering
+     \begin{subfigure}[b]{0.328\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/moment_avg/subject03_all_set1_moment_avg_w_minmax.png}
+     \end{subfigure}
+     ~
+     \begin{subfigure}[b]{0.328\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/moment_avg/subject05_all_set1_moment_avg_w_minmax.png}
+     \end{subfigure}
+    \caption{Normalized \ac{KJM} for subject 3 on the left and subject 5 on the right. The x-axis is the percentage of a single gait cycle. The solid blue line is the average from all the gait cycles and the shaded area around it is the standard deviation.}
+    \label{fig:A-kjm-average}
+\end{figure}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{img/results/emg_avg/subjects3and5_grid_emg_avg.png}
+    \caption{Filtered and normalized \ac{EMG} from subjects 3 and 5. The x-axis is the percentage of a single gait cycle. The solid blue lines represent the average from all the gait cycles for each muscle and the shaded area with corresponding color is the standard deviation.}
+    \label{fig:A-emg-average}
+\end{figure}
+%\input{tables/muscle-names.tex}
 
 \newpage
-\section{Data correlations}
+\section{Subject data correlations}
 \label{sec:A-data-correlations}
 The following heat maps show the correlations between subjects of the average \ac{EMG} and \ac{KJM} across all cycles of each subject.
 The correlations are given by the \ac{PCC}, on the range of $[-1, 1]$ where $-1$ indicates high negative linear correlation and $1$ indicates high positive linear correlation.

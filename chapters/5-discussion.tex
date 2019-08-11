@@ -11,10 +11,10 @@ This includes a further discussion about why the model might generalize well for
 
 \section{Pre-training results}
 \label{sec:discussion_pre-training-results}
-The \ac{EMG} pattern from most of the muscles was shown to highly correlate between subjects.
-This suggests that the subjects have similar muscle activation patterns as well as \ac{KJM} during the gait cycle.
-Therefore, it could be possible to train a \ac{NN} to map the \ac{EMG} signal to \ac{KJM}, and generalize across subjects. 
-With that stated, it should be emphasized that the subjects were all young, healthy adults.
+The \ac{EMG} patterns from most of the muscles and the \acp{KJM} were shown to highly correlate linearly between subjects.
+This might indicate that a mapping function that generalizes across subjects, can be formulated.
+However, as the relationship between the \ac{EMG} and \ac{KJM} is non-linear, it is difficult to see if the mapping from \ac{EMG} to \ac{KJM} is correlated between subjects.
+Also, it should be emphasized that the subjects were all young, healthy adults.
 Many have researched difference in \ac{EMG} signal between various target groups and varying conditions \cite{Courtine2003,Rezgui2013,Sacco2010, Zwaan2012}.
 From these researches, it can be concluded that \ac{EMG} signal can vary in amplitude, lag, and/or pattern depending on pathology and conditions.
 
@@ -22,10 +22,11 @@ The \ac{EMG} from gluteus maximus was observed to vary between subjects, much mo
 There could be a number of reasons for this discrepancy.
 For example, differing location of the sensor.
 The researcher found it more difficult to determine the correct sensor location for the gluteus maximus than the other muscles.
-It should also be mentioned that the sensor was the only sensor that was located underneath the clothes (shorts) of the user.
-The shorts could have got caught in the sensor during walking, possibly pulling on it.
-Furthermore, underneath the clothing there could be more perspiration, which could affect the signal.
+It should also be mentioned that the sensor was the only sensor that was located underneath the clothes (shorts) of the user, which may interfere with the signal somehow.
+For example, underneath the clothing there could be more perspiration, which could affect the signal.
 More specifically, sweat has been shown to dampen the signal \cite{Abdoli-Eramaki2012}.
+
+The normalization method used, resulted in most of the normalized \ac{EMG} signal being below $0.5$ out of $1$
 
 \section{Post-training results}
 \label{sec:discussion_post-training-results}
@@ -37,6 +38,10 @@ Regardless, with respect to the error on the test set, the model is observed to 
 This indicates that an \ac{MLP} cannot be used to generalize between sessions.
 The \ac{MLP} is only looking at \ac{EMG} data at one timestep, and trying to map it to a \ac{KJM} at the same timestep.
 Arguably, this does not capture the task specific pattern of the \ac{EMG} as well as the \ac{LSTM} model.
+
+When discussing the results from each case, it should be noted that the distribution of gait cycles used, is not equal between subjects, as seen in table \ref{tab:data-subject-distribution}. 
+In fact, gait cycles measured from subject 6 constitutes over half of all the gait cycles used.
+\input{tables/data-subject-distribution.tex}
 
 The design of the model had some iterations. 
 One notable design criteria, that changed throughout the process, is the number of timesteps included in the \ac{LSTM} model.
@@ -80,9 +85,8 @@ Furthermore, since the overall amplitude of the signal is much lower in the trai
 
 \subsection{Case 5}
 \label{sec:discussion-case5}
-In case 5, the model was trained on all the subjects, where 80\% of the data was randomly selected for the training set and the rest for the testing set.
-The model performed well in this case and the error for the validation set and testing set about the same.
-This is as expected since they are both unseen data subsets of the same dataset.
+The results from case 5 indicate that using more subjects with more variance in the training does not influence the error of the model's performance much.
+With increased variance in the training set the model can be expected to perform better on unseen data.
 
 \subsection{Comparison}
 

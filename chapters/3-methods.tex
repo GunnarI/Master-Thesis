@@ -46,7 +46,7 @@ All the data from the \ac{EMG} sensors (muscle activity), cameras (marker trajec
 The synchronization includes accounting for the latency of $14ms$ of the \ac{EMG} sensors \cite{aktosEMG}.
 The marker trajectories were sampled at 100Hz using the cameras while the analog data (i.e. \ac{GRF} and \ac{EMG}) was sampled at 1000Hz.
 
-Data was collected from 6 subjects with anthropometric data measured for each subject, some of which is presented in \ref{tab:subject-table}.
+Data was collected from 6 subjects with anthropometric data measured for each subject, some of which is presented in table \ref{tab:subject-table}.
 \input{tables/subject-table.tex}
 Each subject was a young, healthy individual without any muscle disorders.
 A static trial was captured to use for scaling the model, as described in appendix \ref{sec:A-pyCGM2}, and run as part of step C in figure \ref{fig:process-diagram}.
@@ -138,19 +138,21 @@ This is represented by the bracket and dashed arrows in step D of figure \ref{fi
 Two different kinds of networks were tested for comparison, one being the simple \ac{MLP} described in section \ref{sec:A-NeuralNetworks}, and the other one was the \ac{LSTM} based \ac{RNN} described in section \ref{sec:A-rnn}.
 The main difference between the two is that the \ac{LSTM} model contains time-dependency and thus looks at multiple timesteps for each prediction, while the \ac{MLP} does not.
 
-The models were trained for 300 epochs with an early-stop validation interval of 50 epochs.
-This means that if the \ac{MSE} for the validation set had not decreased for an interval of 50 epochs, then the training was stopped before reaching 300 epochs.
+% The models were trained for 300 epochs with an early-stop validation interval of 50 epochs.
+% This means that if the \ac{MSE} for the validation set had not decreased for an interval of 50 epochs, then the training was stopped before reaching 300 epochs.
+The models were trained with an early-stop validation interval of 50 epochs.
+This means that when the \ac{MSE} for the validation set had not decreased for an interval of 50 epochs, then the training was stopped.
 
 TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
-The Keras API provides functions for configuring the \ac{LSTM} layer and the so called \textit{dense} layer, which is the regular, densily connected, \ac{NN} layer which is used in the \ac{MLP} \cite{chollet2015keras}.
+The Keras API provides functions for configuring the \ac{LSTM} layer and the so called \textit{dense} layer, which is the regular, densely connected, \ac{NN} layer which is used in the \ac{MLP} \cite{chollet2015keras}.
 Further information about the APIs in section \ref{sec:A-Tensorflow-and-Keras}.
 The parameters, such as activation function and number of nodes, used for each model are listed in tables \ref{tab:mlp-parameters} and \ref{tab:lstm-parameters}.
 
 It should be noted that the batch size for the \ac{LSTM} network was equal to the length of the longest gait cycle.
 This is needed for the training phase of the model.
 To make all of the batches of equal length, each gait cycle was pre-padded with zeros to the maximum length.
-As suggested by 
-During prediction the batch size is only one, to enable real-time prediction.
+As suggested by \textcite{Dwarampudi2019}, pre-padding outperforms other padding methods.
+During prediction the batch size is only one, which enables real-time prediction.
 
 The topology of the \ac{LSTM} based network that was used is represented in figure \ref{fig:lstm-model-used}.
 \begin{figure}[!htb]
@@ -160,25 +162,17 @@ The topology of the \ac{LSTM} based network that was used is represented in figu
     \label{fig:lstm-model-used}
 \end{figure}
 Note that the \ac{LSTM} cell contains regular \ac{NN} layers, as presented in section \ref{sec:A-NeuralNetworks}, with a configurable number of nodes.
-% \section{Surface-EMG filtering and feature extraction}
-% The filtering steps are \parencite[99]{Clancy2016}:
-% \begin{enumerate}
-%     \item Noise and interference filtering using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$
-%     \item Temporal decorrelation (or whitening) to get rid of the correlation from preceding signal of the same EMG channel.
-%     \item Demodulation (this could be taking RMS?)
-%     \item Smoothing: moving average with a window of $20ms$, i.e. 20 samples. As \citeauthor{Clancy2016} points out, it is common to use a window of $100-250 ms$ but for the purpose of keeping the solution real-time friendly $20ms$ is chosen to not introduce too much delay.
-%     \item Relinearization
-% \end{enumerate}
 
 \section{Step E - Real-time motor control and performance}
 Although this part was not implemented in this thesis the following methods are thoughts about how it could be done.
 
 Once the network has been trained the weights can be saved for later use.
 This is helpful since the model would typically be run on a different system than where it was trained.
-In this case the model was trained using Python and the weights of the trained model were saved to a file.
-The trained model could then be transferred to C++ by using Tensorflow C++ library to replicate the model structure and then loading the saved weights onto the replica.
+% In this case the model was trained using Python and the weights of the trained model were saved to a file.
+% The trained model could then be transferred to C++ by using Tensorflow C++ library to replicate the model structure and then loading the saved weights onto the replica.
+Tensorflow C++ library offers the possibility to import the weights into C++ code.
 This can be helpful since in an exoskeleton the trained model needs to be stored on an embedded system which often runs C++ rather than Python.
-Also, Vicon offers a Datastream SDK in C++ enabling real time computation that can be used with Vicon Nexus.
+% Also, Vicon offers a Datastream SDK in C++ enabling real time computation that can be used with Vicon Nexus.
 This is further discussed in section \ref{sec:discussion}.
 
 The filtering methods were selected to be real-time friendly with minimal calibration.

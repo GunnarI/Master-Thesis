@@ -38,7 +38,7 @@ Further details about the model and its scripts are discussed in appendix \ref{s
 \end{figure}
 
 The aktos nano \ac{sEMG} sensors from myon were used for the \ac{EMG} data capture. 
-The sensors were placed on the surface near 12 muscles on the right leg, presented in table \ref{tab:muscle-names}. 
+The sensors were placed on the surface near 10 muscles on the right leg, presented in table \ref{tab:muscle-names}. 
 \input{tables/muscle-names.tex}
 Skin preparation and placement recommendations from the SENIAM project \cite{Stegeman2007, Hermens1999, Hermens2000} were used. The SENIAM project is a European concerted action in the Biomed 2 program of the European Community \cite{Stegeman2007}. It provides recommendations when measuring \ac{sEMG} to increase standardization within the field.
 
@@ -46,11 +46,11 @@ All the data from the \ac{EMG} sensors (muscle activity), cameras (marker trajec
 The synchronization includes accounting for the latency of $14ms$ of the \ac{EMG} sensors \cite{aktosEMG}.
 The marker trajectories were sampled at 100Hz using the cameras while the analog data (i.e. \ac{GRF} and \ac{EMG}) was sampled at 1000Hz.
 
-Data was collected from 6 subjects with anthropometric data measured for each subject, presented in \ref{tab:subject-table}.
+Data was collected from 6 subjects with anthropometric data measured for each subject, some of which is presented in \ref{tab:subject-table}.
 \input{tables/subject-table.tex}
 Each subject was a young, healthy individual without any muscle disorders.
 A static trial was captured to use for scaling the model, as described in appendix \ref{sec:A-pyCGM2}, and run as part of step C in figure \ref{fig:process-diagram}.
-The subjects were asked to walk front and back over the \acp{FP} either slowly, normally, or fast.
+The subjects were asked to walk front and back over the \acp{FP} either slowly, normal speed, or fast.
 This was to increase variance in the data and thus help prevent overfitting of the \ac{NN} model.
 The definition of slow, normal, or fast walking was not set to a specific speed but rather to what the subjects felt was natural.
 Furthermore, about 80\% of the trials for each subject were measured with normal walking speed.
@@ -59,7 +59,7 @@ The slow and fast walking speeds each covered about 10\% of the trials for each 
 Note that a subject refers to one individual, a session refers to each experiment performed by the subject, and a trial refers to each measured exercised performed in the session. 
 Thus, each subject can have many sessions, e.g. experiments conducted on separate days.
 Furthermore, each session has many trials and each trial was cut down to gait cycles. 
-The gait cycles are defined by the interval from the right foot's heel strike on a \ac{FP} until its next heel strike.
+The gait cycles were defined by the interval from the right foot's heel strike on a \ac{FP} until its next heel strike.
 Some sessions included 3 \acp{FP} resulting in some trials having two gait cycles for the right leg.
 
 Defective cycles were found by looking at outliers, e.g. the longest/shortest cycles indicating defect in heel strike detection and the cycles with highest deviation of \ac{KJM} estimation from the mean.
@@ -106,13 +106,7 @@ That means the \acp{KJM} had a sampling frequency of $100Hz$ unlike the \ac{EMG}
 The \ac{EMG} signal was downsampled to match the frequency of the \acp{KJM}. 
 The downsampling was done by simply taking the first \ac{EMG} sample from every $10ms$ windows. 
 The first sample from the window was used rather than any other to decrease the delay from \ac{EMG} to moment prediction. 
-In that way an \ac{EMG} sample taken at $t$ can predict a moment value at $t+9ms$. 
-
-% The final step before dividing the data into training and testing sets was feature selection.
-% Section \ref{sec:A-NeuralNetworks} discusses briefly the importance of feature selection.
-% The first step was to look at correlations in muscle activity between different muscles using the Pearson standard correlation coefficient.
-% Muscles which were found to correlate highly to one another and which are not contributors to knee flexion or extension were considered redundant.
-% To decrease complexity of the model, the data from these muscles was removed from the datasets.
+% In that way an \ac{EMG} sample taken at $t$ can predict a moment value at $t+9ms$. 
 
 Finally, once each sample had been matched, the data was split into training, validation, and testing datasets.
 Five different cases of training and testing sets were created to look at the ability of the model to generalize for variable cases.
@@ -126,10 +120,6 @@ The normalization is given by equation \ref{eq:emg-normalization}:
 \label{eq:emg-normalization}
     X_{norm} = \frac{X - X_{min}}{X_{max} - X_{min}}
 \end{equation}
-% \begin{equation}
-% \label{eq:emg-normalization}
-%     X_{norm} = \frac{X - \mu_X}{\sigma_X}
-% \end{equation}
 where $X$ is the \ac{EMG} value to be normalized and $X_{min}$ and $X_{max}$ are, respectively, the minimum and maximum measured \ac{EMG} from the training dataset. 
 % For the validation and testing datasets, the same minimum and maximum values were used, to accurately portray new data that the \ac{NN} does not already ``know''.
 The \acp{KJM} were normalized similar to the \ac{EMG} in equation \ref{eq:emg-normalization} with addition clause to set the interval:
@@ -152,13 +142,14 @@ The models were trained for 300 epochs with an early-stop validation interval of
 This means that if the \ac{MSE} for the validation set had not decreased for an interval of 50 epochs, then the training was stopped before reaching 300 epochs.
 
 TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
-The Keras API provides functions for configuring the \ac{LSTM} layer and the so called \textit{dense} layer, which is the regular, densily connected, \ac{NN} layer which is used in the \ac{MLP}.
-The functions offer a number of parameters for the configuration, such as number of nodes, type of activation functions, and dropout rates \cite{chollet2015keras}.
-The parameters used for each model are listed in tables \ref{tab:mlp-parameters} and \ref{tab:lstm-parameters}.
-\input{tables/mlp-parameters.tex}
-\input{tables/lstm-parameters.tex}
-It should be noted that the batch size for the \ac{LSTM} network was equal to the length of the longest gait cycle, during the training of the model.
-To make all of the batches of equal length, each gait cycle was zero-padded to the maximum length.
+The Keras API provides functions for configuring the \ac{LSTM} layer and the so called \textit{dense} layer, which is the regular, densily connected, \ac{NN} layer which is used in the \ac{MLP} \cite{chollet2015keras}.
+Further information about the APIs in section \ref{sec:A-Tensorflow-and-Keras}.
+The parameters, such as activation function and number of nodes, used for each model are listed in tables \ref{tab:mlp-parameters} and \ref{tab:lstm-parameters}.
+
+It should be noted that the batch size for the \ac{LSTM} network was equal to the length of the longest gait cycle.
+This is needed for the training phase of the model.
+To make all of the batches of equal length, each gait cycle was pre-padded with zeros to the maximum length.
+As suggested by 
 During prediction the batch size is only one, to enable real-time prediction.
 
 The topology of the \ac{LSTM} based network that was used is represented in figure \ref{fig:lstm-model-used}.

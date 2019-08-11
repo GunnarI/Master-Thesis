@@ -5,12 +5,18 @@
 \chapter{Conclusions}
 In some cases, the model was able to generalize between sessions or subjects, but in other cases it failed to generalize well enough.
 The study included too few subjects with enough data to train on for a meaningful conclusion.
-It is difficult to conclude why the model failed in some cases. 
-Perhaps it could be fixed with more test subject and more variation in the data.
-Further research is needed to answer that question.
-However, the model was able to generalize rather well in one case, where the test set was a different subject than those that had been used during training.
-This indicates that this model could be used in some cases.
-Perhaps where the subjects have similar muscle activation patterns.
-This is further supported by the result from where the model was trained on one session and tested on another session from the same subject.
+% It is difficult to conclude why the model failed in some cases. 
+Further research should include more test subjects to increase variation in the data.
+% Perhaps it could be fixed with more test subject and more variation in the data.
+% Further research is needed to answer that question.
+With that said, the model was able to generalize rather well in some cases.
+While it failed in across subject prediction for one subject, it succeeded for another subject.
+Thus, the model was able to predict, with a relatively low error, the \ac{KJM} of a subject that was completely foreign to the model.
+The model also succeeded, to a similar degree, to predict \acp{KJM} on a dataset that represented different conditions of the same subject it had been trained on.
+Furthermore, it was shown that by introducing more subjects to the training dataset of the model, the training and validation error of the model was not affected.
+By using more subjects and increasing the variance of the training data, the model could become less sensitive to the difference in \ac{EMG} patterns from the unseen data of other subjects.
+% This indicates that this model could be used in some cases.
+% Perhaps where the subjects have similar muscle activation patterns.
+% This is further supported by the result from where the model was trained on one session and tested on another session from the same subject.
 
 \end{document}

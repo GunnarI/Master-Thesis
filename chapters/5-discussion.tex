@@ -26,22 +26,24 @@ It should also be mentioned that the sensor was the only sensor that was located
 For example, underneath the clothing there could be more perspiration, which could affect the signal.
 More specifically, sweat has been shown to dampen the signal \cite{Abdoli-Eramaki2012}.
 
-The normalization method used, resulted in most of the normalized \ac{EMG} signal being below $0.5$ out of $1$
+The normalization method used, resulted in most of the normalized \ac{EMG} signal, including the peaks, being below $0.5$.
+However, it might improve the pattern recognition if the peaks were generally closer to one and there would be more difference between active and non-active muscle.
+For the normalization the single highest peak of \ac{EMG} from each muscle for the whole dataset of each session was used.
+This peak may be caused by an erroneous spike.
+A different method could be to use more than the single highest peak.
+Also, in a real-time application, the user would not be expected to make around $300$ right-foot steps only for the calibration of the device.
+Thus, a more accurate normalization method would have been to select a random subset of only a few gait cycles to find the max \ac{EMG} value to use.
 
 \section{Post-training results}
 \label{sec:discussion_post-training-results}
-Add text about how the models compare
 When looking at the results from section \ref{sec:post-training-results}, it is clear that the same model does not perform as well for every case.
 The \ac{MLP} model generally performed much worse than the \ac{LSTM} model and did not manage to generalize well.
 The \ac{MSE} of the training set always converged at a much higher value for the \ac{MLP} model than the \ac{LSTM} model.
 Regardless, with respect to the error on the test set, the model is observed to be overfitting.
-This indicates that an \ac{MLP} cannot be used to generalize between sessions.
+This indicates that an \ac{MLP}, or at least this particular \ac{MLP}, cannot be used to generalize between sessions.
 The \ac{MLP} is only looking at \ac{EMG} data at one timestep, and trying to map it to a \ac{KJM} at the same timestep.
 Arguably, this does not capture the task specific pattern of the \ac{EMG} as well as the \ac{LSTM} model.
-
-When discussing the results from each case, it should be noted that the distribution of gait cycles used, is not equal between subjects, as seen in table \ref{tab:data-subject-distribution}. 
-In fact, gait cycles measured from subject 6 constitutes over half of all the gait cycles used.
-\input{tables/data-subject-distribution.tex}
+However, a different design of the \ac{MLP} might improve its performance and it is impossible to state that no form of \ac{MLP} could perform as well as the \ac{LSTM}.
 
 The design of the model had some iterations. 
 One notable design criteria, that changed throughout the process, is the number of timesteps included in the \ac{LSTM} model.
@@ -51,22 +53,25 @@ Those models performed alright in cases where the testing set was a part of the 
 However, they completely failed to generalize between subjects.
 It was not until using 20 timesteps that the model was able to generalize to some extent.
 
-\subsection{Case 1}
-\label{sec:discussion-case1}
-Case 1 was intended for looking at the ability of the model to generalize across sessions.
-In each session the \ac{EMG} sensors were reapplied as per the \ac{SENIAM} guidelines \cite{Hermens1999, Hermens2000}.
-However, the location and orientation of the sensors are most likely not exactly the same between sessions.
-Furthermore, the condition of the subjects is also not the same between session.
-Number of factors may affect difference between the sessions such as muscle soreness or tiredness, more sweating by the subject, or other skin conditions.
+Before discussing the results from each case, it should be noted that the distribution of gait cycles used, is not equal between subjects, as seen in table \ref{tab:data-subject-distribution}. 
+In fact, gait cycles measured from subject 6 constitute over half of all the gait cycles used.
+\input{tables/data-subject-distribution.tex}
+
+\subsection{Case 1 and 2}
+\label{sec:discussion-case1and2}
+Case 1 was intended for looking at the ability of the model to generalize across sessions as conditions of subjects and equipment are not exactly the same between days.
+% In each session the \ac{EMG} sensors were reapplied as per the \ac{SENIAM} guidelines \cite{Hermens1999, Hermens2000}.
+% However, the location and orientation of the sensors are most likely not exactly the same between sessions.
+% Furthermore, the condition of the subjects is also not the same between session.
+% Number of factors may affect difference between the sessions such as muscle soreness or tiredness, more sweating by the subject, or other skin conditions.
 
 The results indicated that the model can generalize well between sessions.
 However, this test should be conducted on more subjects with added number of separate sessions to reach a reliable conclusion.
 
-\subsection{Case 2}
-\label{sec:discussion-case2}
-The increased test set error in case 2 as compared to case 1 is perhaps not surprising. 
-The difference in \ac{EMG} signals can be assumed to be more between subjects rather than between sessions of the same subject.
-The increase in error is however, not large, and the model still performs reasonably well.
+The testing error was increased in case 2 where more subjects were added to the training set, compared to case 1.
+Since the trainin and validation error is lower, this indicates that the difference between sessions of the same subject is less than difference between subjects.
+% This is perhaps not surprising as the difference in \ac{EMG} signals can be assumed to be more between subjects rather than between sessions of the same subject.
+The increase in testing error is however, not large, and the model still performs reasonably well.
 Further research could add more sessions from the same subject to the testing set, in order to see if there is increased flexibility to higher variation between sessions.
 More specifically, to test if the overall testing error of several separate sessions would decrease when using case 2 rather than case 1.
 
@@ -83,23 +88,16 @@ When looking at figure \ref{fig:emg-average} it is clear that the \ac{EMG} signa
 In that way, the pattern of this \ac{EMG} signal is completely unknown to the model in case 3.
 Furthermore, since the overall amplitude of the signal is much lower in the training set, the model may be too sensitive to the high values from the test set.
 
+Further research could include more subjects with more variability to test if the prediction error can be decreased to a reasonable degree for every subject unseen to the model.
+
 \subsection{Case 5}
 \label{sec:discussion-case5}
 The results from case 5 indicate that using more subjects with more variance in the training does not influence the error of the model's performance much.
 With increased variance in the training set the model can be expected to perform better on unseen data.
 
-\subsection{Comparison}
-
-% The study included 5 subjects and two of those subjects measured minimal amount of non-corrupt data.
-% Thus, only 3 subjects measured enough data to be used to train the \acp{NN}.
-% From this small population it is difficult to draw any meaningful conclusion.
-
 \section{Real-time compatability}
 \label{sec:discussion_real-time}
-When used in an exoskeleton, the assistance (or resistance) of the exoskeleton may affect the \ac{EMG} signal.
-Since the model is based on the 20 past \ac{EMG} signals, this may create a bad feed-back loop.
-For example, if the model uses \ac{EMG} signals from $t-20$ to $t-1$ to make the exoskeleton assist knee-flexion at $t$ then this could affect the \ac{EMG} signal collected at $t$.
-This \ac{EMG} signal may be contradicting intended movement, and thus the prediction at $t+1$ might not be correct.
-This in turn has more affect on the user's motion and their \ac{EMG} signal, thus resulting in the bad feed-back loop.
+When used in an exoskeleton, the assistance (or resistance) of the exoskeleton may affect the \ac{EMG} signal \cite{Androwis2018}.
+Since the model is based on the 20 past \ac{EMG} signals, this may create a bad feed-back loop where a faulty prediction affects \ac{EMG} measurements which in turn affects next prediction.
 
 \end{document}

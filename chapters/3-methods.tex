@@ -120,7 +120,10 @@ The normalization is given by equation \ref{eq:emg-normalization}:
 \label{eq:emg-normalization}
     X_{norm} = \frac{X - X_{min}}{X_{max} - X_{min}}
 \end{equation}
-where $X$ is the \ac{EMG} value to be normalized and $X_{min}$ and $X_{max}$ are, respectively, the minimum and maximum measured \ac{EMG} from the training dataset. 
+where $X$ is the \ac{EMG} value to be normalized and $X_{min}$ and $X_{max}$ are, respectively, the minimum and maximum measured \ac{EMG} from the whole dataset of each session. 
+This method is used as it allows quick calibration as well as low computational cost for real-time application.
+Furthermore, it has been shown this normalization method provides low spatial variance \cite{Cronin2015}.
+This means the \ac{EMG} is not as sensitive to the exact placement of the sensor.
 % For the validation and testing datasets, the same minimum and maximum values were used, to accurately portray new data that the \ac{NN} does not already ``know''.
 The \acp{KJM} were normalized similar to the \ac{EMG} in equation \ref{eq:emg-normalization} with addition clause to set the interval:
 \begin{equation}

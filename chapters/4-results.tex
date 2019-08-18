@@ -8,9 +8,9 @@ The results can be split into two parts: (1) \textit{pre-training} which include
 
 \section{Pre-training results}
 \label{sec:results_pre-training-results}
-Before training the \ac{NN} it is useful to examine what the data looks like.
+Before training the \ac{NN} it is useful to examine the data.
 Figure \ref{fig:kjm-average} shows a representation of the \ac{KJM} from all the gait cycles for subjects 1, 2 and 6.
-Same plots can be found for subject 3 and 5 in section \ref{sec:A-data-representation-4-subjects35} in the appendix. 
+Same plots can be found for subject 3 and 5 in appendix \ref{sec:A-data-representation-4-subjects35}. 
 Figure \ref{fig:emg-average} shows the corresponding \ac{EMG} activity of each muscle, grouped by the muscle's main function as per table \ref{tab:muscle-names}.
 \begin{figure}[ht!]
      \centering
@@ -28,7 +28,7 @@ Figure \ref{fig:emg-average} shows the corresponding \ac{EMG} activity of each m
          \centering
          \includegraphics[width=\textwidth]{img/results/moment_avg/subject06_all_set1_moment_avg_w_minmax.png}
      \end{subfigure}
-    \caption{Normalized \ac{KJM} for subjects 1, 2, and 6, from left to right respectively. The x-axis is the percentage of a single gait cycle. The solid blue line is the average from all the gait cycles and the shaded area around it is the standard deviation.}
+    \caption{Normalized \ac{KJM} for subjects 1, 2, and 6, from left to right. The x-axis is the percentage of a single gait cycle. The solid blue line is the average from all the gait cycles and the shaded area around it is the standard deviation.}
     \label{fig:kjm-average}
 \end{figure}
 \begin{figure}[ht!]
@@ -37,18 +37,12 @@ Figure \ref{fig:emg-average} shows the corresponding \ac{EMG} activity of each m
     \caption{Filtered and normalized \ac{EMG} from subjects 1, 2, and 6. The x-axis is the percentage of a single gait cycle. The solid blue lines represent the average from all the gait cycles for each muscle and the shaded area with corresponding color is the standard deviation.}
     \label{fig:emg-average}
 \end{figure}
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=0.75\textwidth]{img/results/20190429_06_moments_normal_walk.png}
-%     \caption{Knee joint moments from part of the trial of subject00 where gait cycles are considered as "normal" walking speed. Positive moment means knee flexion and negative knee extension. The values are normalized as explained in the chapter \ref{sec:methods}. The light-blue area around the average represents the standard deviation. This dataset includes 523 gait cycles. See figure \ref{fig:knee-joint-moments-stat-compl} for complementing dataset, i.e. "slow" and "fast" walking speeds. }
-%     \label{fig:knee-joint-moments-stat}
-% \end{figure}
-The figures show the subjects have similar patterns for \acp{KJM} and \ac{EMG} signals over the gait cycles.
+The figures show similar patterns between the subjects, for \acp{KJM} and \ac{EMG} signals over the gait cycles.
 However the average normalized \ac{KJM} amplitude for subject 1 is much lower than for subjects 2 and 6.
 As indicated by the ``fastest'' and ``slowest'' cycles, it is because subject 1 generally walked slower, in most trials, compared to their maximum speed.
 
 % Considering similar patterns across subjects, an \ac{NN} might be able to generalize between subjects, at least up to some degree.
-The linear correlation between the average for each subject, considering each of the muscles and the \ac{KJM}, is plotted in figures \ref{fig:kjm-correlation}--\ref{fig:gaslat-correlation}.
+The linear correlation between the average for each subject, considering each of the muscles and the \ac{KJM}, is plotted in figures \ref{fig:A-kjm-and-glutmax-correlation}--\ref{fig:A-gasmed-and-gaslat-correlation}.
 Table \ref{tab:correlation-sumup} outlines the results from these plots.
 \input{tables/correlations-sumup.tex}
 This table indicates that the patterns are generally correlated between subjects, except for the pattern of gluteus maximus.
@@ -57,68 +51,69 @@ This is also noticeable in figure \ref{fig:emg-average} where the \ac{EMG} patte
 Another notable observation is the amplitude of the normalized \ac{EMG}.
 It indicates that most of the values, including the peaks, have below $0.5$ amplitude.
 
-% This suggests that the normalization method might not be adequate.
-% The discrepancy between the signals from gluteus maximus (GlutMax) may suggest the same. 
-% This is further discussed in chapter \ref{sec:discussion}.
-
 \section{Post-training results}
 \label{sec:post-training-results}
 The following figures and tables show the training and performance results of the model for each case.
-This includes a short excerpt about each case's result.
+The performance is presented in the tables with the \ac{MSE} and \ac{MAE}.
+Although \ac{MSE} was used for objective function during training, the \ac{MAE} gives a clearer picture of the size of the error as compared to the desired output.
 
 \subsection{Case 1}
 \label{sec:results-case1}
-Case 1 is where the model was trained on one session of subject 6 and tested on another session of same subject.
-Subject 6 was used here as it was the only subject with large enough datasets from separate sessions to reliably train and test the model.
+Case 1 is where the model was trained on one session of subject 6 and tested on another session of that same subject.
+Subject 6 was the only subject with large enough datasets from separate sessions to reliably train and test the model in this case.
 The model was trained on the bigger dataset, i.e. session 1.
 
 Table \ref{tab:case1-test-eval} shows the error from running the model on the test set.
 This error can be compared to the error trend of the validation and training set from figure \ref{fig:case1-training-performance}.
-This result shows little overfitting, with the \ac{MSE} of the validation set and testing set not being much higher than for the training set.
+The result shows little overfitting, with the \ac{MSE} of the validation and testing set not being much higher than for the training set.
 Figure \ref{fig:case1-prediction-performance} shows that on average, the model's \ac{KJM} predictions are close to the \ac{ID} outputs.
+\input{tables/Case1_models_test-eval.tex}
 \begin{figure}[!htb]
-    \captionsetup[subfigure]{aboveskip=-12pt}
+    % \captionsetup[subfigure]{aboveskip=-1pt}
      \centering
      \begin{subfigure}[b]{0.475\textwidth}
+    %  \begin{minipage}{0.475\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/training_history/Case1_LSTMvsMLP_training.png}
+         \subcaption{The training and validation set's \ac{MSE} per epoch during training.}
          \label{fig:case1-training-performance}
-         \caption{The training and validation set's \ac{MSE} per epoch during training.}
      \end{subfigure}
+    %  \end{minipage}%
      \hfill
      \begin{subfigure}[b]{0.515\textwidth}
+    %  \begin{minipage}{0.515\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/test_prediction_evaluation/Case1_LSTM_test_prediction.png}
+         \subcaption{Test set's average \ac{KJM}; LSTM model prediction vs. actual (CGM2 output).}
          \label{fig:case1-prediction-performance}
-         \caption{Test set's average \ac{KJM}; LSTM model prediction vs. actual (CGM2 output).}
      \end{subfigure}
+    %  \end{minipage}
     \caption{Case 1 model performance}
     \label{fig:case1-performance-plots}
 \end{figure}
-\input{tables/Case1_models_test-eval.tex}
 
 \subsection{Case 2}
 \label{sec:results-case2}
 In case 2, both sessions from subjects 1 and 2 were added to the training set.
-This was done to look at how increasing variance in the training set would affect the results from case 1.
+This shows how increasing variance in the training set affects the results from case 1.
 
-From figure \ref{fig:case2-training-performance} it can be seen that the training error and validation error was significantly decreased and the discrepancy between them was low, indicating decreased risk of overfitting.
+Figure \ref{fig:case2-training-performance} shows that the training error and validation error was significantly decreased and the discrepancy between them was low, indicating decreased risk of overfitting.
 However, the error of the test set increased when compared to case 1, as seen from tables \ref{tab:case1-test-eval} and \ref{tab:case2-test-eval}.
 \begin{figure}[!htb]
-    \captionsetup[subfigure]{aboveskip=-12pt}
+    % \captionsetup[subfigure]{aboveskip=-12pt}
      \centering
      \begin{subfigure}[b]{0.475\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/training_history/Case2_LSTMvsMLP_training.png}
-         \label{fig:case2-training-performance}
          \caption{The training and validation set's \ac{MSE} per epoch during training.}
+         \label{fig:case2-training-performance}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.515\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/test_prediction_evaluation/Case2_LSTM_test_prediction.png}
-         \label{fig:case2-prediction-performance}
          \caption{Test set's average \ac{KJM}; LSTM model prediction vs. actual (CGM2 output).}
+         \label{fig:case2-prediction-performance}
      \end{subfigure}
     \caption{Case 2 model performance}
     \label{fig:case2-performance-plots}
@@ -128,24 +123,24 @@ However, the error of the test set increased when compared to case 1, as seen fr
 \subsection{Case 3}
 \label{sec:results-case3}
 In case 3, the model was trained on subjects 1 and 6, and tested on subject 2.
-When comparing the \ac{MSE} from figure \ref{fig:case3-training-performance} and table \ref{tab:case3-test-eval}, a high level of overfitting can be observed.
-The error of the training set is much lower than for the validation set and more drastically the testing set.
+When comparing the \ac{MSE} from figure \ref{fig:case3-training-performance} and table \ref{tab:case3-test-eval}, a high level of overfitting is observed.
+The training set's error is much lower than for the validation and testing sets.
 Incidentally, as seen on figure \ref{fig:case3-prediction-performance}, the model fails to predict the \acp{KJM} accurately, on average.
 \begin{figure}[!htb]
-    \captionsetup[subfigure]{aboveskip=-12pt}
+    % \captionsetup[subfigure]{aboveskip=-12pt}
      \centering
      \begin{subfigure}[b]{0.475\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/training_history/Case3_LSTMvsMLP_training.png}
-         \label{fig:case3-training-performance}
          \caption{The training and validation set's \ac{MSE} per epoch during training.}
+         \label{fig:case3-training-performance}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.515\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/test_prediction_evaluation/Case3_LSTM_test_prediction.png}
-         \label{fig:case3-prediction-performance}
          \caption{Test set's average \ac{KJM}; LSTM model prediction vs. actual (CGM2 output).}
+         \label{fig:case3-prediction-performance}
      \end{subfigure}
     \caption{Case 3 model performance}
     \label{fig:case3-performance-plots}
@@ -155,24 +150,24 @@ Incidentally, as seen on figure \ref{fig:case3-prediction-performance}, the mode
 \subsection{Case 4}
 \label{sec:results-case4}
 In case 4, the model was trained on subjects 2 and 6, and tested on subject 1.
-Comparing tables \ref{tab:case3-test-eval} and \ref{tab:case4-test-eval} and figures \ref{fig:case3-training-performance} and \ref{fig:case4-training-performance} it is observed that the training and validation error for case 4 is much higher than for case 3, but the testing error much lower.
+Comparing tables \ref{tab:case3-test-eval} and \ref{tab:case4-test-eval} and figures \ref{fig:case3-training-performance} and \ref{fig:case4-training-performance} it is observed that the training and validation error for case 4 is much higher than for case 3, but the testing error is much lower.
 Interestingly, the testing error in case 4 is even lower than the validation error.
 The validation set contains unseen cycles from subject 2 which may induce similar results as in case 3.
 \begin{figure}[!htb]
-    \captionsetup[subfigure]{aboveskip=-12pt}
+    % \captionsetup[subfigure]{aboveskip=-12pt}
      \centering
      \begin{subfigure}[b]{0.475\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/training_history/Case4_LSTMvsMLP_training.png}
-         \label{fig:case4-training-performance}
          \caption{The training and validation set's \ac{MSE} per epoch during training.}
+         \label{fig:case4-training-performance}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.515\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/test_prediction_evaluation/Case4_LSTM_test_prediction.png}
-         \label{fig:case4-prediction-performance}
          \caption{Test set's average \ac{KJM}; LSTM model prediction vs. actual (CGM2 output).}
+         \label{fig:case4-prediction-performance}
      \end{subfigure}
     \caption{Case 4 model performance}
     \label{fig:case4-performance-plots}
@@ -181,26 +176,26 @@ The validation set contains unseen cycles from subject 2 which may induce simila
 
 \subsection{Case 5}
 \label{sec:results-case5}
-In case 5, the model was trained on all the subjects, where 80\% of the data was randomly selected for the training set and the rest for the testing set.
-The performance shows little overfitting and the error for the validation and testing set is about the same, when comparing table \ref{tab:case5-test-eval} and figure \ref{fig:case5-training-performance}.
-Furthermore, the training and validation error are observed to converge at a relatively low error when compared to the other cases.
-Even with the increased variance in these sets.
-
-\begin{figure}[!htb]
-    \captionsetup[subfigure]{aboveskip=-12pt}
+In case 5, the model was trained and tested on all the subjects. 
+The testing set was selected as random 20\% of the data, not presented to the model during training.
+Comparing table \ref{tab:case5-test-eval} and figure \ref{fig:case5-training-performance}, there is little overfitting and the error for the validation and testing set is about the same.
+Furthermore, the training and validation error are observed to converge at a relatively low value when compared to the other cases, even with the increased variance in these sets.
+\newpage
+\begin{figure}
+    % \captionsetup[subfigure]{aboveskip=-12pt}
      \centering
      \begin{subfigure}[b]{0.475\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/training_history/Case5_LSTMvsMLP_training.png}
-         \label{fig:case5-training-performance}
          \caption{The training and validation set's \ac{MSE} per epoch during training.}
+         \label{fig:case5-training-performance}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.515\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/test_prediction_evaluation/Case5_LSTM_test_prediction.png}
-         \label{fig:case5-prediction-performance}
          \caption{Test set's average \ac{KJM}; LSTM model prediction vs. actual (CGM2 output).}
+         \label{fig:case5-prediction-performance}
      \end{subfigure}
     \caption{Case 5 model performance}
     \label{fig:case5-performance-plots}

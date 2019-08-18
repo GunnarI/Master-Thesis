@@ -13,12 +13,12 @@ The data presented here is any relevant data that may be referenced in the repor
 \label{sec:A-data-representation-4-subjects35}
 \begin{figure}[ht!]
      \centering
-     \begin{subfigure}[b]{0.328\textwidth}
+     \begin{subfigure}[b]{0.4\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/moment_avg/subject03_all_set1_moment_avg_w_minmax.png}
      \end{subfigure}
      ~
-     \begin{subfigure}[b]{0.328\textwidth}
+     \begin{subfigure}[b]{0.4\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/moment_avg/subject05_all_set1_moment_avg_w_minmax.png}
      \end{subfigure}
@@ -27,7 +27,7 @@ The data presented here is any relevant data that may be referenced in the repor
 \end{figure}
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=\textwidth]{img/results/emg_avg/subjects3and5_grid_emg_avg.png}
+    \includegraphics[width=0.8\textwidth]{img/results/emg_avg/subjects3and5_grid_emg_avg.png}
     \caption{Filtered and normalized \ac{EMG} from subjects 3 and 5. The x-axis is the percentage of a single gait cycle. The solid blue lines represent the average from all the gait cycles for each muscle and the shaded area with corresponding color is the standard deviation.}
     \label{fig:A-emg-average}
 \end{figure}
@@ -38,66 +38,136 @@ The data presented here is any relevant data that may be referenced in the repor
 \label{sec:A-data-correlations}
 The following heat maps show the correlations between subjects of the average \ac{EMG} and \ac{KJM} across all cycles of each subject.
 The correlations are given by the \ac{PCC}, on the range of $[-1, 1]$ where $-1$ indicates high negative linear correlation and $1$ indicates high positive linear correlation.
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.7\textwidth]{img/results/correlations/KJM_correlation_between_subjects.png}
-    \caption{\ac{KJM} correlation between subjects.}
-    \label{fig:kjm-correlation}
+\begin{figure}[!htb]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/correlations/KJM_correlation_between_subjects.png}
+     \end{subfigure}
+     ~
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/correlations/GlutMax_correlation_between_subjects.png}
+     \end{subfigure}
+    \caption{\ac{PCC} for \ac{KJM} and gluteus maximus \ac{EMG}: correlation between subjects.}
+    \label{fig:A-kjm-and-glutmax-correlation}
 \end{figure}
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.7\textwidth]{img/results/correlations/RectFem_correlation_between_subjects.png}
-    \caption{Rectus Femoris \ac{EMG} correlation between subjects.}
-    \label{fig:rectfem-correlation}
+\begin{figure}[!htb]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/correlations/RectFem_correlation_between_subjects.png}
+     \end{subfigure}
+     ~
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/correlations/VasMed_correlation_between_subjects.png}
+     \end{subfigure}
+    \caption{\ac{PCC} for rectus femoris and vastus medialis \ac{EMG}: correlation between subjects.}
+    \label{fig:A-rectfem-and-vasmed-correlation}
 \end{figure}
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.7\textwidth]{img/results/correlations/VasMed_correlation_between_subjects.png}
-    \caption{Vastus Medialis \ac{EMG} correlation between subjects.}
-    \label{fig:vasmed-correlation}
+\begin{figure}[!htb]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/correlations/VasLat_correlation_between_subjects.png}
+     \end{subfigure}
+     ~
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/correlations/BicFem_correlation_between_subjects.png}
+     \end{subfigure}
+    \caption{\ac{PCC} for vastus lateralis and biceps femoris \ac{EMG}: correlation between subjects.}
+    \label{fig:A-vaslat-and-bicfem-correlation}
 \end{figure}
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.7\textwidth]{img/results/correlations/VasLat_correlation_between_subjects.png}
-    \caption{Vastus Lateralis \ac{EMG} correlation between subjects.}
-    \label{fig:vaslat-correlation}
+\begin{figure}[!htb]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/correlations/TibAnt_correlation_between_subjects.png}
+     \end{subfigure}
+     ~
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/correlations/Soleus_correlation_between_subjects.png}
+     \end{subfigure}
+    \caption{\ac{PCC} for tibialis anterior and soleus \ac{EMG}: correlation between subjects.}
+    \label{fig:A-tibant-and-soleus-correlation}
 \end{figure}
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.7\textwidth]{img/results/correlations/BicFem_correlation_between_subjects.png}
-    \caption{Biceps Femoris \ac{EMG} correlation between subjects.}
-    \label{fig:bicfem-correlation}
+\begin{figure}[!htb]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/correlations/GasMed_correlation_between_subjects.png}
+     \end{subfigure}
+     ~
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/results/correlations/GasLat_correlation_between_subjects.png}
+     \end{subfigure}
+    \caption{\ac{PCC} for gastrocnemius medialis and gastrocnemius lateralis \ac{EMG}: correlation between subjects.}
+    \label{fig:A-gasmed-and-gaslat-correlation}
 \end{figure}
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.7\textwidth]{img/results/correlations/GlutMax_correlation_between_subjects.png}
-    \caption{Gluteus Maximus \ac{EMG} correlation between subjects.}
-    \label{fig:glutmax-correlation}
-\end{figure}
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.7\textwidth]{img/results/correlations/TibAnt_correlation_between_subjects.png}
-    \caption{Tibialis Anterior \ac{EMG} correlation between subjects.}
-    \label{fig:tibant-correlation}
-\end{figure}
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.7\textwidth]{img/results/correlations/Soleus_correlation_between_subjects.png}
-    \caption{Soleus \ac{EMG} correlation between subjects.}
-    \label{fig:soleus-correlation}
-\end{figure}
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.7\textwidth]{img/results/correlations/GasMed_correlation_between_subjects.png}
-    \caption{Gastrocnemius Medialis \ac{EMG} correlation between subjects.}
-    \label{fig:gasmed-correlation}
-\end{figure}
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.7\textwidth]{img/results/correlations/GasLat_correlation_between_subjects.png}
-    \caption{Gastrocnemius Lateralis \ac{EMG} correlation between subjects.}
-    \label{fig:gaslat-correlation}
-\end{figure}
+% \begin{figure}[!htb]
+%     \centering
+%     \includegraphics[width=0.7\textwidth]{img/results/correlations/KJM_correlation_between_subjects.png}
+%     \caption{\ac{KJM} correlation between subjects.}
+%     \label{fig:kjm-correlation}
+% \end{figure}
+% \begin{figure}[ht!]
+%     \centering
+%     \includegraphics[width=0.7\textwidth]{img/results/correlations/RectFem_correlation_between_subjects.png}
+%     \caption{Rectus Femoris \ac{EMG} correlation between subjects.}
+%     \label{fig:rectfem-correlation}
+% \end{figure}
+% \begin{figure}[ht!]
+%     \centering
+%     \includegraphics[width=0.7\textwidth]{img/results/correlations/VasMed_correlation_between_subjects.png}
+%     \caption{Vastus Medialis \ac{EMG} correlation between subjects.}
+%     \label{fig:vasmed-correlation}
+% \end{figure}
+% \begin{figure}[ht!]
+%     \centering
+%     \includegraphics[width=0.7\textwidth]{img/results/correlations/VasLat_correlation_between_subjects.png}
+%     \caption{Vastus Lateralis \ac{EMG} correlation between subjects.}
+%     \label{fig:vaslat-correlation}
+% \end{figure}
+% \begin{figure}[ht!]
+%     \centering
+%     \includegraphics[width=0.7\textwidth]{img/results/correlations/BicFem_correlation_between_subjects.png}
+%     \caption{Biceps Femoris \ac{EMG} correlation between subjects.}
+%     \label{fig:bicfem-correlation}
+% \end{figure}
+% \begin{figure}[ht!]
+%     \centering
+%     \includegraphics[width=0.7\textwidth]{img/results/correlations/GlutMax_correlation_between_subjects.png}
+%     \caption{Gluteus Maximus \ac{EMG} correlation between subjects.}
+%     \label{fig:glutmax-correlation}
+% \end{figure}
+% \begin{figure}[ht!]
+%     \centering
+%     \includegraphics[width=0.7\textwidth]{img/results/correlations/TibAnt_correlation_between_subjects.png}
+%     \caption{Tibialis Anterior \ac{EMG} correlation between subjects.}
+%     \label{fig:tibant-correlation}
+% \end{figure}
+% \begin{figure}[ht!]
+%     \centering
+%     \includegraphics[width=0.7\textwidth]{img/results/correlations/Soleus_correlation_between_subjects.png}
+%     \caption{Soleus \ac{EMG} correlation between subjects.}
+%     \label{fig:soleus-correlation}
+% \end{figure}
+% \begin{figure}[ht!]
+%     \centering
+%     \includegraphics[width=0.7\textwidth]{img/results/correlations/GasMed_correlation_between_subjects.png}
+%     \caption{Gastrocnemius Medialis \ac{EMG} correlation between subjects.}
+%     \label{fig:gasmed-correlation}
+% \end{figure}
+% \begin{figure}[ht!]
+%     \centering
+%     \includegraphics[width=0.7\textwidth]{img/results/correlations/GasLat_correlation_between_subjects.png}
+%     \caption{Gastrocnemius Lateralis \ac{EMG} correlation between subjects.}
+%     \label{fig:gaslat-correlation}
+% \end{figure}
 % \begin{figure}
 %     \centering
 %     \includegraphics[width=0.9\textwidth]{img/results/20190429_06_gait_cycle_duration_quart.png}

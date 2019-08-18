@@ -5,7 +5,7 @@
 \chapter{Methods}
 \label{sec:methods}
 The process from data collection to training to then using the \ac{NN} is presented in figure \ref{fig:process-diagram}. 
-The process can be divided into 5 steps (A-E), each of which will be discussed in dedicated subsections in this chapter.
+The process can be divided into 5 steps (A-E), each of which will be discussed in the following subsections.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/ProcessDiagram}
@@ -16,8 +16,9 @@ The process can be divided into 5 steps (A-E), each of which will be discussed i
 \section{Step A - Experiment Setup}
 For the experiment, a motion lab equipped with 10 Vicon Vantage V16 cameras and 3 AMTI OR6 \acp{FP} was used. 
 Figure \ref{fig:cgm23-markerset} shows the markerset protocol used, which follows the CGM2.3 model's protocol. 
-CGM2.3 is a recent version of CGM2.i project which is meant to update the old \ac{CGM} by improving it and fixing some known issues \cite{Leboeuf2019}. 
-Further details about the model and its scripts are discussed in appendix \ref{sec:A-pyCGM2}.
+CGM2.3 is a recent version of CGM2.i project.
+The project is meant to update the old \ac{CGM} by improving it and fixing some known issues \cite{Leboeuf2019}. 
+Further details about the model are discussed in appendix \ref{sec:A-pyCGM2}.
 \begin{figure}[!ht]
      \centering
      \begin{subfigure}[t]{0.58\textwidth}
@@ -42,7 +43,7 @@ The sensors were placed on the surface near 10 muscles on the right leg, present
 \input{tables/muscle-names.tex}
 Skin preparation and placement recommendations from the SENIAM project \cite{Stegeman2007, Hermens1999, Hermens2000} were used. The SENIAM project is a European concerted action in the Biomed 2 program of the European Community \cite{Stegeman2007}. It provides recommendations when measuring \ac{sEMG} to increase standardization within the field.
 
-All the data from the \ac{EMG} sensors (muscle activity), cameras (marker trajectories), and the \acp{FP} (\ac{GRF}) was collected and synchronized using the Vicon Nexus 2.8.2 system/software.
+All the data from the \ac{sEMG} sensors (muscle activity), cameras (marker trajectories), and the \acp{FP} (\ac{GRF}) was collected and synchronized using the Vicon Nexus 2.8.2 system/software.
 The synchronization includes accounting for the latency of $14ms$ of the \ac{EMG} sensors \cite{aktosEMG}.
 The marker trajectories were sampled at 100Hz using the cameras while the analog data (i.e. \ac{GRF} and \ac{EMG}) was sampled at 1000Hz.
 
@@ -50,35 +51,36 @@ Data was collected from 6 subjects with anthropometric data measured for each su
 \input{tables/subject-table.tex}
 Each subject was a young, healthy individual without any muscle disorders.
 A static trial was captured to use for scaling the model, as described in appendix \ref{sec:A-pyCGM2}, and run as part of step C in figure \ref{fig:process-diagram}.
-The subjects were asked to walk front and back over the \acp{FP} either slowly, normal speed, or fast.
+The subjects were asked to walk over the \acp{FP} either slowly, normal speed, or fast.
 This was to increase variance in the data and thus help prevent overfitting of the \ac{NN} model.
-The definition of slow, normal, or fast walking was not set to a specific speed but rather to what the subjects felt was natural.
+The definition of ``slow'', ``normal'', or ``fast'' walking was not set to a specific speed but rather to what the subjects felt was natural.
 Furthermore, about 80\% of the trials for each subject were measured with normal walking speed.
 The slow and fast walking speeds each covered about 10\% of the trials for each subject.
 
-Note that a subject refers to one individual, a session refers to each experiment performed by the subject, and a trial refers to each measured exercised performed in the session. 
+Note that a subject refers to one individual, a session refers to each experiment, and a trial refers to each measured exercised performed in the session. 
 Thus, each subject can have many sessions, e.g. experiments conducted on separate days.
-Furthermore, each session has many trials and each trial was cut down to gait cycles. 
+Each session has many trials and each trial was cut down to gait cycles. 
 The gait cycles were defined by the interval from the right foot's heel strike on a \ac{FP} until its next heel strike.
 Some sessions included 3 \acp{FP} resulting in some trials having two gait cycles for the right leg.
 
 Defective cycles were found by looking at outliers, e.g. the longest/shortest cycles indicating defect in heel strike detection and the cycles with highest deviation of \ac{KJM} estimation from the mean.
 Faulty signal from motion capture or \ac{GRF} makes the \ac{KJM} output from the \ac{ID} calculations wrong.
-All such cycles, that were found, were removed from the dataset since the \ac{KJM} are the labels and not the inputs for the \ac{NN}.
-The \ac{EMG} on the other hand is input to the model and any errors to the \ac{EMG} measurements might also happen in real live.
+All cycles with defective \ac{KJM} found, were removed from the dataset.
+The \ac{EMG} on the other hand is input to the model and any deviation in the \ac{EMG} signal might also happen in real live.
 That is, if it is not easily preventable, systematic error.
 For that reason, the cycles that contained what appeared to be non-systematic errors in the \ac{EMG} signal were not removed from the dataset.
 
 \section{Step B - Data processing}
 \label{sec:data-processing}
 In step B of figure \ref{fig:process-diagram}, before running \ac{IK} and \ac{ID}, the marker trajectories and the \ac{GRF} were filtered.
-Both were filtered with a 4th order Butterworth lowpass filter and a cutoff frequency of $10Hz$. 
+Both were filtered with a 4th order Butterworth lowpass filter and a cutoff frequency of $10$Hz. 
 The same cutoff frequency was used for both to minimize an artifact introduced in the joint moment at heel strike, due to a spike in reaction force \cite{Kristianslund2012}.
 
 The \ac{EMG} was filtered with the ``typical'' steps as mentioned by \textcite[99]{Clancy2016}, but excluding the whitening step for simplicity.
-The purpose of whitening is to get rid of correlation between successive samples which affects information extraction due to temporal weights on consecutive samples.
-The effect of omitting this step or the possible gain in including it will be discussed in section \ref{sec:discussion}.
-The signal was noise and interference filtered using Butterworth IIR bandpass filter with cutoff frequencies $10-100Hz$. 
+The purpose of whitening is to get rid of correlation between successive samples.
+This affects information extraction due to temporal weights on consecutive samples.
+The effect of omitting this step or the possible gain in including it will be discussed in chapter \ref{sec:discussion}.
+The signal was noise and interference filtered using Butterworth IIR bandpass filter with cutoff frequencies $10-100$Hz. 
 Then, for demodulation, smoothing, and relinearization, the RMS method was used where the smoothing was done with a moving average window of $50ms$. 
 As \textcite{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of a real-time friendly solution, $50ms$ was chosen.
 That is, to not introduce too much delay of the signal while still keeping it relatively smooth.
@@ -96,20 +98,19 @@ The objective function from equation \ref{eq:ik-obj-func} is rewritten here for 
     \min(obj) = \min\biggl\{ &\sum_{i=1}^{\text{markers}}w_i \left(\Vec{x_i}^{subject}-\Vec{x_i}^{model}\right)^2 \nonumber\\ 
     &+ \sum_{j=1}^{\text{joint angles}}w_j \left( \theta_j^{subject}-\theta_j^{model}\right)^2 \biggr\}
 \end{align*}
-The weights ($w_i$ and $w_j$) where set equal for every marker used and the threshold for the objective function was set to $10^{-8}$.
+The weights ($w_i$ and $w_j$) were set equal for every marker and the threshold for the objective function was set to $10^{-8}$.
 The \ac{ID} computations are based on anthropometric segment measurements according to \textcite{Dempster1955} and the iterative Newton-Euler equations as described by \textcite{Dumas2004}.
 The model outputs are designed to have the same conventions as Vicon's \ac{PiG} model, and as such were normalized to the subject's height and body mass \cite{Leboeuf2019, viconpig}.
 Furthermore, the \acp{KJM} were represented as positive for knee flexion and negative for extension.
 
 The model outputs were calculated for each frame.
-That means the \acp{KJM} had a sampling frequency of $100Hz$ unlike the \ac{EMG} which was sampled at $1000Hz$.
-The \ac{EMG} signal was downsampled to match the frequency of the \acp{KJM}. 
-The downsampling was done by simply taking the first \ac{EMG} sample from every $10ms$ windows. 
-The first sample from the window was used rather than any other to decrease the delay from \ac{EMG} to moment prediction. 
+That means the \acp{KJM} had a sampling frequency of $100$Hz unlike the \ac{EMG} which was sampled at $1000$Hz.
+To match the frequency of the \acp{KJM}, the \ac{EMG} signal was downsampled by taking the first \ac{EMG} sample from consecutive $10ms$ windows.
+By using the first sample, the delay from \ac{EMG} to moment prediction is decreased by $9ms$. 
 % In that way an \ac{EMG} sample taken at $t$ can predict a moment value at $t+9ms$. 
 
 Finally, once each sample had been matched, the data was split into training, validation, and testing datasets.
-Five different cases of training and testing sets were created to look at the ability of the model to generalize for variable cases.
+Five different cases of training and testing sets were created to look at the ability of the model to generalize in different cases.
 Table \ref{tab:training-cases} lists these cases and describes the purpose of each case.
 \input{tables/training_cases.tex}
 
@@ -121,50 +122,48 @@ The normalization is given by equation \ref{eq:emg-normalization}:
     X_{norm} = \frac{X - X_{min}}{X_{max} - X_{min}}
 \end{equation}
 where $X$ is the \ac{EMG} value to be normalized and $X_{min}$ and $X_{max}$ are, respectively, the minimum and maximum measured \ac{EMG} from the whole dataset of each session. 
-This method is used as it allows quick calibration as well as low computational cost for real-time application.
+This method gives quick calibration as well as low computational cost for real-time application.
 Furthermore, it has been shown this normalization method provides low spatial variance \cite{Cronin2015}.
-This means the \ac{EMG} is not as sensitive to the exact placement of the sensor.
+This means the \ac{sEMG} is not as sensitive to the exact placement of the sensor.
 % For the validation and testing datasets, the same minimum and maximum values were used, to accurately portray new data that the \ac{NN} does not already ``know''.
 The \acp{KJM} were normalized similar to the \ac{EMG} in equation \ref{eq:emg-normalization} with addition clause to set the interval:
 \begin{equation}
 \label{eq:moment-normalization}
     X_{norm} = \frac{X - X_{min}}{X_{max} - X_{min}}\left(1 - \frac{X_{min}}{X_{max}}\right) + \frac{X_{min}}{X_{max}}
 \end{equation}
-where $X$ represents moment values. 
-The extra clause made sure the signal was scaled down to the interval $[-1,1]$ (assuming $\left|X_{min}\right| \leq \left|X_{max}\right|$) and that flexion and extension was still represented with positive and negative values respectively.
+where $X$ represents \ac{KJM} values. 
+The extra clause limits the scaling to the interval $[-1,1]$ (assuming $\left|X_{min}\right| \leq \left|X_{max}\right|$) and makes sure that flexion and extension is still represented with positive and negative values respectively.
 
 \section{Step D - Architecture and Training of the Neural Network}
 As discussed in appendix \ref{sec:A-NeuralNetworks}, the training of the \ac{NN} consists of optimizing an objective function.
 In this case, it involved minimizing the \ac{MSE} between the output of the \ac{NN} and the calculated \acp{KJM}.
-This is represented by the bracket and dashed arrows in step D of figure \ref{fig:process-diagram}.
+The \ac{MSE} is the feedback represented by the bracket and dashed arrows in step D of figure \ref{fig:process-diagram}.
 
-Two different kinds of networks were tested for comparison, one being the simple \ac{MLP} described in section \ref{sec:A-NeuralNetworks}, and the other one was the \ac{LSTM} based \ac{RNN} described in section \ref{sec:A-rnn}.
+Two different kinds of networks were tested for comparison, one being the regular \ac{MLP} described in appendix \ref{sec:A-NeuralNetworks}, and the other the \ac{LSTM} based \ac{RNN} described in appendix \ref{sec:A-rnn}.
 The main difference between the two is that the \ac{LSTM} model contains time-dependency and thus looks at multiple timesteps for each prediction, while the \ac{MLP} does not.
 
-% The models were trained for 300 epochs with an early-stop validation interval of 50 epochs.
-% This means that if the \ac{MSE} for the validation set had not decreased for an interval of 50 epochs, then the training was stopped before reaching 300 epochs.
 The models were trained with an early-stop validation interval of 50 epochs.
-This means that when the \ac{MSE} for the validation set had not decreased for an interval of 50 epochs, then the training was stopped.
+This means that when the validation set's \ac{MSE} had not decreased for an interval of 50 epochs, the training was stopped.
 
 TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
-The Keras API provides functions for configuring the \ac{LSTM} layer and the so called \textit{dense} layer, which is the regular, densely connected, \ac{NN} layer which is used in the \ac{MLP} \cite{chollet2015keras}.
-Further information about the APIs in section \ref{sec:A-Tensorflow-and-Keras}.
-The parameters, such as activation function and number of nodes, used for each model are listed in tables \ref{tab:mlp-parameters} and \ref{tab:lstm-parameters}.
+The Keras API provides functions for configuring the \ac{LSTM} layer and the so called \textit{dense} layer, i.e. the densely connected \ac{NN} layer which is used in the \ac{MLP} \cite{chollet2015keras}.
+The APIs are further described in appendix \ref{sec:A-Tensorflow-and-Keras}.
+The parameters that were used for each model are listed in tables \ref{tab:mlp-parameters} and \ref{tab:lstm-parameters}.
 
 It should be noted that the batch size for the \ac{LSTM} network was equal to the length of the longest gait cycle.
 This is needed for the training phase of the model.
-To make all of the batches of equal length, each gait cycle was pre-padded with zeros to the maximum length.
+To make all batches of equal length, each gait cycle was pre-padded with zeros to the maximum length.
 As suggested by \textcite{Dwarampudi2019}, pre-padding outperforms other padding methods.
 During prediction the batch size is only one, which enables real-time prediction.
 
-The topology of the \ac{LSTM} based network that was used is represented in figure \ref{fig:lstm-model-used}.
+Figure \ref{fig:lstm-model-used} represents the topology of the \ac{LSTM} based network.
 \begin{figure}[!htb]
     \centering
     \includegraphics{img/LSTM_model_used.pdf}
-    \caption{Topology of the \ac{LSTM} based \ac{NN} that was used. The \ac{LSTM} cells represent the structure presented in section \ref{sec:A-rnn} and figure \ref{fig:lstm-cell}. Note, there is a recurrence of cell state between each timestep, even though it is not shown here. In this thesis $\tau = 20$ was used indicating that 20 \ac{EMG} samples from past steps were used for each \ac{KJM} prediction at time step $t$.}
+    \caption{Topology of the \ac{LSTM} based \ac{NN} that was used. The \ac{LSTM} cells represent the structure presented in appendix \ref{sec:A-rnn} and figure \ref{fig:lstm-cell}. Note, there is a recurrence of cell state between each timestep, even though it is not shown here. In this thesis $\tau = 20$ was used indicating that 20 \ac{EMG} samples from past steps were used for each \ac{KJM} prediction at time step $t$.}
     \label{fig:lstm-model-used}
 \end{figure}
-Note that the \ac{LSTM} cell contains regular \ac{NN} layers, as presented in section \ref{sec:A-NeuralNetworks}, with a configurable number of nodes.
+Note that the \ac{LSTM} cell contains regular \ac{NN} layers, as presented in appendix \ref{sec:A-NeuralNetworks}, with a configurable number of nodes.
 
 \section{Step E - Real-time motor control and performance}
 Although this part was not implemented in this thesis the following methods are thoughts about how it could be done.
@@ -175,8 +174,6 @@ This is helpful since the model would typically be run on a different system tha
 % The trained model could then be transferred to C++ by using Tensorflow C++ library to replicate the model structure and then loading the saved weights onto the replica.
 Tensorflow C++ library offers the possibility to import the weights into C++ code.
 This can be helpful since in an exoskeleton the trained model needs to be stored on an embedded system which often runs C++ rather than Python.
-% Also, Vicon offers a Datastream SDK in C++ enabling real time computation that can be used with Vicon Nexus.
-This is further discussed in section \ref{sec:discussion}.
 
 The filtering methods were selected to be real-time friendly with minimal calibration.
 The only thing that would need calibration before running the model is the normalization, which uses the maximum \ac{EMG} from the whole set to scale down the \ac{EMG} using equation \ref{eq:emg-normalization}.

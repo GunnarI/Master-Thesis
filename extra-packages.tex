@@ -21,6 +21,9 @@
 
 % For subfigures
 \usepackage{subcaption}
+\captionsetup[subfigure]{
+    labelfont=rm
+}
 
 % For align equations
 \usepackage{amsmath}
@@ -76,6 +79,11 @@
 
 \let\Oldsubsubsection\subsubsection
 \renewcommand{\subsubsection}{\FloatBarrier\Oldsubsubsection}
+
+% To make sure images and tables are placed at top on otherwise empty page
+\makeatletter
+    \setlength\@fptop{0\p@}
+\makeatother
 
 % This is just to get some nonsense text in this template, can be safely removed
 \usepackage{blindtext}

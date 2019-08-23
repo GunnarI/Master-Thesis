@@ -4,11 +4,11 @@
 
 \chapter{Results}
 \label{sec:results}
-The results can be split into two parts: (1) \textit{pre-training} which includes the experimental data after filtering and the pre-processing before the training; and (2) \textit{post-training} which includes the output from the trained \ac{NN} model, including training and performance evaluation.
+The results can be split into two parts: (1) \textit{pre-training} which includes the experimental data after filtering and the pre-processing before the training; and (2) \textit{post-training} which includes the output from the trained \ac{ANN} model, including training and performance evaluation.
 
 \section{Pre-training results}
 \label{sec:results_pre-training-results}
-Before training the \ac{NN} it is useful to examine the data.
+Before training the \ac{ANN} it is useful to examine the data.
 Figure \ref{fig:kjm-average} shows a representation of the \ac{KJM} from all the gait cycles for subjects 1, 2 and 6.
 Same plots can be found for subject 3 and 5 in appendix \ref{sec:A-data-representation-4-subjects35}. 
 Figure \ref{fig:emg-average} shows the corresponding \ac{EMG} activity of each muscle, grouped by the muscle's main function as per table \ref{tab:muscle-names}.
@@ -41,7 +41,7 @@ The figures show similar patterns between the subjects, for \acp{KJM} and \ac{EM
 However the average normalized \ac{KJM} amplitude for subject 1 is much lower than for subjects 2 and 6.
 As indicated by the ``fastest'' and ``slowest'' cycles, it is because subject 1 generally walked slower, in most trials, compared to their maximum speed.
 
-% Considering similar patterns across subjects, an \ac{NN} might be able to generalize between subjects, at least up to some degree.
+% Considering similar patterns across subjects, an \ac{ANN} might be able to generalize between subjects, at least up to some degree.
 The linear correlation between the average for each subject, considering each of the muscles and the \ac{KJM}, is plotted in figures \ref{fig:A-kjm-and-glutmax-correlation}--\ref{fig:A-gasmed-and-gaslat-correlation}.
 Table \ref{tab:correlation-sumup} outlines the results from these plots.
 \input{tables/correlations-sumup.tex}

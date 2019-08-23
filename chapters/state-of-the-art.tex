@@ -244,7 +244,7 @@ For the non-parametric muscle model an artificial neural network could be used \
 \section{Artificial neural networks in biomechanics}
 The methods to predict joint torque discussed previously all use calculations based on anthropometry and dynamic models of the human body. 
 The measured parameters, such as \ac{EMG}, motion, and reaction force data, are used as input into equations based on specific dynamic models of the human body, to estimate the joint torque that best fits the input.
-\ac{ANN} on the contrary treats the model part as sort of a \textit{black box} and does not depend on these dynamic models. 
+\Ac{ANN} on the contrary treats the model part as sort of a \textit{black box} and does not depend on these dynamic models. 
 Rather, it simulates the model with a self-organized calculations based on statistical methods.
 This means that the \ac{ANN} goes from an input to desired output without direct relations to dynamic models of the human body.
 This is important when looking at going from an \ac{EMG} signal to joint torque prediction since the projection of \ac{EMG} to muscle force and joint torque is not easily established through dynamic models.
@@ -390,10 +390,10 @@ Figure \ref{fig:lstm-cell} demonstrates the flow of information through the \ac{
 \begin{figure}[ht!]
     \centering
     \includegraphics{img/LSTM-cell.pdf}
-    \caption{The \ac{LSTM} cell. Variables and operations reference equations \ref{eq:lstm-ff}. The boxes indicate a \ac{NN} layer and the circles indicate matrix math operations. The dashed arrow indicates the possibility of getting the output from this timesteps status. The diagram is a highly modified version of an image from http://colah.github.io/posts/2015-08-Understanding-LSTMs/}
+    \caption{The \ac{LSTM} cell. Variables and operations reference equations \ref{eq:lstm-ff}. The boxes indicate a \ac{ANN} layer and the circles indicate matrix math operations. The dashed arrow indicates the possibility of getting the output from this timesteps status. The diagram is a highly modified version of an image from http://colah.github.io/posts/2015-08-Understanding-LSTMs/}
     \label{fig:lstm-cell}
 \end{figure}
-The cell contains four separate sigmoid units that work similar to the regular \ac{NN} node from figure \ref{fig:node-diagram}.
+The cell contains four separate sigmoid units that work similar to the regular \ac{ANN} node from figure \ref{fig:node-diagram}.
 Equations \ref{eq:ann-node} become \cite{Goodfellow2016}:
 \begin{equation}
 \label{eq:lstm_sigmoid_generic}
@@ -515,8 +515,8 @@ TensorFlow and Keras are \acp{API} that can be used to design, run, and evaluate
 Both projects offer open-source python packages.
 The algorithm within TensorFlow consist of a directed \textit{graph}, composed of a set of connected \textit{nodes}, containing states and computations, much like previously explained in section \ref{sec:A-NeuralNetworks}.
 TensorFlow offers high flexibility towards how the graphs are constructed and configured \cite{tensorflow2015-whitepaper}.
-Keras offers a high-level \ac{NN} \ac{API} which can run on top of TensorFlow \cite{chollet2015keras}.
-The API facilitates building a conventional \ac{NN}, layer-wise, in a TensorFlow graph.
+Keras offers a high-level \ac{ANN} \ac{API} which can run on top of TensorFlow \cite{chollet2015keras}.
+The API facilitates building a conventional \ac{ANN}, layer-wise, in a TensorFlow graph.
 An example of a layer in Keras is the \textit{Dense} function which constructs the regular, densely connected layer as described in figure \ref{fig:generic-ann}.
 The function takes as an input, the number of nodes (or units) and the activation functions, weight, and bias initialization applied to each node as described in figure \ref{fig:node-diagram}.
 

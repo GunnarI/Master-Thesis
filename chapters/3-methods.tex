@@ -4,12 +4,12 @@
 
 \chapter{Methods}
 \label{sec:methods}
-The process from data collection to training to then using the \ac{NN} is presented in figure \ref{fig:process-diagram}. 
+The process from data collection to training to then using the \ac{ANN} is presented in figure \ref{fig:process-diagram}. 
 The process can be divided into 5 steps (A-E), each of which will be discussed in the following subsections.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/ProcessDiagram}
-    \caption{Flow diagram of the modelling procedure. The dashed box indicates a procedure used only for training the \ac{NN} and the dashed arrows are feedback during training. (A) Subject walks in a motion lab collecting \acf{GRF}, marker trajectories, and muscle activity; (B) The data is filtered and prepared for use in the models; (C) The \ac{GRF} and marker trajectories are used for \ac{IK} and \ac{ID} to retrieve \acp{KJM}; (D) During training, \ac{EMG} data is continuously fed through the \ac{NN}. Output is compared to the moments from (C) and the error used as feedback to update the \ac{NN}; (E) \ac{EMG} fed through the trained \ac{NN} produces \acp{KJM} prediction to control motor torque in an exoskeleton}
+    \caption{Flow diagram of the modelling procedure. The dashed box indicates a procedure used only for training the \ac{ANN} and the dashed arrows are feedback during training. (A) Subject walks in a motion lab collecting \acf{GRF}, marker trajectories, and muscle activity; (B) The data is filtered and prepared for use in the models; (C) The \ac{GRF} and marker trajectories are used for \ac{IK} and \ac{ID} to retrieve \acp{KJM}; (D) During training, \ac{EMG} data is continuously fed through the \ac{ANN}. Output is compared to the moments from (C) and the error used as feedback to update the \ac{ANN}; (E) \ac{EMG} fed through the trained \ac{ANN} produces \acp{KJM} prediction to control motor torque in an exoskeleton}
     \label{fig:process-diagram}
 \end{figure}
 
@@ -52,7 +52,7 @@ Data was collected from 6 subjects with anthropometric data measured for each su
 Each subject was a young, healthy individual without any muscle disorders.
 A static trial was captured to use for scaling the model, as described in appendix \ref{sec:A-pyCGM2}, and run as part of step C in figure \ref{fig:process-diagram}.
 The subjects were asked to walk over the \acp{FP} either slowly, normal speed, or fast.
-This was to increase variance in the data and thus help prevent overfitting of the \ac{NN} model.
+This was to increase variance in the data and thus help prevent overfitting of the \ac{ANN} model.
 The definition of ``slow'', ``normal'', or ``fast'' walking was not set to a specific speed but rather to what the subjects felt was natural.
 Furthermore, about 80\% of the trials for each subject were measured with normal walking speed.
 The slow and fast walking speeds each covered about 10\% of the trials for each subject.
@@ -125,7 +125,7 @@ where $X$ is the \ac{EMG} value to be normalized and $X_{min}$ and $X_{max}$ are
 This method gives quick calibration as well as low computational cost for real-time application.
 Furthermore, it has been shown this normalization method provides low spatial variance \cite{Cronin2015}.
 This means the \ac{sEMG} is not as sensitive to the exact placement of the sensor.
-% For the validation and testing datasets, the same minimum and maximum values were used, to accurately portray new data that the \ac{NN} does not already ``know''.
+% For the validation and testing datasets, the same minimum and maximum values were used, to accurately portray new data that the \ac{ANN} does not already ``know''.
 The \acp{KJM} were normalized similar to the \ac{EMG} in equation \ref{eq:emg-normalization} with addition clause to set the interval:
 \begin{equation}
 \label{eq:moment-normalization}
@@ -135,8 +135,8 @@ where $X$ represents \ac{KJM} values.
 The extra clause limits the scaling to the interval $[-1,1]$ (assuming $\left|X_{min}\right| \leq \left|X_{max}\right|$) and makes sure that flexion and extension is still represented with positive and negative values respectively.
 
 \section{Step D - Architecture and Training of the Neural Network}
-As discussed in appendix \ref{sec:A-NeuralNetworks}, the training of the \ac{NN} consists of optimizing an objective function.
-In this case, it involved minimizing the \ac{MSE} between the output of the \ac{NN} and the calculated \acp{KJM}.
+As discussed in appendix \ref{sec:A-NeuralNetworks}, the training of the \ac{ANN} consists of optimizing an objective function.
+In this case, it involved minimizing the \ac{MSE} between the output of the \ac{ANN} and the calculated \acp{KJM}.
 The \ac{MSE} is the feedback represented by the bracket and dashed arrows in step D of figure \ref{fig:process-diagram}.
 
 Two different kinds of networks were tested for comparison, one being the regular \ac{MLP} described in appendix \ref{sec:A-NeuralNetworks}, and the other the \ac{LSTM} based \ac{RNN} described in appendix \ref{sec:A-rnn}.
@@ -145,8 +145,8 @@ The main difference between the two is that the \ac{LSTM} model contains time-de
 The models were trained with an early-stop validation interval of 50 epochs.
 This means that when the validation set's \ac{MSE} had not decreased for an interval of 50 epochs, the training was stopped.
 
-TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{NN}.
-The Keras API provides functions for configuring the \ac{LSTM} layer and the so called \textit{dense} layer, i.e. the densely connected \ac{NN} layer which is used in the \ac{MLP} \cite{chollet2015keras}.
+TensorFlow \cite{tensorflow2015-whitepaper} and the Keras API \cite{chollet2015keras} were used for constructing and training the \ac{ANN}.
+The Keras API provides functions for configuring the \ac{LSTM} layer and the so called \textit{dense} layer, i.e. the densely connected \ac{ANN} layer which is used in the \ac{MLP} \cite{chollet2015keras}.
 The APIs are further described in appendix \ref{sec:A-Tensorflow-and-Keras}.
 The parameters that were used for each model are listed in tables \ref{tab:mlp-parameters} and \ref{tab:lstm-parameters}.
 
@@ -160,10 +160,10 @@ Figure \ref{fig:lstm-model-used} represents the topology of the \ac{LSTM} based 
 \begin{figure}[!htb]
     \centering
     \includegraphics{img/LSTM_model_used.pdf}
-    \caption{Topology of the \ac{LSTM} based \ac{NN} that was used. The \ac{LSTM} cells represent the structure presented in appendix \ref{sec:A-rnn} and figure \ref{fig:lstm-cell}. Note, there is a recurrence of cell state between each timestep, even though it is not shown here. In this thesis $\tau = 20$ was used indicating that 20 \ac{EMG} samples from past steps were used for each \ac{KJM} prediction at time step $t$.}
+    \caption{Topology of the \ac{LSTM} based \ac{ANN} that was used. The \ac{LSTM} cells represent the structure presented in appendix \ref{sec:A-rnn} and figure \ref{fig:lstm-cell}. Note, there is a recurrence of cell state between each timestep, even though it is not shown here. In this thesis $\tau = 20$ was used indicating that 20 \ac{EMG} samples from past steps were used for each \ac{KJM} prediction at time step $t$.}
     \label{fig:lstm-model-used}
 \end{figure}
-Note that the \ac{LSTM} cell contains regular \ac{NN} layers, as presented in appendix \ref{sec:A-NeuralNetworks}, with a configurable number of nodes.
+Note that the \ac{LSTM} cell contains regular \ac{ANN} layers, as presented in appendix \ref{sec:A-NeuralNetworks}, with a configurable number of nodes.
 
 \section{Step E - Real-time motor control and performance}
 Although this part was not implemented in this thesis the following methods are thoughts about how it could be done.

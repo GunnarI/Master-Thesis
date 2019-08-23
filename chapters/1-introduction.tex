@@ -17,11 +17,11 @@ Thus, with an appropriate model, it can be used as a responsive human-machine co
 More specifically, by measuring \ac{sEMG} from the leg, a model could be constructed to estimate the \ac{KJM} from the muscle activity.
 Such \ac{EMG}-based models have been developed, such as the modified Hill-type muscle model discussed in appendix \ref{sec:A-EMGBasedModels} \cite{Pizzolato2015, Erdemir2007, Lloyd2003}.
 However, due to the nature of \ac{EMG} to muscle force relationship, these models require complicated measurements such as maximum isometric muscle force, and muscle geometries.
-A possible alternative to these kind of models is to train a \ac{NN} to map the \ac{EMG} signal as closely as possible to the \acp{KJM}.
-A \ac{NN} is a machine learning model which is capable of \textit{learning} a mapping function which maps one set of parameters to another, based on an objective/error function. 
+A possible alternative to these kind of models is to train a \ac{ANN} to map the \ac{EMG} signal as closely as possible to the \acp{KJM}.
+A \ac{ANN} is a machine learning model which is capable of \textit{learning} a mapping function which maps one set of parameters to another, based on an objective/error function. 
 % The mapping function could be trained to represent the mapping from \ac{EMG} to joint torque as closely as possible, based on an objective/error function.
 
-A \ac{LSTM} based \ac{NN} refers to a \ac{RNN} that uses \ac{LSTM} cells.
+A \ac{LSTM} based \ac{ANN} refers to a \ac{RNN} that uses \ac{LSTM} cells.
 \acp{RNN} add time-dependency to the model by including several timesteps as inputs for each output.
 In this research it means the input is a temporal window of specific size where the data is a sequence of \ac{EMG} samples.
 An \ac{EMG} sample refers to the \ac{sEMG} signal from each of the muscles at one timestep.

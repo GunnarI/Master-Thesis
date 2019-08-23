@@ -26,9 +26,9 @@ Sweat has been shown to dampen the signal \cite{Abdoli-Eramaki2012}.
 
 The filtering of the \ac{sEMG} signal was enough to extract a pattern of muscle activation.
 However, with a small moving average window of $50ms$, the filtered signal was not very smooth.
-Future research could compare smoother signal's affect to the learning of the \ac{NN}.
+Future research could compare smoother signal's affect to the learning of the \ac{ANN}.
 Additionally, by including the whitening step mentioned in section \ref{sec:data-processing}, the muscle activity could be captured more selectively \cite{Clancy2016}.
-Further research could investigate if including the whitening step would improve the learning of the \ac{NN}.
+Further research could investigate if including the whitening step would improve the learning of the \ac{ANN}.
 It should be emphasized that both of these method decisions were in favor of simpler solution for real-time application.
 The moving average window was kept small to minimize delay of the \ac{EMG} signal and the whitening step was omitted to simplify the calibration process.
 The whitening process requires calibration where the magnitude and phase of the whitening filter need to be determined \cite{Clancy2016}.

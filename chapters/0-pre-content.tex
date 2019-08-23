@@ -6,7 +6,7 @@ An essential part of an exoskeleton, to satisfy the role of assistance, is its c
 Exoskeletons need to assist and reinforce motion of the user rather than hinder or counteract it.
 This could be accomplished by controlling the exoskeletons' actuators based on the user's body dynamics.
 The challenge is to estimate the body dynamics in the suit in real-time since such an estimate often requires complex measurements and model.
-This research investigates if a \ac*{LSTM} based \ac*{NN} is capable of predicting the body dynamics based only on \ac*{EMG} signal measured from the user's muscle activity.
+This research investigates if a \ac*{LSTM} based \ac*{ANN} is capable of predicting the body dynamics based only on \ac*{EMG} signal measured from the user's muscle activity.
 It looks at the ability of the model to generalize, firstly, between separate sessions of the same subject, and secondly between different subjects.
 The goal is to accurately predict \acp*{KJM} during regular gait of healthy individuals using sequences of \acs*{EMG} data from multiple muscles of the lower limbs.
 The goal is also to provide a basis for a model which could be used in real-time in an exoskeleton to accurately control an actuator for the knee joint, based on the user's need.
@@ -16,7 +16,7 @@ The goal is also to provide a basis for a model which could be used in real-time
 % \Ac{EMG} can be used to indicate muscle activity and is relatively easy to measure with low power consumption.
 % \Ac{EMG} signal is however non-linearly related to muscle force and joint moments.
 % Furthermore, the relationship depends on many factors which are hard to measure (e.g. muscle fiber length, elasticity, and maximum isometric muscle force).
-% In this thesis the possibility of using a \ac{NN} to map the \ac{EMG} signal to \ac{KJM} during gait is explored.
+% In this thesis the possibility of using a \ac{ANN} to map the \ac{EMG} signal to \ac{KJM} during gait is explored.
 % The aim is also to provide a basis for a model which could be used in real-time in an exoskeleton while using \ac{EMG} signal as the only input.
 % The \ac{KJM} to map the signal onto is estimated using a state-of-the-art motion capture system and modelling tools for human motion including \ac{IK} and \ac{ID} calculations.
 

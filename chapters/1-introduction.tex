@@ -19,6 +19,8 @@ Such \ac{EMG}-based models have been developed, such as the modified Hill-type m
 However, due to the nature of \ac{EMG} to muscle force relationship, these models require complicated measurements such as maximum isometric muscle force, and muscle geometries.
 A possible alternative to these kind of models is to train a \ac{ANN} to map the \ac{EMG} signal as closely as possible to the \acp{KJM}.
 A \ac{ANN} is a machine learning model which is capable of \textit{learning} a mapping function which maps one set of parameters to another, based on an objective/error function. 
+The \acp{KJM} can be calculated using \ac{ID}, which involves using Newton's second law of motion in reverse on kinematic and anthropometric data \cite{inversedynamics}.
+The process of using \ac{ID} together with \ac{IK} for motion modelling and joint moment calculations is further explained in appendix \ref{sec:A-Inverse-Dynamics}.
 % The mapping function could be trained to represent the mapping from \ac{EMG} to joint torque as closely as possible, based on an objective/error function.
 
 A \ac{LSTM} based \ac{ANN} refers to a \ac{RNN} that uses \ac{LSTM} cells.

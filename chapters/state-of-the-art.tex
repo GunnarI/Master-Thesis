@@ -34,7 +34,7 @@ Several methods have then been developed to estimate joint torques and muscle fo
 \subsection{Joint Moments from Inverse Dynamics}
 \label{sec:A-Inverse-Dynamics}
 \textit{\Acf{ID}} is, as defined by the Dictionary of Sport and Exercise Science and Medicine \cite{inversedynamics}, ``the calculation of forces and moments by using kinematics and data for mass and moment of inertia, effectively using Newton's second law of motion ($f = ma$) in reverse.''
-In relation to the human body this means the use of kinetics and kinematics, e.g. motion capture, scaled model, and force plate data from a motion lab, to calculate joint torque estimations.
+In relation to the human body this means the use of kinetics and kinematics, e.g. motion capture, scaled model, and \ac{FP} data from a motion lab, to calculate joint torque estimations.
 As the method works with the equation of motion, it relies on correct scaling of each body segment, and joints angles and positions relative to the reaction forces \cite{Erdemir2007, Buchanan2004}.
 
 Using a motion lab one can collect the positions and motions of body segments using reflective markers that are sensed by specially designed motion cameras.
@@ -52,7 +52,7 @@ where $\Vec{x_i}^{sub}$ and $\Vec{x_i}^{mod}$ are the global ($xyz$) coordinates
 and $\theta_j^{sub}$ and $\theta_j^{mod}$ the angles of the $j$-th joint.
 The weights can be used to set the relative importance of specific joints to be fitted accurately.
 
-After applying \ac{IK}, the model and its kinematics, have been fitted in the global coordinate system, relative to the \ac{GRF} from the force plates.
+After applying \ac{IK}, the model and its kinematics, have been fitted in the global coordinate system, relative to the \ac{GRF} from the \acp{FP}.
 Finally, \ac{ID} can be applied using those kinematics and \acp{GRF} together with the anthropometric data of the segments.
 Figure \ref{fig:ID-forces-and-segments} shows the translation of the \ac{GRF} to the segments' center of mass and joint centers \cite{cgm-ID, Dumas2004}.
 \begin{figure}[!htb]
@@ -127,10 +127,6 @@ where $\mathbf{I}$ is the inertia tensor, $\bm{\alpha}$ is the angular accelerat
 Notably, the force and moment from previous segment are used in the equation, indicated by the subscript $i-1$.
 The initial case is simply the wrench at the center of pressure on the \ac{FP}, defined by the \ac{FP} measured data.
 
-% Extensive research has been done of on inverse dynamics and it is widely used in clinical applications such as, for example, gait analysis in rehabilitation \cite{Erdemir2007,Buchanan2004,Pizzolato2015}.
-
-% OpenSim \cite{Delp2007, Seth2018} is an open-source software offering biomechanical models and simulation tools to, among many other things, model and run inverse dynamic solution on a scaled musculoskeletal model \cite{Buchanan2004, Delp2007, Seth2018, Pizzolato2017}.
-
 
 % There is a limitation to these optimization methods due to variations in muscle synergies.
 % \textcite{Ivanenko2016} define muscle synergies as representing "coordinated activations of groups of muscles, with specific activation balances or temporal profiles, that might reflect basic biomechanical properties of the musculoskeletal apparatus or statistical regularities in the muscle activation patterns involved in performing a specific motor behavior" \parencite[160]{Ivanenko2016}.
@@ -156,7 +152,7 @@ The \ac{EMG} signal depends on the number of \acp{MU} activated and the \ac{AP} 
 However, the relation between the two varies from muscle to muscle and furthermore, both relate non-linearly to the neural drive from the motor neuron.
 Consequently, \ac{EMG} does not directly measure muscle forces but is rather an indication of how activated the \acp{MU} are \cite{Enoka2016, Farina2016}.
 
-There are two common methods of measuring \ac{EMG}, one being the invasive method where a needle electrode is inserted percutaneously to the target muscle, and the second being the surface \ac{EMG} method where electrodes are placed on the skin close to the target muscle. 
+There are two common methods of measuring \ac{EMG}, one being the invasive method where a needle electrode is inserted percutaneously to the target muscle, and the second being the \ac{sEMG} method where electrodes are placed on the skin close to the target muscle. 
 Although the invasive method can give a more accurate signal, the \ac{sEMG} method is more widely used due to the fact that it is non-invasive and easier to implement. 
 The continued discussion here about \ac{EMG}s will be focused on the \ac{sEMG} method.
 When using the \ac{sEMG} method the source of the signal and the recording electrodes are separated by biological tissues (e.g. skin, fat, blood vessels).
@@ -230,7 +226,7 @@ The article states that the control strategy of an exoskeleton can be divided in
 
 \textcite{Anam2012} divide the \textit{dynamic model} into three different categories, each with its strengths and weaknesses.
 These models use the system's physical characteristics and motion data to estimate moments and/or forces required from the exoskeleton. 
-For example, one of the categories is the artificial intelligence method where one study has used the joint angle, angle velocity, and angle acceleration as input to the model and the joint torque as output, behaving like an inverse dynamics model.
+For example, one of the categories is the artificial intelligence method where one study has used the joint angle, angle velocity, and angle acceleration as input to the model and the joint torque as output, behaving like an \ac{ID} model.
 
 The \textit{muscle model} uses muscle neural activity and/or joint kinematics to predict muscle forces and resulting joint moments. 
 These models can be split into two categories: parametric and non-parametric muscle model. 
@@ -239,13 +235,13 @@ This is much like the \ac{EMG}-driven models discussed in the previous chapter \
 The \textit{muscle model} has been researched as a way to provide real-time prediction of muscle forces and joint torques \cite{Pizzolato2015, Anam2012, durandau}. 
 Furthermore, as mentioned by \textcite{Anam2012}, much effort has been made towards predicting the user's intentions beforehand by using \ac{EMG} data.
 The Hill-type muscle model is possibly the most researched parametric muscle model and some modifications of it have been made throughout the years to make it more accurate \cite{Pizzolato2015, Lloyd2003, Anam2012, Lee14-1}.
-For the non-parametric muscle model an artificial neural network could be used \cite{Lee14-1, Kiguchi2012}.  
+For the non-parametric muscle model an \ac{ANN} could be used \cite{Lee14-1, Kiguchi2012}.  
 
 \section{Artificial neural networks in biomechanics}
 The methods to predict joint torque discussed previously all use calculations based on anthropometry and dynamic models of the human body. 
 The measured parameters, such as \ac{EMG}, motion, and reaction force data, are used as input into equations based on specific dynamic models of the human body, to estimate the joint torque that best fits the input.
 \Ac{ANN} on the contrary treats the model part as sort of a \textit{black box} and does not depend on these dynamic models. 
-Rather, it simulates the model with a self-organized calculations based on statistical methods.
+Rather, it simulates the model with self-organized calculations based on statistical methods.
 This means that the \ac{ANN} goes from an input to desired output without direct relations to dynamic models of the human body.
 This is important when looking at going from an \ac{EMG} signal to joint torque prediction since the projection of \ac{EMG} to muscle force and joint torque is not easily established through dynamic models.
 Motion data and reaction forces are needed to get joint torque from dynamic models, and this is typically not possible to measure in an exoskeleton.
@@ -297,7 +293,7 @@ This highly relates to the concepts of overfitting and underfitting, as defined 
 \label{sec:A-NeuralNetworks}
 Like the name suggests \acp{ANN} consist of multiple ``artificial neurons'', often called nodes, that are interconnected by pathways for communication.
 \textit{Topology} refers to how these nodes are placed (e.g. into layers), how many there are, and how they are connected.
-Figure \ref{fig:generic-ann} shows an example of a generic multilayer feed-forward \ac{ANN}, also known as \ac{DNN} or \ac{MLP}.
+Figure \ref{fig:generic-ann} shows an example of a generic multilayer feed-forward \ac{ANN}, also known as a \ac{MLP}.
 It is feed-forward since it does not contain any feed-back loops, as opposed to \acp{RNN} \cite{Goodfellow2016, Haykin2009}. 
 Furthermore, it is multilayer as it contains hidden layers, additionally to the input and output layer.
 \begin{figure}[ht!]
@@ -436,7 +432,7 @@ The input to the network is \ac{EMG} and \ac{GRF} data collected during gait tri
 Notably, the dataset used in their research could not be considered very large in relation to machine learning (i.e. 120 gait cycles in total).
 Including the \ac{GRF} as input decreases the flexibility of using the model in real time since \ac{GRF} measurements are typically more difficult to obtain than \ac{EMG}.
 The prediction error of \ac{KJM} seems to be up to around 10\% Normalized-RMSE, depending on walking pattern.
-\textcite{Lee14-1} use a NNARX (Neural Network, AutoRegressive, eXternal Input) model to estimate knee joint moment in sit-to-stand movement. 
+\textcite{Lee14-1} use a NNARX (Neural Network, AutoRegressive, eXternal Input) model to estimate \ac{KJM} in sit-to-stand movement. 
 The input was \ac{EMG}, joint angle, and joint velocity as well as previously predicted joint moment. 
 \textcite{Kiguchi2012} present a neuro-fuzzy system to estimate joint torques in the upper-limb to use with a power-assist exoskeleton. 
 The input to the neuro-fuzzy system is the joint angles and the output are weights to be multiplied by measured \ac{EMG} RMS values.
@@ -511,11 +507,11 @@ CGM2.3 introduces additional markers to minimize a soft tissue artifact accompan
 
 \subsection{TensorFlow and Keras}
 \label{sec:A-Tensorflow-and-Keras}
-TensorFlow and Keras are \acp{API} that can be used to design, run, and evaluate machine learning algorithms \cite{tensorflow2015-whitepaper, chollet2015keras}.
+TensorFlow and Keras are APIs that can be used to design, run, and evaluate machine learning algorithms \cite{tensorflow2015-whitepaper, chollet2015keras}.
 Both projects offer open-source python packages.
 The algorithm within TensorFlow consist of a directed \textit{graph}, composed of a set of connected \textit{nodes}, containing states and computations, much like previously explained in section \ref{sec:A-NeuralNetworks}.
 TensorFlow offers high flexibility towards how the graphs are constructed and configured \cite{tensorflow2015-whitepaper}.
-Keras offers a high-level \ac{ANN} \ac{API} which can run on top of TensorFlow \cite{chollet2015keras}.
+Keras offers a high-level \ac{ANN} API which can run on top of TensorFlow \cite{chollet2015keras}.
 The API facilitates building a conventional \ac{ANN}, layer-wise, in a TensorFlow graph.
 An example of a layer in Keras is the \textit{Dense} function which constructs the regular, densely connected layer as described in figure \ref{fig:generic-ann}.
 The function takes as an input, the number of nodes (or units) and the activation functions, weight, and bias initialization applied to each node as described in figure \ref{fig:node-diagram}.

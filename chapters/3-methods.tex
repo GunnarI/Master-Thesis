@@ -9,15 +9,14 @@ The process can be divided into 5 steps (A-E), each of which will be discussed i
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/ProcessDiagram}
-    \caption{Flow diagram of the modelling procedure. The dashed box indicates a procedure used only for training the \ac{ANN} and the dashed arrows are feedback during training. (A) Subject walks in a motion lab collecting \acf{GRF}, marker trajectories, and muscle activity; (B) The data is filtered and prepared for use in the models; (C) The \ac{GRF} and marker trajectories are used for \ac{IK} and \ac{ID} to retrieve \acp{KJM}; (D) During training, \ac{EMG} data is continuously fed through the \ac{ANN}. Output is compared to the moments from (C) and the error used as feedback to update the \ac{ANN}; (E) \ac{EMG} fed through the trained \ac{ANN} produces \acp{KJM} prediction to control motor torque in an exoskeleton}
+    \caption{Flow diagram of the modelling procedure. The dashed box indicates a procedure used only for training the \ac{ANN} and the dashed arrows are feedback during training. (A) Subject walks in a motion lab collecting \acf{GRF}, marker trajectories, and muscle activity; (B) The data is filtered and prepared for use in the models; (C) The \acp{GRF} and marker trajectories are used for \ac{IK} and \ac{ID} to retrieve \acp{KJM}; (D) During training, \ac{EMG} data is continuously fed through the \ac{ANN}. Output is compared to the moments from (C) and the error used as feedback to update the \ac{ANN}; (E) \ac{EMG} fed through the trained \ac{ANN} produces \acp{KJM} prediction to control motor torque in an exoskeleton}
     \label{fig:process-diagram}
 \end{figure}
 
 \section{Step A - Experiment Setup}
-For the experiment, a motion lab equipped with 10 Vicon Vantage V16 cameras and 3 AMTI OR6 \acp{FP} was used. 
+Data collection was performed in the motion lab (KTH MovAbility Laboratory) which is equipped with 10 Vicon Vantage V16 cameras and 3 AMTI OR6 \acp{FP}. 
 Figure \ref{fig:cgm23-markerset} shows the markerset protocol used, which follows the CGM2.3 model's protocol. 
-CGM2.3 is a recent version of CGM2.i project.
-The project is meant to update the old \ac{CGM} by improving it and fixing some known issues \cite{Leboeuf2019}. 
+CGM2.3 is a updated version of the old \ac{CGM} \cite{Leboeuf2019}.
 Further details about the model are discussed in appendix \ref{sec:A-pyCGM2}.
 \begin{figure}[!ht]
      \centering
@@ -39,25 +38,29 @@ Further details about the model are discussed in appendix \ref{sec:A-pyCGM2}.
 \end{figure}
 
 The aktos nano \ac{sEMG} sensors from myon were used for the \ac{EMG} data capture. 
-The sensors were placed on the surface near 10 muscles on the right leg, presented in table \ref{tab:muscle-names}. 
+The sensors were placed on the surface of 10 muscles (table \ref{tab:muscle-names}) on the right leg.
 \input{tables/muscle-names.tex}
-Skin preparation and placement recommendations from the SENIAM project \cite{Stegeman2007, Hermens1999, Hermens2000} were used. The SENIAM project is a European concerted action in the Biomed 2 program of the European Community \cite{Stegeman2007}. It provides recommendations when measuring \ac{sEMG} to increase standardization within the field.
+Skin preparations and electrode's placements were according to recommendations from the SENIAM project \cite{Stegeman2007, Hermens1999, Hermens2000}. 
+% The SENIAM project is a European concerted action in the Biomed 2 program of the European Community \cite{Stegeman2007}. 
+% It provides recommendations when measuring \ac{sEMG} to increase standardization within the field.
 
-All the data from the \ac{sEMG} sensors (muscle activity), cameras (marker trajectories), and the \acp{FP} (\ac{GRF}) was collected and synchronized using the Vicon Nexus 2.8.2 system/software.
+All the data from the \ac{sEMG} sensors (muscle activity), cameras (marker trajectories), and the \acp{FP} (\acp{GRF}) was collected and synchronized using the Vicon Nexus 2.8.2 system/software.
 The synchronization includes accounting for the latency of $14ms$ of the \ac{EMG} sensors \cite{aktosEMG}.
-The marker trajectories were sampled at 100Hz using the cameras while the analog data (i.e. \ac{GRF} and \ac{EMG}) was sampled at 1000Hz.
+The marker trajectories were sampled at 100Hz using the cameras while the analog data (i.e. \acp{GRF} and \ac{EMG}) was sampled at 1000Hz.
 
-Data was collected from 6 subjects with anthropometric data measured for each subject, some of which is presented in table \ref{tab:subject-table}.
+% Data was collected from 6 healthy subjects with anthropometric data measured for each subject, some of which is presented in table \ref{tab:subject-table}.
+Data was collected from 6 healthy subjects (table \ref{tab:subject-table}).
 \input{tables/subject-table.tex}
-Each subject was a young, healthy individual without any muscle disorders.
-A static trial was captured to use for scaling the model, as described in appendix \ref{sec:A-pyCGM2}, and run as part of step C in figure \ref{fig:process-diagram}.
-The subjects were asked to walk over the \acp{FP} either slowly, normal speed, or fast.
+%\input{tables/subject-table-changed.tex}
+% Each subject was a young, healthy individual without any muscle disorders.
+A static trial was captured to scale the model, as described in appendix \ref{sec:A-pyCGM2}, and run as part of step C in figure \ref{fig:process-diagram}.
+The subjects were asked to walk over the \acp{FP} either slowly, at a normal speed, or fast.
 This was to increase variance in the data and thus help prevent overfitting of the \ac{ANN} model.
 The definition of ``slow'', ``normal'', or ``fast'' walking was not set to a specific speed but rather to what the subjects felt was natural.
 Furthermore, about 80\% of the trials for each subject were measured with normal walking speed.
 The slow and fast walking speeds each covered about 10\% of the trials for each subject.
 
-Note that a subject refers to one individual, a session refers to each experiment, and a trial refers to each measured exercised performed in the session. 
+Note that a subject refers to one individual, a session refers to each experiment, and a trial refers to each measured gait exercise performed in the session. 
 Thus, each subject can have many sessions, e.g. experiments conducted on separate days.
 Each session has many trials and each trial was cut down to gait cycles. 
 The gait cycles were defined by the interval from the right foot's heel strike on a \ac{FP} until its next heel strike.
@@ -67,7 +70,7 @@ Defective cycles were found by looking at outliers, e.g. the longest/shortest cy
 Faulty signal from motion capture or \ac{GRF} makes the \ac{KJM} output from the \ac{ID} calculations wrong.
 All cycles with defective \ac{KJM} found, were removed from the dataset.
 The \ac{EMG} on the other hand is input to the model and any deviation in the \ac{EMG} signal might also happen in real live.
-That is, if it is not easily preventable, systematic error.
+That is, if it is not a easily preventable systematic error.
 For that reason, the cycles that contained what appeared to be non-systematic errors in the \ac{EMG} signal were not removed from the dataset.
 
 \section{Step B - Data processing}
@@ -79,7 +82,7 @@ The same cutoff frequency was used for both to minimize an artifact introduced i
 The \ac{EMG} was filtered with the ``typical'' steps as mentioned by \textcite[99]{Clancy2016}, but excluding the whitening step for simplicity.
 The purpose of whitening is to get rid of correlation between successive samples.
 This affects information extraction due to temporal weights on consecutive samples.
-The effect of omitting this step or the possible gain in including it will be discussed in chapter \ref{sec:discussion}.
+The effect of omitting this step or the possible benefit in including it will be discussed in chapter \ref{sec:discussion}.
 The signal was noise and interference filtered using Butterworth IIR bandpass filter with cutoff frequencies $10-100$Hz. 
 Then, for demodulation, smoothing, and relinearization, the RMS method was used where the smoothing was done with a moving average window of $50ms$. 
 As \textcite{Clancy2016} point out, it is common to use a window of $100-250 ms$ but for the purpose of a real-time friendly solution, $50ms$ was chosen.
@@ -109,8 +112,8 @@ To match the frequency of the \acp{KJM}, the \ac{EMG} signal was downsampled by 
 By using the first sample, the delay from \ac{EMG} to moment prediction is decreased by $9ms$. 
 % In that way an \ac{EMG} sample taken at $t$ can predict a moment value at $t+9ms$. 
 
-Finally, once each sample had been matched, the data was split into training, validation, and testing datasets.
-Five different cases of training and testing sets were created to look at the ability of the model to generalize in different cases.
+Finally, the data was split into training, validation, and testing datasets.
+Five different cases of training and testing sets were created to investigate the ability of the model to generalize in different cases.
 Table \ref{tab:training-cases} lists these cases and describes the purpose of each case.
 \input{tables/training_cases.tex}
 

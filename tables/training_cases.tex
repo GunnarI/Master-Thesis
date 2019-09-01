@@ -1,23 +1,23 @@
 \begin{table}[ht!]
     \centering
-    \caption{Dataset combination cases for the model training and testing. The cases test various abilities of the model to generalize when trained and tested on different datasets.}
+    \caption{Dataset combination cases for the model training and testing. The cases test various abilities of the model to generalize when trained and tested on different datasets. Each session was recorded on separate days.}
     \begin{tabular}{>{\raggedright}p{0.45\textwidth} | p{0.45\textwidth}}
     \multicolumn{2}{>{\raggedright}p{0.9\textwidth}}{\textbf{Case 1}: Ability to generalize across sessions.} \\ \hline
         \textbf{Training set} & \textbf{Testing set} \\
         Subject06/Session1 & Subject06/Session2 \\ \hline
     \multicolumn{2}{>{\raggedright}p{0.9\textwidth}}{\vspace{-4pt}\textbf{Case 2}: If added data from other subjects improve case 1.} \\ \hline
         \textbf{Training set} & \textbf{Testing set} \\
-        Subject01/Both & Subject06/Session2 \\ 
-        Subject02/Both & \\
+        Subject01/Both sessions & Subject06/Session2 \\ 
+        Subject02/Both sessions & \\
         Subject06/Session1 & \\ \hline  
     \multicolumn{2}{>{\raggedright}p{0.9\textwidth}}{\vspace{-4pt}\textbf{Case 3}: Ability to generalize across subjects.} \\ \hline
         \textbf{Training set} & \textbf{Testing set} \\
-        Subject01/Both & Subject02/Both \\ 
-        Subject06/Both & \\ \hline  
+        Subject01/Both sessions & Subject02/Both sessions \\ 
+        Subject06/Both sessions & \\ \hline  
     \multicolumn{2}{>{\raggedright}p{0.9\textwidth}}{\vspace{-4pt}\textbf{Case 4}: Same as case 3 but switched subjects for train and test} \\ \hline
         \textbf{Training set} & \textbf{Testing set} \\
-        Subject02/Both & Subject01/Both \\ 
-        Subject06/Both & \\ \hline 
+        Subject02/Both sessions & Subject01/Both sessions \\ 
+        Subject06/Both sessions & \\ \hline 
     \multicolumn{2}{>{\raggedright}p{0.9\textwidth}}{\vspace{-4pt}\textbf{Case 5}: Ability to generalize when trained on many subjects} \\ \hline
         \textbf{Training set} & \textbf{Testing set} \\
         Random 80\% of all the usable data & Random 20\% of all the usable data (different data than the training set) \\ \hline 

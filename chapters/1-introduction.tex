@@ -14,13 +14,13 @@ This calls for a balanced control system with a smooth human-machine interaction
 
 \Ac{EMG} signal from muscle activity is non-linearly related to joint torque \cite{Young2017}.
 Thus, with an appropriate model, it can be used as a responsive human-machine control strategy for the actuator.
-More specifically, by measuring \ac{sEMG} from the leg, a model could be constructed to estimate the \ac{KJM} from the muscle activity.
+More specifically, by measuring \ac{sEMG} from the major lower limb muscles, a model could be constructed to estimate the \ac{KJM} from the muscle activity.
 Such \ac{EMG}-based models have been developed, such as the modified Hill-type muscle model discussed in appendix \ref{sec:A-EMGBasedModels} \cite{Pizzolato2015, Erdemir2007, Lloyd2003}.
-However, due to the nature of \ac{EMG} to muscle force relationship, these models require complicated measurements such as maximum isometric muscle force, and muscle geometries.
+However, due to the nature of \ac{EMG} to muscle force relationship, these models require complicated measurements and estimations such muscle geometries and maximum isometric muscle force.
 A possible alternative to these kind of models is to train a \ac{ANN} to map the \ac{EMG} signal as closely as possible to the \acp{KJM}.
 A \ac{ANN} is a machine learning model which is capable of \textit{learning} a mapping function which maps one set of parameters to another, based on an objective/error function. 
-The \acp{KJM} can be calculated using \ac{ID}, which involves using Newton's second law of motion in reverse on kinematic and anthropometric data \cite{inversedynamics}.
-The process of using \ac{ID} together with \ac{IK} for motion modelling and joint moment calculations is further explained in appendix \ref{sec:A-Inverse-Dynamics}.
+The \ac{KJM} can be calculated using \ac{ID} together with \ac{IK} for motion modelling. 
+This process is further explained in appendix \ref{sec:A-Inverse-Dynamics}.
 % The mapping function could be trained to represent the mapping from \ac{EMG} to joint torque as closely as possible, based on an objective/error function.
 
 A \ac{LSTM} based \ac{ANN} refers to a \ac{RNN} that uses \ac{LSTM} cells.
@@ -32,10 +32,12 @@ The effectiveness of including time-dependency will be examined by comparing the
 These networks are further explained in appendix \ref{sec:A-NeuralNetworks}.
 
 \section{Research Question}
-In this research, \ac{sEMG} signal is collected from ten muscles of the right leg of six healthy subjects. 
-Corresponding \acp{KJM} from the right leg are estimated using state of the art motion lab and tools/software to perform \ac{ID} calculations on a scaled skeletal model.
+% In this research, \ac{sEMG} signal is collected from ten muscles of the right leg of six healthy subjects. 
+% Corresponding \acp{KJM} from the right leg are estimated using state of the art motion lab and tools/software to perform \ac{ID} calculations on a scaled skeletal model.
+% A \ac{LSTM} model is constructed and trained on the \ac{EMG} data to predict \ac{KJM} with minimal error.
+In this research, \ac{sEMG} signals and \acp{KJM} is collected from the right leg during normal gait.
 A \ac{LSTM} model is constructed and trained on the \ac{EMG} data to predict \ac{KJM} with minimal error.
 The main interest is then to see if such a model is capable of predicting \ac{KJM} accurately enough to be used as a myoelectric control system for an exoskeleton.
-Furthermore, to examine if the model can generalize between varying conditions of the same subject or even across different subjects, given the non-linear nature of the \ac{EMG}-to-\ac{KJM} relationship.
+Furthermore, to examine if the model can generalize between varying conditions of the same subject or even across different subjects, given the non-linear nature of the \ac{EMG}-to-\ac{KJM} relationship. 
 
 \end{document}

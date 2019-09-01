@@ -9,26 +9,29 @@ The results can be split into two parts: (1) \textit{pre-training} which include
 \section{Pre-training results}
 \label{sec:results_pre-training-results}
 Before training the \ac{ANN} it is useful to examine the data.
+The following figures only show the results for subjects 1, 2 and 6 since the datasets from the other subjects were much smaller and as a result show much less variance and are less representative.
+However, these figures for subjects 3 and 5 can be found in appendix \ref{sec:A-data-representation-4-subjects35}.
+All gait cycles from subject 4 were invalid and thus completely excluded from the study.
+
 Figure \ref{fig:kjm-average} shows a representation of the \ac{KJM} from all the gait cycles for subjects 1, 2 and 6.
-Same plots can be found for subject 3 and 5 in appendix \ref{sec:A-data-representation-4-subjects35}. 
 Figure \ref{fig:emg-average} shows the corresponding \ac{EMG} activity of each muscle, grouped by the muscle's main function as per table \ref{tab:muscle-names}.
 \begin{figure}[ht!]
      \centering
-     \begin{subfigure}[b]{0.328\textwidth}
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/moment_avg/subject01_all_set1_moment_avg_w_minmax.png}
      \end{subfigure}
      \hfill
-     \begin{subfigure}[b]{0.328\textwidth}
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/moment_avg/subject02_all_set1_moment_avg_w_minmax.png}
      \end{subfigure}
      \hfill
-     \begin{subfigure}[b]{0.328\textwidth}
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{img/results/moment_avg/subject06_all_set1_moment_avg_w_minmax.png}
      \end{subfigure}
-    \caption{Normalized \ac{KJM} for subjects 1, 2, and 6, from left to right. The x-axis is the percentage of a single gait cycle. The solid blue line is the average from all the gait cycles and the shaded area around it is the standard deviation.}
+    \caption{Normalized \ac{KJM} for subjects 1 and 2 (the upper two plots) and subject 6 (the lower plot). The solid blue line is the average from all the gait cycles and the shaded area around it is the standard deviation.}
     \label{fig:kjm-average}
 \end{figure}
 \begin{figure}[ht!]
@@ -37,25 +40,35 @@ Figure \ref{fig:emg-average} shows the corresponding \ac{EMG} activity of each m
     \caption{Filtered and normalized \ac{EMG} from subjects 1, 2, and 6. The x-axis is the percentage of a single gait cycle. The solid blue lines represent the average from all the gait cycles for each muscle and the shaded area with corresponding color is the standard deviation.}
     \label{fig:emg-average}
 \end{figure}
+
 The figures show similar patterns between the subjects, for \acp{KJM} and \ac{EMG} signals over the gait cycles.
 However the average normalized \ac{KJM} amplitude for subject 1 is much lower than for subjects 2 and 6.
 As indicated by the ``fastest'' and ``slowest'' cycles, it is because subject 1 generally walked slower, in most trials, compared to their maximum speed.
 
 % Considering similar patterns across subjects, an \ac{ANN} might be able to generalize between subjects, at least up to some degree.
-The linear correlation between the average for each subject, considering each of the muscles and the \ac{KJM}, is plotted in figures \ref{fig:A-kjm-and-glutmax-correlation}--\ref{fig:A-gasmed-and-gaslat-correlation}.
-Table \ref{tab:correlation-sumup} outlines the results from these plots.
-\input{tables/correlations-sumup.tex}
-This table indicates that the patterns are generally correlated between subjects, except for the pattern of gluteus maximus.
-This is also noticeable in figure \ref{fig:emg-average} where the \ac{EMG} pattern for gluteus maximus varies between subjects.
+% The linear correlation between the average for each subject, considering each of the muscles's activity and the \ac{KJM}, is plotted in figures \ref{fig:A-kjm-and-glutmax-correlation}--\ref{fig:A-gasmed-and-gaslat-correlation}.
+% Table \ref{tab:correlation-sumup} outlines the results from these plots.
+% \input{tables/correlations-sumup.tex}
+% This table indicates that the patterns are generally correlated between subjects, except for the pattern of gluteus maximus.
+Figure \ref{fig:emg-average} shows that there is some similarity between muscle activation patterns of the different subjects. 
+Peaks seem to occur at a similar time in the gait cycle but amplitudes seem to vary.
+The amplitude for rectus femoris, for example, is higher for subject 6 relative to other knee extensors, when compared to subjects 1 and 2.
+Appendix \ref{sec:A-data-correlations} shows linear correlation between subjects to further indicate the similarity between muscle activation patterns.
 
-Another notable observation is the amplitude of the normalized \ac{EMG}.
-It indicates that most of the values, including the peaks, have below $0.5$ amplitude.
+Another notable observation is that most of the amplitude, including the peaks, is below $0.5$ normalized muscle activity.
+% This is also noticeable in figure \ref{fig:emg-average} where the \ac{EMG} pattern for gluteus maximus varies between subjects.
+
+% Another notable observation is the amplitude of the normalized \ac{EMG}.
+% It indicates that most of the values, including the peaks, have below $0.5$ amplitude.
 
 \section{Post-training results}
 \label{sec:post-training-results}
 The following figures and tables show the training and performance results of the model for each case.
 The performance is presented in the tables with the \ac{MSE} and \ac{MAE}.
-Although \ac{MSE} was used for objective function during training, the \ac{MAE} gives a clearer picture of the size of the error as compared to the desired output.
+The error is the difference between actual \ac{KJM} (i.e. normalized output from the CGM2 model) and the output from the \ac{ANN} models.
+Although \ac{MSE} was used for objective function during training, the \ac{MAE} gives a clearer picture of the size of the error as compared to the actual \ac{KJM}.
+Training of the \ac{MLP} always ended with fewer epochs due to the early stop validation mentioned in chapter \ref{sec:methods}.
+Furthermore, the discussion is mostly focused on the performance of the \ac{LSTM} since it outperformed the \ac{MLP} in all cases.
 
 \subsection{Case 1}
 \label{sec:results-case1}
@@ -180,7 +193,6 @@ In case 5, the model was trained and tested on all the subjects.
 The testing set was selected as random 20\% of the data, not presented to the model during training.
 Comparing table \ref{tab:case5-test-eval} and figure \ref{fig:case5-training-performance}, there is little overfitting and the error for the validation and testing set is about the same.
 Furthermore, the training and validation error are observed to converge at a relatively low value when compared to the other cases, even with the increased variance in these sets.
-\newpage
 \begin{figure}
     % \captionsetup[subfigure]{aboveskip=-12pt}
      \centering
